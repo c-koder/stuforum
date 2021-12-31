@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import zxcvbn from "zxcvbn";
 
 const PasswordStrengthMeter = ({ password }) => {
@@ -24,7 +23,7 @@ const PasswordStrengthMeter = ({ password }) => {
   return (
     <div
       className="password-strength-meter"
-      style={{ marginLeft: 5, marginTop: -10, color: "#444444" }}
+      style={{ marginLeft: 5, marginTop: -10, color: "var(--gray)" }}
     >
       <progress
         className={`password-strength-meter-progress strength-${createPasswordLabel(
@@ -35,14 +34,10 @@ const PasswordStrengthMeter = ({ password }) => {
         max="4"
       />
       <label className="password-strength-meter-label">
-
-          <>
-            <strong>Password strength:</strong>{" "}
-            {password && (
-            createPasswordLabel(testedResult)
-            )}
-          </>
-      
+        <>
+          <strong>Password strength:</strong>{" "}
+          {password && createPasswordLabel(testedResult)}
+        </>
       </label>
     </div>
   );

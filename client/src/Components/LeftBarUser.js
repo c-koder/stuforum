@@ -83,7 +83,7 @@ const LeftBarUser = ({ user }) => {
 
             <h2 style={{ marginTop: 20 }}>{authState.name}</h2>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <h3 style={{ color: "#B4B4B4" }}>{authState.likes}</h3>
+              <h3 style={{ color: "var(--secondary)" }}>{authState.likes}</h3>
               <img
                 style={{ marginLeft: 10, height: 20, marginTop: 3 }}
                 className="icon"
@@ -101,7 +101,7 @@ const LeftBarUser = ({ user }) => {
               <hr style={{ marginTop: 20, marginBottom: 20 }} />
               <h4
                 style={{
-                  color: "#B4B4B4",
+                  color: "var(--secondary)",
                   textAlign: "center",
                   marginBottom: user === authState.name && 20,
                 }}

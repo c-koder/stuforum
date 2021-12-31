@@ -16,6 +16,8 @@ import ViewUser from "./pages/ViewUser";
 import { useState, useEffect } from "react";
 import { AuthContext } from "./helpers/AuthContext";
 import axios from "axios";
+import sun from "./resources/sun.png";
+import moon from "./resources/moon.png";
 
 const Routing = () => {
   const [authState, setAuthState] = useState({
@@ -55,6 +57,51 @@ const Routing = () => {
     setAuthState({ ...authState, status: false });
   };
 
+  const lightTheme = {
+    "--secondary": "#b4b4b4",
+    "--gray": "#444444",
+    "--blue": "#e8ebfb",
+    "--bg": "#fcfcfc",
+    "--white": "#ffffff",
+    "--light-white": "#ececec",
+  };
+
+  const darkTheme = {
+    "--secondary": "#a4a4a4",
+    "--gray": "#f0f0f0",
+    "--blue": "#333333",
+    "--bg": "#121212",
+    "--white": "#202020",
+    "--light-white": "#333333",
+  };
+
+  const [currentMode, setCurrentMode] = useState("light");
+  const [isChecked, setIsChecked] = useState(false);
+  const [img, setImg] = useState(sun);
+
+  useEffect(() => {
+    if (localStorage.getItem("mode") === "dark") {
+      setCurrentMode("dark");
+      setIsChecked(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const theme = currentMode === "light" ? lightTheme : darkTheme;
+    Object.keys(theme).forEach((key) => {
+      const value = theme[key];
+      document.documentElement.style.setProperty(key, value);
+    });
+  }, [currentMode]);
+
+  const toggleTheme = () => {
+    const newMode = currentMode === "light" ? "dark" : "light";
+    setIsChecked(!isChecked);
+    setCurrentMode(newMode);
+    localStorage.setItem("mode", newMode);
+    isChecked ? setImg(moon) : setImg(sun);
+  };
+
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
       <Router>
@@ -67,13 +114,13 @@ const Routing = () => {
             element={!authState.status ? <LogReg /> : <Navigate to={"/home"} />}
           />
 
-          <Route
-            path="/home"
-            element={authState.status ? <Home /> : <Navigate to={"/"} />}
-          />
-
           {authState.status !== null && (
             <>
+              <Route
+                path="/home"
+                element={authState.status ? <Home /> : <Navigate to={"/"} />}
+              />
+
               <Route
                 path="/myquestions"
                 element={
@@ -128,6 +175,9 @@ const Routing = () => {
             </>
           )}
         </Routes>
+        <button className="themeToggleBtn" onClick={toggleTheme}>
+          <img className="icon" style={{ height: "22px" }} src={img} />
+        </button>
       </Router>
     </AuthContext.Provider>
   );

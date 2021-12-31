@@ -7,14 +7,14 @@ import { motion } from "framer-motion";
 const MyAnswers = () => {
   const containerVariants = {
     hidden: {
-      opacity: 0.1,
+      scale: 0.99,
     },
     visible: {
-      opacity: 1,
-      transition: { duration: 0.5 },
+      scale: 1,
+      transition: { duration: 0.15 },
     },
     exit: {
-      transition: { ease: "easeOut" },
+      transition: { ease: "easeIn" },
     },
   };
 

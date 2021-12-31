@@ -216,7 +216,7 @@ app.post("/getposttags", async (req, res) => {
 
   let sql =
     "SELECT * FROM tag INNER JOIN post_tag ON post_tag.tag_id = tag.id AND post_tag.post_id = ? GROUP BY tag.name";
-  await db.query(sql, post_id, (err, result) => {
+  db.query(sql, post_id, (err, result) => {
     if (err) {
       res.send({ err: err });
     }

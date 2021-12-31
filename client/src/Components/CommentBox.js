@@ -1,11 +1,25 @@
+import moment from "moment";
 import { useState } from "react";
 import avatar from "../resources/img_avatar.png";
 
-const CommentBox = ({ replyTo }) => {
-  const [comment, setComment] = useState(
-    replyTo != "" ? "@" + replyTo + " " : ""
-  );
-  const submitComment = () => {};
+const CommentBox = (props) => {
+  const [description, setDescription] = useState();
+  const [error, setError] = useState("");
+
+  const submitComment = () => {
+    const replied_time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
+
+    if (description == "") {
+    }
+  };
+
+  const errorStyling = () => {
+    if (error != "") {
+      return "error active";
+    } else {
+      return "error";
+    }
+  };
 
   return (
     <div className="postsContainer">
@@ -34,8 +48,9 @@ const CommentBox = ({ replyTo }) => {
                 }}
                 className="txtArea"
                 placeholder="Write an answer"
+                value={description}
                 onChange={(e) => {
-                  setComment(e.target.value);
+                  setDescription(e.target.value);
                 }}
               />
             </div>
@@ -51,6 +66,15 @@ const CommentBox = ({ replyTo }) => {
             />
           </form>
         </span>
+        <div
+          id="error"
+          className={errorStyling()}
+          style={{
+            marginLeft: 5,
+          }}
+        >
+          {error}
+        </div>
       </div>
     </div>
   );

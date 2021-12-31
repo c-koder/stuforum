@@ -55,13 +55,15 @@ const LeftBar = () => {
           }}
         >
           <a href="/profile">
-            <h3 style={{ color: "#3D5AF1", fontSize: 22 }}>
+            <h3 style={{ color: "var(--primary)", fontSize: 22 }}>
               You{" "}
-              <span style={{ color: "#B4B4B4" }}>({userQuestionCount})</span>
+              <span style={{ color: "var(--secondary)" }}>
+                ({userQuestionCount})
+              </span>
             </h3>
           </a>
           <span style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
-            <h3 style={{ color: "#B4B4B4", fontSize: 22 }}>
+            <h3 style={{ color: "var(--secondary)", fontSize: 22 }}>
               {authState.likes}
             </h3>
             <img

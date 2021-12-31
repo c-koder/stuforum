@@ -20,11 +20,11 @@ const Home = () => {
 
   const containerVariants = {
     hidden: {
-      opacity: 0.1,
+      scale: 0.99,
     },
     visible: {
-      opacity: 1,
-      transition: { duration: 0.5 },
+      scale: 1,
+      transition: { duration: 0.15 },
     },
     exit: {
       transition: { ease: "easeIn" },
@@ -55,7 +55,7 @@ const Home = () => {
                 marginBottom: 20,
               }}
             >
-              <h3 style={{ color: "#B4B4B4", marginTop: 8 }}>Tagged</h3>
+              <h3 style={{ color: "var(secondary)", marginTop: 8 }}>Tagged</h3>
               <a
                 href={{
                   pathname: `/home/tagged/${name}`,

@@ -25,7 +25,9 @@ const SideMenu = ({ activeTab }) => {
       <div className="rightbar whiteContainer" style={{ marginTop: 0 }}>
         <a
           href="/home"
-          className={activeTab === "home" ? "active link" : "link"}
+          className={
+            activeTab === "home" ? "active rightbar-item" : "rightbar-item"
+          }
         >
           <span>
             <img
@@ -37,7 +39,9 @@ const SideMenu = ({ activeTab }) => {
         </a>
         <a
           href="/myquestions"
-          className={activeTab === "questions" ? "active link" : "link"}
+          className={
+            activeTab === "questions" ? "active rightbar-item" : "rightbar-item"
+          }
         >
           <span>
             <img
@@ -49,7 +53,9 @@ const SideMenu = ({ activeTab }) => {
         </a>
         <a
           href="/myanswers"
-          className={activeTab === "answers" ? "active link" : "link"}
+          className={
+            activeTab === "answers" ? "active rightbar-item" : "rightbar-item"
+          }
         >
           <span>
             <img
@@ -61,7 +67,9 @@ const SideMenu = ({ activeTab }) => {
         </a>
         <a
           href="/tags"
-          className={activeTab === "tags" ? "active link" : "link"}
+          className={
+            activeTab === "tags" ? "active rightbar-item" : "rightbar-item"
+          }
         >
           <span>
             <img

@@ -107,14 +107,14 @@ const LogReg = () => {
 
   const containerVariants = {
     hidden: {
-      opacity: 0.1,
+      scale: 0.99,
     },
     visible: {
-      opacity: 1,
-      transition: { duration: 0.5 },
+      scale: 1,
+      transition: { duration: 0.15 },
     },
     exit: {
-      transition: { ease: "easeOut" },
+      transition: { ease: "easeIn" },
     },
   };
 
@@ -149,7 +149,8 @@ const LogReg = () => {
 
         <div
           style={{
-            borderLeft: "2px solid #b4b4b4",
+            borderLeft: "2px solid",
+            borderColor: "var(--secondary)",
             borderRadius: 25,
             height: "410px",
             marginLeft: 25,

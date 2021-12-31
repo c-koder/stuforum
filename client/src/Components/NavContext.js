@@ -39,7 +39,7 @@ const NavContext = ({ show, onLogout }) => {
                 }}
                 to={"/profile"}
               >
-                <li style={{ color: "#b4b4b4", textAlign: "right" }}>
+                <li style={{ color: "var(--secondary)", textAlign: "right" }}>
                   Profile
                 </li>
               </Link>
@@ -54,7 +54,7 @@ const NavContext = ({ show, onLogout }) => {
               onClick={onLogout}
             >
               {" "}
-              <li style={{ color: "#b4b4b4" }}>Logout</li>
+              <li style={{ color: "var(--secondary)" }}>Logout</li>
             </motion.button>
           </div>
         </ul>

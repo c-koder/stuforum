@@ -18,7 +18,9 @@ const Tag = ({ tag, tagOnly }) => {
           {tag.name}
         </a>
         {!tagOnly && (
-          <h3 style={{ color: "#B4B4B4", marginLeft: 15 }}>{tag.frequency}</h3>
+          <h3 style={{ color: "var(--secondary)", marginLeft: 15 }}>
+            {tag.frequency}
+          </h3>
         )}
       </span>
     </>

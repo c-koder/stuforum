@@ -1,6 +1,4 @@
-import { useState } from "react";
 import Post from "./posts/Post";
-import Replies from "./replies/Replies";
 import Reply from "./replies/Reply";
 
 const Answers = ({ posts, replies, onDelete, repliedBy }) => {

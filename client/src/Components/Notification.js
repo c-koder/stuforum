@@ -4,7 +4,6 @@ import avatar from "../resources/img_avatar.png";
 import liked from "../resources/round/liked.png";
 import upVoted from "../resources/round/upvoted.png";
 import commented from "../resources/round/commented.png";
-import { useState } from "react";
 
 const Notification = ({ notification, changeViewed, onDelete }) => {
   return (
@@ -53,16 +52,18 @@ const Notification = ({ notification, changeViewed, onDelete }) => {
           <div>
             <div style={{ display: "flex" }}>
               <h4>
-                <span style={{ color: "#3d5af1" }}>{notification.byUser}</span>{" "}
+                <span style={{ color: "var(--primary)" }}>
+                  {notification.byUser}
+                </span>{" "}
                 {notification.type} {notification.description}{" "}
               </h4>
             </div>
-            <h5 style={{ float: "left", color: "#b4b4b4" }}>
+            <h5 style={{ float: "left", color: "var(--secondary)" }}>
               {notification.time}
             </h5>
             {!notification.viewed && (
               <h6>
-                <pre style={{ color: "#3d5af1" }}> 🔵</pre>
+                <pre style={{ color: "var(--primary)" }}> 🔵</pre>
               </h6>
             )}
           </div>

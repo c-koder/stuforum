@@ -30,7 +30,7 @@ const ContextMenu = ({
       <div
         style={{
           minWidth: reply != null && "120px",
-          marginLeft: reply != null && "35.7%",
+          marginLeft: reply != null && "59.7%",
         }}
         className={"context-content" + (show ? " shown" : "")}
       >
@@ -52,7 +52,7 @@ const ContextMenu = ({
                   x: -3,
                 }}
               >
-                <li style={{ color: post.answered && "#b4b4b4" }}>
+                <li style={{ color: post.answered && "var(--secondary)" }}>
                   {post.urgent ? "Unmark as Urgent" : "Mark as Urgent"}
                 </li>
               </motion.button>
@@ -68,7 +68,7 @@ const ContextMenu = ({
                   x: -3,
                 }}
               >
-                <li style={{ color: post.urgent && "#b4b4b4" }}>
+                <li style={{ color: post.urgent && "var(--secondary)" }}>
                   {post.answered ? "Unmark as Answered" : "Mark as Answered"}
                 </li>
               </motion.button>

@@ -26,23 +26,23 @@ const Reply = ({ reply, onDelete }) => {
   );
   const [userLiked, setUserLiked] = useState(reply.userLiked);
 
-  let likesColor = "#b4b4b4";
-  let dislikesColor = "#b4b4b4";
+  let likesColor = "var(--secondary)";
+  let dislikesColor = "var(--secondary)";
   if (userLiked === "liked") {
     if (reply.likes >= 0) {
-      likesColor = "#3d5af1";
+      likesColor = "var(--primary)";
     } else {
-      likesColor = "#b4b4b4";
+      likesColor = "var(--secondary)";
     }
   } else if (userLiked === "disliked") {
     if (reply.dislikes >= 0) {
-      dislikesColor = "#ff304f";
+      dislikesColor = "var(--red)";
     } else {
-      dislikesColor = "#b4b4b4";
+      dislikesColor = "var(--secondary)";
     }
   } else {
-    likesColor = "#b4b4b4";
-    dislikesColor = "#b4b4b4";
+    likesColor = "var(--secondary)";
+    dislikesColor = "var(--secondary)";
   }
 
   const likedFunc = (e) => {
@@ -145,14 +145,14 @@ const Reply = ({ reply, onDelete }) => {
               width: "100%",
             }}
           >
-            <h4 style={{ color: "#B4B4B4", marginRight: 10 }}>
+            <h4 style={{ color: "var(--secondary)", marginRight: 10 }}>
               Replied by{" "}
               <a href={`/user/${reply.user_name}`}>
-                <span style={{ color: "#3D5AF1", fontWeight: 600 }}>
+                <span style={{ color: "var(--primary)", fontWeight: 600 }}>
                   {reply.user_name}{" "}
                   <span
                     style={{
-                      color: "#B4B4B4",
+                      color: "var(--secondary)",
                     }}
                   >
                     {moment(reply.replied_time).local().fromNow()}
@@ -182,10 +182,10 @@ const Reply = ({ reply, onDelete }) => {
           )}
 
           <div style={{ display: "flex" }}>
-            <p style={{ color: "#444444" }}>
+            <p style={{ color: "var(--gray)" }}>
               {reply.replied_to !== null && (
                 <a href={`/user/${reply.replied_to}`}>
-                  <span style={{ color: "#3D5AF1", fontWeight: 600 }}>
+                  <span style={{ color: "var(--primary)", fontWeight: 600 }}>
                     @{reply.replied_to}
                   </span>
                 </a>
@@ -252,7 +252,7 @@ const Reply = ({ reply, onDelete }) => {
                 src={replyIcon}
                 style={{ marginTop: 3 }}
               />
-              <h3 style={{ color: "#B4B4B4" }}>Reply</h3>
+              <h3 style={{ color: "var(--secondary)" }}>Reply</h3>
             </button>
           </div>
         </div>
@@ -264,7 +264,12 @@ const Reply = ({ reply, onDelete }) => {
           width: reply.replied_to != "" && "95%",
         }}
       >
-        <CommentBox replyTo={reply.user_name} />
+        <CommentBox
+          replyTo={reply.user_name}
+          user_name={authState.user}
+          user_id={authState.id}
+          post_id={reply.post_id}
+        />
       </div>
 
       {reply.replies !== null && <Replies replies={reply.replies} />}

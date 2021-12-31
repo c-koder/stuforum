@@ -76,26 +76,26 @@ const Post = ({
   let labelColor;
 
   if (post.urgent) {
-    labelColor = "#FF304F";
+    labelColor = "var(--red)";
   }
   if (post.answered) {
-    labelColor = "#40EF40";
+    labelColor = "var(--green)";
   }
 
   let leadsColor;
   if (userVoted === "useful") {
     if (post.leads >= 0) {
-      leadsColor = "#3d5af1";
+      leadsColor = "var(--primary)";
     } else {
-      leadsColor = "#b4b4b4";
+      leadsColor = "var(--secondary)";
     }
   } else if (userVoted === "useless") {
-    leadsColor = "#ff304f";
+    leadsColor = "var(--red)";
   } else {
     if (post.leads < 0) {
-      leadsColor = "#b4b4b4";
+      leadsColor = "var(--secondary)";
     } else {
-      leadsColor = "#b4b4b4";
+      leadsColor = "var(--secondary)";
     }
   }
 
@@ -184,7 +184,7 @@ const Post = ({
         place="bottom"
         type="info"
         className="tooltip"
-        arrowColor="#b4b4b4"
+        arrowColor={"var(--secondary)"}
         delayShow={500}
       />
       <div className="postsContainer">
@@ -212,7 +212,9 @@ const Post = ({
           >
             {leads}
             <br />
-            <span style={{ color: "#B4B4B4", fontSize: 18 }}>Leads</span>
+            <span style={{ color: "var(--secondary)", fontSize: 18 }}>
+              Leads
+            </span>
           </h2>
         </div>
         <div className="postsContainer-div">
@@ -264,20 +266,20 @@ const Post = ({
             style={{
               float: "left",
               minWidth: "30%",
-              color: "#B4B4B4",
+              color: "var(--secondary)",
               fontWeight: 600,
             }}
           >
             Posted by{" "}
             <a href={`/user/${userName}`}>
-              <span style={{ color: "#3D5AF1", fontWeight: 600 }}>
+              <span style={{ color: "var(--primary)", fontWeight: 600 }}>
                 {userName}
               </span>
             </a>
           </span>
           <br />
           <Tags tags={tags} tagOnly={true} />
-          <p style={{ color: singlePost ? "#444444" : "#B4B4B4" }}>
+          <p style={{ color: "var(--gray)" }}>
             {post.description.length > 800 && !singlePost
               ? post.description.substring(0, 800) + " . . ."
               : post.description}
@@ -289,14 +291,14 @@ const Post = ({
             <span
               style={{
                 float: "left",
-                color: "#B4B4B4",
+                color: "var(--secondary)",
                 fontWeight: 600,
                 marginTop: -5,
               }}
             >
               <h4
                 style={{
-                  color: "#B4B4B4",
+                  color: "var(--secondary)",
                 }}
               >
                 {moment(post.posted_time).fromNow()}
@@ -306,7 +308,7 @@ const Post = ({
             <span
               style={{
                 margin: "0 auto",
-                color: "#b4b4b4",
+                color: "var(--primary)",
                 fontWeight: 600,
               }}
             >

@@ -1,4 +1,3 @@
-import { a } from "react-router-dom";
 import like from "../resources/like-blue.png";
 import { motion } from "framer-motion";
 
@@ -12,10 +11,12 @@ const TopUser = ({ topUser }) => {
         }}
       >
         <a href={`/user/${topUser.name}`}>
-          <h3 style={{ color: "#3D5AF1", fontSize: 22 }}>{topUser.name}</h3>
+          <h3 style={{ color: "var(--primary)", fontSize: 22 }}>{topUser.name}</h3>
         </a>
         <span style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
-          <h3 style={{ color: "#B4B4B4", fontSize: 22 }}>{topUser.likes}</h3>
+          <h3 style={{ color: "var(--secondary)", fontSize: 22 }}>
+            {topUser.likes}
+          </h3>
           <img
             style={{ marginLeft: 10, height: 25 }}
             className="icon"

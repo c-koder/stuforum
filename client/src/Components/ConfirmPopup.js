@@ -51,10 +51,10 @@ const ConfirmPopup = (props) => {
             <div style={{ display: "block" }}>
               <h2>Confirm Delete?</h2>
               <h3 style={{ margin: "10px 0 10px 0" }}>
-                It will be <span style={{ color: "#ff304f" }}>permanently</span>{" "}
+                It will be <span style={{ color: "var(--red)" }}>permanently</span>{" "}
                 removed.
               </h3>
-              <h4 style={{ margin: "10px 0 10px 0", color: "#b4b4b4" }}>
+              <h4 style={{ margin: "10px 0 10px 0", color: "var(--secondary)" }}>
                 (This action can't be undone.)
               </h4>
               <div style={{ display: "flex", width: "35%" }}>

@@ -118,10 +118,10 @@ const AskAQuestion = (props) => {
 
             <div
               className="whiteContainer"
-              style={{ backgroundColor: "#E8EBFB", marginBottom: 20 }}
+              style={{ backgroundColor: "var(--blue)", marginBottom: 20 }}
             >
-              <p style={{ color: "#3D5AF1", lineHeight: 1.5 }}>
-                <span style={{ fontWeight: 600, color: "#3D5AF1" }}>
+              <p style={{ color: "var(--primary)", lineHeight: 1.5 }}>
+                <span style={{ fontWeight: 600, color: "var(--primary)" }}>
                   Tips on getting good answers quickly
                 </span>
                 <br />
