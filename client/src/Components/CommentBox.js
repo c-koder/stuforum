@@ -29,7 +29,7 @@ const CommentBox = (props) => {
         })
         .then((response) => {
           const data = {
-            id: response.data.id,
+            // id: response.data.id,
             parent_id: response.data.id,
             user_id: user_id,
             user_name: user_name,
