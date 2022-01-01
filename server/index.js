@@ -99,7 +99,7 @@ app.post("/login", (req, res) => {
               expiresIn: 60 * 60 * 6,
             }
           );
-          res.json({
+          res.send({
             token: accessToken,
             name: result[0].name,
             id: result[0].id,
@@ -167,6 +167,31 @@ app.post("/getuserposts", (req, res) => {
 
 //posts
 
+app.post("/getpostdata", (req, res) => {
+  const post_id = req.body.post_id;
+  const user_id = req.body.user_id;
+
+  //tags
+  db.query(
+    "SELECT * FROM tag INNER JOIN post_tag ON post_tag.tag_id = tag.id AND post_tag.post_id = ?",
+    post_id,
+    (err, tagsResult) => {
+      if (!err) {
+        //post pref
+        db.query(
+          "SELECT * FROM post_pref WHERE user_id = ? AND post_id = ?",
+          [user_id, post_id],
+          (err, postPrefResult) => {
+            if (!err) {
+              res.send({ post_pref: postPrefResult[0], tags: tagsResult });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
 app.post("/addpost", (req, res) => {
   const { question, description, tags, user_id, user_name, posted_time } =
     req.body;
@@ -186,6 +211,7 @@ app.post("/addpost", (req, res) => {
 });
 
 app.post("/getposts", (req, res) => {
+  // ORDER BY id DESC
   let sql = "SELECT * FROM post ORDER BY id DESC";
   db.query(sql, (err, result) => {
     if (err) {
@@ -200,60 +226,18 @@ app.post("/getposts", (req, res) => {
 app.post("/getsinglepost", (req, res) => {
   const post_id = req.body.post_id;
 
-  let sql = "SELECT * FROM post WHERE id = ?";
-  db.query(sql, post_id, (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
+  db.query("SELECT * FROM post WHERE id = ?", post_id, (err, result) => {
+    if (!err) {
       res.send(result);
     }
   });
-});
-
-app.post("/getposttags", async (req, res) => {
-  const post_id = req.body.post_id;
-
-  let sql =
-    "SELECT * FROM tag INNER JOIN post_tag ON post_tag.tag_id = tag.id AND post_tag.post_id = ? GROUP BY tag.name";
-  db.query(sql, post_id, (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
-      res.send(result);
-    }
-  });
-});
-
-app.post("/userpref", (req, res) => {
-  const post_id = req.body.post_id;
-  const user_id = req.body.user_id;
-
-  db.query(
-    "SELECT * FROM post_pref WHERE user_id = ? AND post_id = ?",
-    [user_id, post_id],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      }
-      if (result.length > 0) {
-        res.send(result[0]);
-      }
-    }
-  );
 });
 
 app.post("/updateleadsprefs", (req, res) => {
   const { id, post_id, user_id, pref, leads } = req.body;
 
-  console.log(req.body);
-
-  if (id > 0) {
-    db.query(
-      "UPDATE post_pref SET preference = ? WHERE user_id = ? AND post_id = ?",
-      [pref, user_id, post_id]
-    );
+  if (id != null) {
+    db.query("UPDATE post_pref SET preference = ? WHERE id = ?", [pref, id]);
   } else {
     db.query(
       "INSERT INTO post_pref(post_id, user_id, preference) VALUES(?, ?, ?)",
@@ -331,6 +315,64 @@ app.post("/getsortedtags", (req, res) => {
 
 //replies
 
+app.post("/addreply", (req, res) => {
+  const {
+    parent_id,
+    user_id,
+    user_name,
+    replied_to,
+    post_id,
+    replied_time,
+    description,
+  } = req.body;
+
+  if (replied_to != "") {
+    db.query(
+      "INSERT INTO child_reply(parent_id, user_id, user_name, replied_to, post_id, replied_time, description) VALUES(?, ?, ?, ?, ?, ?, ?)",
+      [
+        parent_id,
+        user_id,
+        user_name,
+        replied_to,
+        post_id,
+        replied_time,
+        description,
+      ],
+      (childReplyErr, result) => {
+        if (!childReplyErr) {
+          db.query(
+            "SELECT id FROM child_reply WHERE user_id = ? AND replied_time = ?",
+            [user_id, replied_time],
+            (selectErr, selectResult) => {
+              if (!selectErr) {
+                res.send(selectResult[0]);
+              }
+            }
+          );
+        }
+      }
+    );
+  } else {
+    db.query(
+      "INSERT INTO reply(user_id, user_name, post_id, replied_time, description) VALUES(?, ?, ?, ?, ?)",
+      [user_id, user_name, post_id, replied_time, description],
+      (err, result) => {
+        if (!err) {
+          db.query(
+            "SELECT id FROM reply WHERE user_id = ? AND replied_time = ?",
+            [user_id, replied_time],
+            (selectErr, selectResult) => {
+              if (!selectErr) {
+                res.send(selectResult[0]);
+              }
+            }
+          );
+        }
+      }
+    );
+  }
+});
+
 app.post("/getreplies", async (req, res) => {
   const post_id = req.body.post_id;
 
@@ -351,6 +393,44 @@ app.post("/getreplies", async (req, res) => {
       });
     }
   });
+});
+
+app.post("/deletereply", (req, res) => {
+  const { reply_id, delete_child_only } = req.body;
+
+  if (!delete_child_only) {
+    db.query(
+      "DELETE FROM reply WHERE id = ?",
+      reply_id,
+      (parentErr, parentResult) => {
+        if (!parentErr) {
+          db.query(
+            "DELETE FROM child_reply WHERE parent_id = ?",
+            reply_id,
+            (err, result) => {
+              if (err) {
+                res.send({ err: err });
+              } else {
+                res.send({ message: "success" });
+              }
+            }
+          );
+        }
+      }
+    );
+  } else {
+    db.query(
+      "DELETE FROM child_reply WHERE id = ?",
+      reply_id,
+      (err, result) => {
+        if (err) {
+          res.send({ err: err });
+        } else {
+          res.send({ message: "success" });
+        }
+      }
+    );
+  }
 });
 
 app.listen(3001, () => {

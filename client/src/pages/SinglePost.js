@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Post from "../Components/posts/Post";
 import RightBar from "../Components/RightBar";
 import { useParams } from "react-router";
@@ -7,9 +7,12 @@ import Replies from "../Components/replies/Replies";
 import { motion } from "framer-motion";
 import useSinglePost from "../Components/dataHooks/useSinglePost";
 import useReplies from "../Components/dataHooks/useReplies";
-import Reply from "../Components/replies/Reply";
+import { AuthContext } from "../helpers/AuthContext";
+import back from "../resources/backArrow.png";
+import axios from "axios";
 
 const SinglePost = () => {
+  const { authState } = useContext(AuthContext);
   const { id } = useParams();
 
   const [post, setPost] = useState({
@@ -69,7 +72,58 @@ const SinglePost = () => {
     },
   };
 
-  const onDelete = () => {};
+  const handleChildReplyDelete = (parent_id, child_id) => {
+    axios.post("http://localhost:3001/deletereply", {
+      reply_id: child_id,
+      delete_child_only: true,
+    });
+    setSortedReplies(
+      sortedReplies.map((reply) => {
+        const { id, replies } = reply;
+        if (id !== parent_id) {
+          return reply;
+        }
+        return {
+          ...reply,
+          replies: replies.filter(({ id }) => id !== child_id),
+        };
+      })
+    );
+  };
+
+  const onDelete = (id, parent_id) => {
+    if (parent_id != null) {
+      handleChildReplyDelete(parent_id, id);
+    } else {
+      axios.post("http://localhost:3001/deletereply", {
+        reply_id: id,
+        delete_child_only: false,
+      });
+      setSortedReplies(sortedReplies.filter((reply) => reply.id !== id));
+    }
+  };
+
+  const addReply = (data) => {
+    // const id = Math.floor(Math.random() * 100000) + 1;
+    const newReply = data;
+    console.log(newReply);
+    if (data.replied_to == null) {
+      setSortedReplies([...sortedReplies, newReply]);
+      // window.location.reload();
+    } else {
+      setSortedReplies(
+        sortedReplies.map((reply) => {
+          if (reply.id == data.parent_id || reply.id == id) {
+            let childArray = reply.replies === null ? [] : reply.replies;
+            childArray = [...childArray, newReply];
+            return { ...reply, replies: childArray };
+          } else {
+            return reply;
+          }
+        })
+      );
+    }
+  };
 
   return (
     <>
@@ -80,10 +134,46 @@ const SinglePost = () => {
         animate="visible"
         exit="exit"
       >
+        <motion.div
+          className="container-div"
+          style={{ width: "0%" }}
+          whileHover={{
+            x: -5,
+          }}
+        >
+          <a
+            href="/home"
+            style={{
+              backgroundColor: "var(--white)",
+              padding: "20px 15px 10px 15px",
+              borderRadius: 10,
+            }}
+          >
+            <img
+              className="icon"
+              style={{
+                height: "22px",
+                marginTop: 10,
+              }}
+              src={back}
+            />
+          </a>
+        </motion.div>
         <div className="container-div" style={{ width: "347%" }}>
-          <Post post={post} singlePost={true} />
-          <CommentBox replyTo={""} />
-          <Replies replies={sortedReplies} onDelete={onDelete} />
+          <Post key={post.id} post={post} singlePost={true} />
+          <CommentBox
+            addReply={addReply}
+            replyTo={""}
+            parent_id={""}
+            user_name={authState.name}
+            user_id={authState.id}
+            post_id={id}
+          />
+          <Replies
+            replies={sortedReplies}
+            onDelete={onDelete}
+            addReply={addReply}
+          />
         </div>
         <div className="container-div">
           <RightBar activeTab={""} />

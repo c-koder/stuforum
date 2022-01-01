@@ -18,6 +18,7 @@ import { AuthContext } from "./helpers/AuthContext";
 import axios from "axios";
 import sun from "./resources/sun.png";
 import moon from "./resources/moon.png";
+import { motion } from "framer-motion";
 
 const Routing = () => {
   const [authState, setAuthState] = useState({
@@ -61,7 +62,7 @@ const Routing = () => {
     "--secondary": "#b4b4b4",
     "--gray": "#444444",
     "--blue": "#e8ebfb",
-    "--bg": "#fcfcfc",
+    "--bg": "#f8f8f8",
     "--white": "#ffffff",
     "--light-white": "#ececec",
   };
@@ -88,6 +89,7 @@ const Routing = () => {
 
   useEffect(() => {
     const theme = currentMode === "light" ? lightTheme : darkTheme;
+    currentMode === "light" ? setImg(moon) : setImg(sun);
     Object.keys(theme).forEach((key) => {
       const value = theme[key];
       document.documentElement.style.setProperty(key, value);
@@ -100,6 +102,13 @@ const Routing = () => {
     setCurrentMode(newMode);
     localStorage.setItem("mode", newMode);
     isChecked ? setImg(moon) : setImg(sun);
+  };
+
+  const rotateVariant = {
+    rotate: { rotate: -10, transition: { duration: 0.2 } },
+    stop: {
+      rotate: 40,
+    },
   };
 
   return (
@@ -175,9 +184,19 @@ const Routing = () => {
             </>
           )}
         </Routes>
-        <button className="themeToggleBtn" onClick={toggleTheme}>
-          <img className="icon" style={{ height: "22px" }} src={img} />
-        </button>
+        <motion.button
+          className="themeToggleBtn"
+          onClick={toggleTheme}
+          whileHover={{ y: -5 }}
+        >
+          <motion.img
+            className="icon"
+            style={{ height: "22px" }}
+            src={img}
+            variants={rotateVariant}
+            animate={currentMode === "light" ? "rotate" : "stop"}
+          />
+        </motion.button>
       </Router>
     </AuthContext.Provider>
   );

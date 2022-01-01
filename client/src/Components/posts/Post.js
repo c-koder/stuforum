@@ -12,9 +12,7 @@ import { motion } from "framer-motion";
 import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
 import axios from "axios";
-import usePostTags from "../dataHooks/usePostTags";
-import usePostPrefs from "../dataHooks/usePostPrefs";
-import useUser from "../dataHooks/useUser";
+import usePostData from "../dataHooks/usePostData";
 
 const Post = ({
   post,
@@ -30,48 +28,34 @@ const Post = ({
   const [leads, setLeads] = useState(post.leads);
 
   const [tags, setTags] = useState([]);
-  const { tagResponse } = usePostTags(post.id);
-
-  useEffect(() => {
-    if (tagResponse !== null) {
-      setTags(tagResponse);
-    }
-  }, [tagResponse]);
-
   const [userVoted, setUserVoted] = useState("");
   const [upVoted, setUpVoted] = useState();
   const [downVoted, setDownVoted] = useState();
-  const [prefId, setPrefId] = useState();
+  const [prefId, setPrefId] = useState(null);
 
-  const { prefResponse } = usePostPrefs(post.id, authState.id);
-
+  const { response } = usePostData(post.id, authState.id);
   useEffect(() => {
-    if (prefResponse !== null) {
-      setPrefId(prefResponse.id);
-      if (prefResponse.preference == "1") {
-        setUserVoted("useful");
-        setUpVoted(true);
-        setDownVoted(false);
-      } else if (prefResponse.preference == "0") {
-        setUserVoted("useless");
-        setUpVoted(false);
-        setDownVoted(true);
-      } else {
-        setUserVoted("");
-        setUpVoted(false);
-        setDownVoted(false);
+    if (response !== null) {
+      setTags(response.tags);
+
+      if (response.post_pref != null) {
+        setPrefId(response.post_pref.id);
+        if (response.post_pref.preference == "1") {
+          setUserVoted("useful");
+          setUpVoted(true);
+          setDownVoted(false);
+        } else if (response.post_pref.preference == "0") {
+          setUserVoted("useless");
+          setUpVoted(false);
+          setDownVoted(true);
+        } else {
+          setUserVoted("");
+          setUpVoted(false);
+          setDownVoted(false);
+        }
       }
     }
-  }, [prefResponse]);
-
-  const [userName, setUserName] = useState();
-  const { userResponse } = useUser(post.user_id);
-
-  useEffect(() => {
-    if (userResponse !== null) {
-      setUserName(userResponse.name);
-    }
-  }, [userResponse]);
+  }, [response]);
 
   let labelColor;
 
@@ -218,7 +202,7 @@ const Post = ({
           </h2>
         </div>
         <div className="postsContainer-div">
-          {userName === authState.name && (
+          {post.user_name === authState.name && (
             <button
               ref={ref}
               style={{ float: "right" }}
@@ -271,9 +255,9 @@ const Post = ({
             }}
           >
             Posted by{" "}
-            <a href={`/user/${userName}`}>
+            <a href={`/user/${post.user_name}`}>
               <span style={{ color: "var(--primary)", fontWeight: 600 }}>
-                {userName}
+                {post.user_name}
               </span>
             </a>
           </span>

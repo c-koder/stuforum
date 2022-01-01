@@ -9,6 +9,7 @@ import tag from "../resources/tag.png";
 import activeTag from "../resources/tag-blue.png";
 import Tags from "./tags/Tags";
 import useSortedTags from "./dataHooks/useSortedTags";
+import { motion } from "framer-motion";
 
 const SideMenu = ({ activeTab }) => {
   const [tags, setTags] = useState([]);
@@ -23,11 +24,15 @@ const SideMenu = ({ activeTab }) => {
   return (
     <div>
       <div className="rightbar whiteContainer" style={{ marginTop: 0 }}>
-        <a
+        <motion.a
           href="/home"
           className={
             activeTab === "home" ? "active rightbar-item" : "rightbar-item"
           }
+          whileHover={{
+            scale: 1.03,
+          }}
+          // transition={{ type: "spring", stiffness: 200, damping: 10 }}
         >
           <span>
             <img
@@ -36,12 +41,15 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           Home
-        </a>
-        <a
+        </motion.a>
+        <motion.a
           href="/myquestions"
           className={
             activeTab === "questions" ? "active rightbar-item" : "rightbar-item"
           }
+          whileHover={{
+            scale: 1.03,
+          }}
         >
           <span>
             <img
@@ -50,12 +58,15 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           My Questions
-        </a>
-        <a
+        </motion.a>
+        <motion.a
           href="/myanswers"
           className={
             activeTab === "answers" ? "active rightbar-item" : "rightbar-item"
           }
+          whileHover={{
+            scale: 1.03,
+          }}
         >
           <span>
             <img
@@ -64,12 +75,15 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           My Answers
-        </a>
-        <a
+        </motion.a>
+        <motion.a
           href="/tags"
           className={
             activeTab === "tags" ? "active rightbar-item" : "rightbar-item"
           }
+          whileHover={{
+            scale: 1.03,
+          }}
         >
           <span>
             <img
@@ -78,7 +92,7 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           Tags
-        </a>
+        </motion.a>
       </div>
       <div className="whiteContainer">
         <h2 style={{ marginBottom: 20 }}>Frequently used tags</h2>

@@ -35,6 +35,14 @@ const ConfirmPopup = (props) => {
     };
   }, [ref]);
 
+  const onClick = () => {
+    if (props.post != null) {
+      props.onDelete(props.post.id);
+    } else if (props.reply != null) {
+      props.onDelete(props.reply.id, props.reply.parent_id);
+    }
+  };
+
   return (
     <div className="overlay">
       <AnimatePresence>
@@ -51,23 +59,22 @@ const ConfirmPopup = (props) => {
             <div style={{ display: "block" }}>
               <h2>Confirm Delete?</h2>
               <h3 style={{ margin: "10px 0 10px 0" }}>
-                It will be <span style={{ color: "var(--red)" }}>permanently</span>{" "}
+                It will be{" "}
+                <span style={{ color: "var(--red)" }}>permanently</span>{" "}
                 removed.
               </h3>
-              <h4 style={{ margin: "10px 0 10px 0", color: "var(--secondary)" }}>
+              <h4
+                style={{ margin: "10px 0 10px 0", color: "var(--secondary)" }}
+              >
                 (This action can't be undone.)
               </h4>
               <div style={{ display: "flex", width: "35%" }}>
                 <button
                   className="btn btn-block"
                   style={{ marginRight: 20 }}
-                  onClick={() =>
-                    props.post != null
-                      ? props.onDelete(props.post.id)
-                      : props.reply != null && props.onDelete(props.reply.id)
-                  }
+                  onClick={onClick}
                 >
-                  Okay
+                  Proceed
                 </button>
                 <button
                   className="btn btn-block"

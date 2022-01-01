@@ -1,16 +1,16 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const usePostPrefs = (post_id, user_id) => {
-  const [prefResponse, setPrefResponse] = useState(null);
+const usePostData = (post_id, user_id) => {
+  const [response, setResponse] = useState(null);
   const fetchData = () => {
     axios
-      .post("http://localhost:3001/userpref", {
+      .post("http://localhost:3001/getpostdata", {
         post_id: post_id,
         user_id: user_id,
       })
       .then((res) => {
-        setPrefResponse(res.data);
+        setResponse(res.data);
       });
   };
 
@@ -18,7 +18,7 @@ const usePostPrefs = (post_id, user_id) => {
     fetchData();
   }, []);
 
-  return { prefResponse };
+  return { response };
 };
 
-export default usePostPrefs;
+export default usePostData;

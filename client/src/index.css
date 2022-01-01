@@ -8,7 +8,7 @@
   --blue: #1a1a1a;
   --red: #dd2541;
   --green: #33be2f;
-  --bg: #fcfcfc;
+  --bg: #f8f8f8;
   --white: #ffffff;
   --light-white: #ececec;
 }
@@ -18,7 +18,7 @@ body,
 html {
   text-rendering: optimizeLegibility;
   font-feature-settings: "kern";
-  transition: all 150ms ease;
+  transition: background-color 200ms ease-in;
 }
 
 img {
@@ -220,21 +220,18 @@ p {
 .themeToggleBtn {
   cursor: pointer;
   font-size: 20;
-  z-index: 999;
+  z-index: 900;
   position: fixed;
   right: 0;
   bottom: 0;
-  margin: 75px;
+  margin: 70px 80px;
   background-color: var(--white);
+  box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
   border: none;
   border-radius: 10%;
-  width: 42px;
-  height: 42px;
-  padding: 10px;
-}
-
-.themeToggleBtn:hover {
-  background-color: var(--light-white);
+  width: 50px;
+  height: 50px;
+  padding: 14px;
 }
 
 .logRegForm {
@@ -307,13 +304,10 @@ p {
   border-radius: 5px;
   cursor: pointer;
   font-size: 18px;
-  transition: all 150ms ease-in;
 }
 
 .rightbar-item:hover {
   background: var(--light-white);
-  transform: scale(1.015);
-  transition: all 150ms ease-in;
 }
 
 .rightbar .active {
@@ -685,7 +679,7 @@ a {
 .error {
   color: var(--white);
   border: none;
-  padding: 10px 20px;
+  padding: 13px 20px;
   margin-bottom: 5px 0px;
   margin-top: 20px;
   border-radius: 5px;
@@ -805,7 +799,7 @@ a {
 }
 
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 9px;
   background-color: transparent;
 }
 

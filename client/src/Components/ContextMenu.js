@@ -11,7 +11,6 @@ const ContextMenu = ({
   onToggleAnswered,
 }) => {
   const [confirmationPopup, setConfirmationPopup] = useState(false);
-
   return (
     <div
       style={{
@@ -30,7 +29,8 @@ const ContextMenu = ({
       <div
         style={{
           minWidth: reply != null && "120px",
-          marginLeft: reply != null && "59.7%",
+          marginLeft:
+            reply != null && reply.replied_to != null ? "53%" : "56.3%",
         }}
         className={"context-content" + (show ? " shown" : "")}
       >

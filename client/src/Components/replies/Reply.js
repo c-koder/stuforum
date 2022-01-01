@@ -13,7 +13,7 @@ import ContextMenu from "../ContextMenu";
 import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
 
-const Reply = ({ reply, onDelete }) => {
+const Reply = ({ reply, onDelete, addReply }) => {
   const { authState } = useContext(AuthContext);
   const [show, setShow] = useState(false);
   const [likes, setLikes] = useState(reply.likes);
@@ -124,9 +124,11 @@ const Reply = ({ reply, onDelete }) => {
         style={{
           float: reply.replied_to != null && "right",
           width: reply.replied_to != null && "95%",
+          marginBottom: 20,
         }}
       >
         <ContextMenu reply={reply} show={show} onDelete={onDelete} />
+
         <div
           className="postsContainer-div"
           style={{
@@ -265,14 +267,18 @@ const Reply = ({ reply, onDelete }) => {
         }}
       >
         <CommentBox
+          addReply={addReply}
+          parent_id={reply.parent_id ? reply.parent_id : reply.id}
           replyTo={reply.user_name}
-          user_name={authState.user}
+          user_name={authState.name}
           user_id={authState.id}
           post_id={reply.post_id}
         />
       </div>
 
-      {reply.replies !== null && <Replies replies={reply.replies} />}
+      {reply.replies !== null && (
+        <Replies replies={reply.replies} onDelete={onDelete} />
+      )}
     </>
   );
 };

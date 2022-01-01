@@ -55,7 +55,7 @@ const Home = () => {
                 marginBottom: 20,
               }}
             >
-              <h3 style={{ color: "var(secondary)", marginTop: 8 }}>Tagged</h3>
+              <h3 style={{ color: "var(--secondary)", marginTop: 8 }}>Tagged</h3>
               <a
                 href={{
                   pathname: `/home/tagged/${name}`,
