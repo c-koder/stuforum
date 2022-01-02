@@ -2,6 +2,8 @@ import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import avatar from "../resources/img_avatar.png";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const CommentBox = (props) => {
   const [description, setDescription] = useState("");
@@ -29,8 +31,8 @@ const CommentBox = (props) => {
         })
         .then((response) => {
           const data = {
-            // id: response.data.id,
-            parent_id: response.data.id,
+            id: response.data.id != null ? response.data.id : null,
+            parent_id: parent_id == null ? response.data.id : parent_id,
             user_id: user_id,
             user_name: user_name,
             replied_to: replyTo == "" ? null : replyTo,
@@ -46,6 +48,35 @@ const CommentBox = (props) => {
           props.addReply(data);
         });
     }
+  };
+
+  let modules = {
+    toolbar: [
+      [{ size: [] }],
+      ["bold", "italic", "underline"],
+      ["code"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
+    ],
+    clipboard: {
+      matchVisual: false,
+    },
+  };
+
+  let formats = [
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "list",
+    "bullet",
+    "link",
+    "image",
+  ];
+
+  const handleChange = (html) => {
+    setDescription(html);
   };
 
   useEffect(() => {
@@ -71,21 +102,31 @@ const CommentBox = (props) => {
       <div className="postsContainer-div">
         <span style={{ width: "100%" }}>
           <div className="form-control" style={{ marginBottom: 30 }}>
-            <textarea
-              style={{
-                margin: "-20px 0px 0px 0px",
-                resize: "vertical",
-                height: 50,
-                minHeight: 50,
-                maxHeight: 200,
-              }}
-              className="txtArea"
-              placeholder="Write an answer"
-              value={description}
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
-            />
+            {props.replyTo == "" ? (
+              <ReactQuill
+                onChange={handleChange}
+                value={description}
+                modules={modules}
+                bounds={".quillcontent"}
+                formats={formats}
+              />
+            ) : (
+              <textarea
+                style={{
+                  margin: "-20px 0px 0px 0px",
+                  resize: "vertical",
+                  height: 50,
+                  minHeight: 50,
+                  maxHeight: 200,
+                }}
+                className="txtArea"
+                placeholder="Write an answer"
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+              />
+            )}
           </div>
           <button
             type="button"

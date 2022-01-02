@@ -192,7 +192,9 @@ const Reply = ({ reply, onDelete, addReply }) => {
                   </span>
                 </a>
               )}{" "}
-              {reply.description}
+              <span
+                dangerouslySetInnerHTML={{ __html: reply.description }}
+              ></span>
             </p>
           </div>
 

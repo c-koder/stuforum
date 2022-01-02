@@ -104,16 +104,14 @@ const SinglePost = () => {
   };
 
   const addReply = (data) => {
-    // const id = Math.floor(Math.random() * 100000) + 1;
     const newReply = data;
     console.log(newReply);
     if (data.replied_to == null) {
       setSortedReplies([...sortedReplies, newReply]);
-      // window.location.reload();
     } else {
       setSortedReplies(
         sortedReplies.map((reply) => {
-          if (reply.id == data.parent_id || reply.id == id) {
+          if (reply.id == data.parent_id) {
             let childArray = reply.replies === null ? [] : reply.replies;
             childArray = [...childArray, newReply];
             return { ...reply, replies: childArray };

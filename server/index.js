@@ -340,15 +340,7 @@ app.post("/addreply", (req, res) => {
       ],
       (childReplyErr, result) => {
         if (!childReplyErr) {
-          db.query(
-            "SELECT id FROM child_reply WHERE user_id = ? AND replied_time = ?",
-            [user_id, replied_time],
-            (selectErr, selectResult) => {
-              if (!selectErr) {
-                res.send(selectResult[0]);
-              }
-            }
-          );
+          res.send({ message: "success" });
         }
       }
     );

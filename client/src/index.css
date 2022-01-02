@@ -778,6 +778,33 @@ a {
   padding: 10px !important;
 }
 
+.ql-editor {
+  overflow-y: scroll;
+  resize: vertical;
+}
+
+.quill {
+  margin-top: -15px;
+}
+
+.quill .ql-container {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+  background: transparent;
+}
+
+.quill .ql-snow.ql-toolbar {
+  display: block;
+  background: #ececec;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+}
+
+.quill .ql-editor {
+  font-size: 16px;
+  min-height: 60px;
+  max-height: 360px;
+}
 .strength-Weak::-webkit-progress-value {
   background-color: #f25f5c;
 }
