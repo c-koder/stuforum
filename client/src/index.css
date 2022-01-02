@@ -8,7 +8,7 @@
   --blue: #1a1a1a;
   --red: #dd2541;
   --green: #33be2f;
-  --bg: #f8f8f8;
+  --bg: #f6f6f6;
   --white: #ffffff;
   --light-white: #ececec;
 }
@@ -781,6 +781,7 @@ a {
 .ql-editor {
   overflow-y: scroll;
   resize: vertical;
+  font-size: 16px;
 }
 
 .quill {
@@ -800,11 +801,29 @@ a {
   border-top-right-radius: 0.5em;
 }
 
-.quill .ql-editor {
-  font-size: 16px;
-  min-height: 60px;
-  max-height: 360px;
+.quill .ql-snow .ql-editor pre.ql-syntax,
+.quill .ql-bubble .ql-editor pre.ql-syntax {
+  background-color: var(--bg);
+  color: var(--gray);
+  overflow: visible;
 }
+
+.quill .ql-bubble .ql-editor pre.ql-syntax {
+  padding: 10px 15px 10px 15px;
+}
+
+.quill .ql-bubble {
+  padding: 0;
+  margin: 0px 0px -27px 0px;
+  resize: none;
+}
+
+.quill .ql-bubble .ql-editor {
+  padding: 17px 0px 20px 0px;
+  padding-top: 15px;
+  resize: none;
+}
+
 .strength-Weak::-webkit-progress-value {
   background-color: #f25f5c;
 }

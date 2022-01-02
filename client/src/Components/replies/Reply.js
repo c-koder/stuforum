@@ -12,6 +12,8 @@ import settings from "../../resources/settings.png";
 import ContextMenu from "../ContextMenu";
 import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
+import "react-quill/dist/quill.bubble.css";
+import ReactQuill from "react-quill";
 
 const Reply = ({ reply, onDelete, addReply }) => {
   const { authState } = useContext(AuthContext);
@@ -147,7 +149,7 @@ const Reply = ({ reply, onDelete, addReply }) => {
               width: "100%",
             }}
           >
-            <h4 style={{ color: "var(--secondary)", marginRight: 10 }}>
+            <h4 style={{ color: "var(--secondary)" }}>
               Replied by{" "}
               <a href={`/user/${reply.user_name}`}>
                 <span style={{ color: "var(--primary)", fontWeight: 600 }}>
@@ -186,16 +188,31 @@ const Reply = ({ reply, onDelete, addReply }) => {
           <div style={{ display: "flex" }}>
             <p style={{ color: "var(--gray)" }}>
               {reply.replied_to !== null && (
-                <a href={`/user/${reply.replied_to}`}>
+                <a
+                  href={`/user/${reply.replied_to}`}
+                  style={{ marginRight: 5 }}
+                >
                   <span style={{ color: "var(--primary)", fontWeight: 600 }}>
                     @{reply.replied_to}
                   </span>
                 </a>
-              )}{" "}
+              )}
+            </p>
+            {reply.description.includes("syntax") ? (
+              <span
+                style={{
+                  backgroundColor: "var(--bg)",
+                  marginTop: 7,
+                  padding: 10,
+                  borderRadius: 7,
+                }}
+                dangerouslySetInnerHTML={{ __html: reply.description }}
+              ></span>
+            ) : (
               <span
                 dangerouslySetInnerHTML={{ __html: reply.description }}
               ></span>
-            </p>
+            )}
           </div>
 
           <hr style={{ margin: "15px 0" }} />
@@ -279,7 +296,11 @@ const Reply = ({ reply, onDelete, addReply }) => {
       </div>
 
       {reply.replies !== null && (
-        <Replies replies={reply.replies} onDelete={onDelete} />
+        <Replies
+          replies={reply.replies}
+          onDelete={onDelete}
+          addReply={addReply}
+        />
       )}
     </>
   );

@@ -4,12 +4,48 @@ import { useEffect, useState } from "react";
 import avatar from "../resources/img_avatar.png";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import hljs from "highlight.js";
+import "highlight.js/styles/stackoverflow-light.css";
+
+hljs.configure({
+  languages: ["javascript", "java", "c", "c++", "python"],
+});
+
+const modules = {
+  syntax: {
+    highlight: (description) => hljs.highlightAuto(description).value,
+  },
+  toolbar: [
+    ["bold", "italic", "underline"],
+    ["code-block"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["link", "image"],
+  ],
+
+  clipboard: {
+    matchVisual: false,
+  },
+};
+
+const formats = [
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "code-block",
+  "list",
+  "bullet",
+  "link",
+  "image",
+];
 
 const CommentBox = (props) => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
 
-  const submitComment = () => {
+  const submitComment = (e) => {
+    e.preventDefault();
+    const id = Math.floor(Math.random() * 10000) + 1;
     const parent_id = props.parent_id;
     const replyTo = props.replyTo;
     const user_id = props.user_id;
@@ -31,7 +67,7 @@ const CommentBox = (props) => {
         })
         .then((response) => {
           const data = {
-            id: response.data.id != null ? response.data.id : null,
+            id: response.data.id != null ? response.data.id : id,
             parent_id: parent_id == null ? response.data.id : parent_id,
             user_id: user_id,
             user_name: user_name,
@@ -49,31 +85,6 @@ const CommentBox = (props) => {
         });
     }
   };
-
-  let modules = {
-    toolbar: [
-      [{ size: [] }],
-      ["bold", "italic", "underline"],
-      ["code"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"],
-    ],
-    clipboard: {
-      matchVisual: false,
-    },
-  };
-
-  let formats = [
-    "size",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "list",
-    "bullet",
-    "link",
-    "image",
-  ];
 
   const handleChange = (html) => {
     setDescription(html);
@@ -102,12 +113,19 @@ const CommentBox = (props) => {
       <div className="postsContainer-div">
         <span style={{ width: "100%" }}>
           <div className="form-control" style={{ marginBottom: 30 }}>
-            {props.replyTo == "" ? (
+            <ReactQuill
+              onChange={handleChange}
+              value={description}
+              modules={modules}
+              bounds={".quill"}
+              formats={formats}
+            />
+            {/* {props.replyTo == "" ? (
               <ReactQuill
                 onChange={handleChange}
                 value={description}
                 modules={modules}
-                bounds={".quillcontent"}
+                bounds={".quill"}
                 formats={formats}
               />
             ) : (
@@ -120,13 +138,13 @@ const CommentBox = (props) => {
                   maxHeight: 200,
                 }}
                 className="txtArea"
-                placeholder="Write an answer"
+                placeholder="Leave a reply..."
                 value={description}
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}
               />
-            )}
+            )} */}
           </div>
           <button
             type="button"
