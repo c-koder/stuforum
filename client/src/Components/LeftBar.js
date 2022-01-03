@@ -8,7 +8,7 @@ import useSortedUsers from "./dataHooks/useSortedUsers";
 import { AuthContext } from "../helpers/AuthContext";
 import useUserPosts from "./dataHooks/useUserPosts";
 
-const LeftBar = () => {
+const LeftBar = ({ addPost }) => {
   const { authState } = useContext(AuthContext);
   const [questionPopup, setQuestionPopup] = useState(false);
 
@@ -40,6 +40,7 @@ const LeftBar = () => {
         <AskAQuestion
           questionPopup={questionPopup}
           setQuestionPopup={setQuestionPopup}
+          addPost={addPost}
         />
       )}
       <Button onClick={askQuestion} text={"Ask a Question"} />

@@ -9,21 +9,20 @@ const UserProfile = () => {
   const { authState } = useContext(AuthContext);
   const containerVariants = {
     hidden: {
-      scale: 0.99,
+      scale: 0.96,
     },
     visible: {
       scale: 1,
-      transition: { duration: 0.15 },
+      transition: { duration: 0.5 },
     },
     exit: {
       transition: { ease: "easeIn" },
     },
   };
 
-  const [title, setTitle] = useState("User Profile");
   useEffect(() => {
-    document.title = title;
-  }, [title]);
+    document.title = "Profile";
+  }, []);
 
   return (
     <>

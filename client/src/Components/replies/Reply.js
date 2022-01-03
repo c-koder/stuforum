@@ -12,21 +12,42 @@ import settings from "../../resources/settings.png";
 import ContextMenu from "../ContextMenu";
 import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
-import "react-quill/dist/quill.bubble.css";
-import ReactQuill from "react-quill";
+import axios from "axios";
+import useReplyData from "../dataHooks/useReplyData";
 
 const Reply = ({ reply, onDelete, addReply }) => {
   const { authState } = useContext(AuthContext);
+
   const [show, setShow] = useState(false);
   const [likes, setLikes] = useState(reply.likes);
   const [dislikes, setDisLikes] = useState(reply.dislikes);
-  const [liked, setLiked] = useState(
-    reply.userLiked === "liked" ? true : false
-  );
-  const [disliked, setDisLiked] = useState(
-    reply.userLiked === "disliked" ? true : false
-  );
-  const [userLiked, setUserLiked] = useState(reply.userLiked);
+
+  const [prefId, setPrefId] = useState(null);
+  const [userLiked, setUserLiked] = useState();
+  const [liked, setLiked] = useState();
+  const [disliked, setDisLiked] = useState();
+
+  const child_reply_id = reply.parent_id != null ? reply.id : null;
+  const { response } = useReplyData(reply.id, child_reply_id, authState.id);
+
+  useEffect(() => {
+    if (response != null) {
+      setPrefId(response.id);
+      if (response.preference == "1") {
+        setUserLiked("liked");
+        setLiked(true);
+        setDisLiked(false);
+      } else if (response.preference == "0") {
+        setUserLiked("disliked");
+        setLiked(false);
+        setDisLiked(true);
+      } else {
+        setUserLiked("");
+        setLiked(false);
+        setDisLiked(false);
+      }
+    }
+  }, [response]);
 
   let likesColor = "var(--secondary)";
   let dislikesColor = "var(--secondary)";
@@ -47,6 +68,19 @@ const Reply = ({ reply, onDelete, addReply }) => {
     dislikesColor = "var(--secondary)";
   }
 
+  const updateReplyPref = (pref, previousPref) => {
+    axios.post("http://localhost:3001/updatereplypref", {
+      id: prefId,
+      parent_id: reply.id,
+      child_id: reply.parent_id != null ? reply.id : null,
+      user_id: authState.id,
+      pref: pref,
+      previous_pref: previousPref,
+    });
+  };
+
+  const [disabled, setDisabled] = useState(false);
+
   const likedFunc = (e) => {
     e.preventDefault();
     if (disliked) {
@@ -55,17 +89,21 @@ const Reply = ({ reply, onDelete, addReply }) => {
       setLiked(true);
       setDisLiked(false);
       setUserLiked("liked");
+      updateReplyPref("1", "disliked");
     } else {
       if (!liked) {
         setLikes(likes + 1);
         setLiked(true);
         setUserLiked("liked");
+        updateReplyPref("1", "");
       } else {
         setLikes(likes - 1);
         setLiked(false);
         setUserLiked("");
+        updateReplyPref("", "liked");
       }
     }
+    setDisabled(true);
   };
 
   const disLikedFunc = (e) => {
@@ -76,17 +114,21 @@ const Reply = ({ reply, onDelete, addReply }) => {
       setLiked(false);
       setDisLiked(true);
       setUserLiked("disliked");
+      updateReplyPref("0", "liked");
     } else {
       if (!disliked) {
         setDisLikes(dislikes + 1);
         setDisLiked(true);
         setUserLiked("disliked");
+        updateReplyPref("0", "");
       } else {
         setDisLikes(dislikes - 1);
         setDisLiked(false);
         setUserLiked("");
+        updateReplyPref("", "disliked");
       }
     }
+    setDisabled(true);
   };
 
   const [showCommentBox, setShowCommentBox] = useState("none");
@@ -118,6 +160,17 @@ const Reply = ({ reply, onDelete, addReply }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [ref]);
+
+  const [repliedTime, setRepliedTime] = useState(
+    moment(reply.replied_time).local().fromNow()
+  );
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRepliedTime(moment(reply.replied_time).local().fromNow());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <>
@@ -154,12 +207,15 @@ const Reply = ({ reply, onDelete, addReply }) => {
               <a href={`/user/${reply.user_name}`}>
                 <span style={{ color: "var(--primary)", fontWeight: 600 }}>
                   {reply.user_name}{" "}
+                  <span style={{ color: "var(--secondary)", fontSize: 12 }}>
+                    ●
+                  </span>{" "}
                   <span
                     style={{
                       color: "var(--secondary)",
                     }}
                   >
-                    {moment(reply.replied_time).local().fromNow()}
+                    {repliedTime}
                   </span>
                 </span>
               </a>
@@ -230,7 +286,11 @@ const Reply = ({ reply, onDelete, addReply }) => {
                 textAlign: "center",
               }}
             >
-              <button className="nullBtn" onClick={likedFunc}>
+              <button
+                className="nullBtn"
+                onClick={likedFunc}
+                disabled={disabled}
+              >
                 <img
                   className="navIcon"
                   src={userLiked === "liked" ? likeBlue : likeIcon}
@@ -248,6 +308,7 @@ const Reply = ({ reply, onDelete, addReply }) => {
                 style={{ marginTop: 5 }}
                 className="nullBtn"
                 onClick={disLikedFunc}
+                disabled={disabled}
               >
                 <img
                   className="navIcon"

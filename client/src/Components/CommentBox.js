@@ -45,7 +45,6 @@ const CommentBox = (props) => {
 
   const submitComment = (e) => {
     e.preventDefault();
-    const id = Math.floor(Math.random() * 10000) + 1;
     const parent_id = props.parent_id;
     const replyTo = props.replyTo;
     const user_id = props.user_id;
@@ -67,7 +66,7 @@ const CommentBox = (props) => {
         })
         .then((response) => {
           const data = {
-            id: response.data.id != null ? response.data.id : id,
+            id: response.data.id,
             parent_id: parent_id == null ? response.data.id : parent_id,
             user_id: user_id,
             user_name: user_name,

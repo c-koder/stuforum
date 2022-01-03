@@ -7,11 +7,11 @@ import { motion } from "framer-motion";
 const MyAnswers = () => {
   const containerVariants = {
     hidden: {
-      scale: 0.99,
+      scale: 0.96,
     },
     visible: {
       scale: 1,
-      transition: { duration: 0.15 },
+      transition: { duration: 0.5 },
     },
     exit: {
       transition: { ease: "easeIn" },
@@ -23,10 +23,9 @@ const MyAnswers = () => {
   //   console.log(replies.length);
   // };
 
-  const [title, setTitle] = useState("My Answers");
   useEffect(() => {
-    document.title = title;
-  }, [title]);
+    document.title = "My Answers";
+  }, []);
 
   return (
     <>

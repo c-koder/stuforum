@@ -16,20 +16,19 @@ const Tags = () => {
 
   const containerVariants = {
     hidden: {
-      scale: 0.99,
+      scale: 0.96,
     },
     visible: {
       scale: 1,
-      transition: { duration: 0.15 },
+      transition: { duration: 0.5 },
     },
     exit: {
       transition: { ease: "easeIn" },
     },
   };
 
-  const title = "Tags";
   useEffect(() => {
-    document.title = title;
+    document.title = "Tags";
   }, []);
 
   return (

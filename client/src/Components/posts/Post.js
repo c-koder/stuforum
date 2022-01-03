@@ -17,6 +17,7 @@ import usePostData from "../dataHooks/usePostData";
 const Post = ({
   post,
   singlePost,
+  commentCount,
   onDelete,
   onToggleUrgent,
   onToggleAnswered,
@@ -76,11 +77,7 @@ const Post = ({
   } else if (userVoted === "useless") {
     leadsColor = "var(--red)";
   } else {
-    if (post.leads < 0) {
-      leadsColor = "var(--secondary)";
-    } else {
-      leadsColor = "var(--secondary)";
-    }
+    leadsColor = "var(--secondary)";
   }
 
   const updateLeadsPrefs = (leads, pref) => {
@@ -160,6 +157,23 @@ const Post = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [ref]);
+
+  const [description, setDescription] = useState(
+    post.description.length > 600 && !singlePost
+      ? post.description.substring(0, 600) + " . . ."
+      : post.description
+  );
+
+  const [postedTime, setPostedTime] = useState(
+    moment(post.posted_time).local().fromNow()
+  );
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPostedTime(moment(post.posted_time).local().fromNow());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <>
@@ -263,11 +277,26 @@ const Post = ({
           </span>
           <br />
           <Tags tags={tags} tagOnly={true} />
-          <p style={{ color: "var(--gray)" }}>
-            {post.description.length > 800 && !singlePost
-              ? post.description.substring(0, 800) + " . . ."
-              : post.description}
-          </p>
+
+          {post.description.includes("syntax") ? (
+            <span
+              style={{
+                backgroundColor: "var(--bg)",
+                marginTop: 7,
+                padding: 10,
+                borderRadius: 7,
+              }}
+              dangerouslySetInnerHTML={{
+                __html: description,
+              }}
+            ></span>
+          ) : (
+            <span
+              dangerouslySetInnerHTML={{
+                __html: description,
+              }}
+            ></span>
+          )}
 
           <hr style={{ margin: "15px 0" }} />
 
@@ -285,7 +314,7 @@ const Post = ({
                   color: "var(--secondary)",
                 }}
               >
-                {moment(post.posted_time).fromNow()}
+                {postedTime}
               </h4>
             </span>
 
@@ -297,7 +326,7 @@ const Post = ({
               }}
             >
               <img className="navIcon" src={answers} />
-              {post.comments}
+              {commentCount == null ? post.comments : commentCount}
             </span>
             <span style={{ float: "right" }}>
               <button className="nullBtn" onClick={upVote}>

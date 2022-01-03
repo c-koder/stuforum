@@ -204,14 +204,40 @@ app.post("/addpost", (req, res) => {
     [question, description, user_id, user_name, posted_time, urgent],
     (addErr, addResult) => {
       if (!addErr) {
-        res.send({ message: "post_added" });
+        tags.map((tag) => {
+          db.query(
+            "SELECT id FROM tag WHERE name = ?",
+            tag.toLowerCase(),
+            (err, result) => {
+              if (result.length <= 0) {
+                db.query(
+                  "INSERT INTO tag(name) VALUES(?)",
+                  tag,
+                  (err, tagResult) => {
+                    if (!err) {
+                      db.query(
+                        "INSERT INTO post_tag(post_id, tag_id) VALUES(?, ?)",
+                        [addResult.insertId, tagResult.insertId]
+                      );
+                    }
+                  }
+                );
+              } else {
+                db.query("INSERT INTO post_tag(post_id, tag_id) VALUES(?, ?)", [
+                  addResult.insertId,
+                  result[0].id,
+                ]);
+              }
+            }
+          );
+        });
+        res.send({ id: addResult.insertId, message: "post_added" });
       }
     }
   );
 });
 
 app.post("/getposts", (req, res) => {
-  // ORDER BY id DESC
   let sql = "SELECT * FROM post ORDER BY id DESC";
   db.query(sql, (err, result) => {
     if (err) {
@@ -245,24 +271,15 @@ app.post("/updateleadsprefs", (req, res) => {
     );
   }
 
-  db.query("SELECT leads FROM post WHERE id = ?", post_id, (err, result) => {
-    if (err) {
-      res.send({ err: err });
+  db.query(
+    "UPDATE post SET leads = leads + ? WHERE id = ?",
+    [leads, post_id],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
     }
-    if (result.length > 0) {
-      const newLeads = parseInt(result[0].leads) + leads;
-      db.query(
-        "UPDATE post SET leads = ? WHERE id = ?",
-        [newLeads, post_id],
-        (err, updateRes) => {
-          if (err) {
-            res.send({ err: err });
-          }
-        }
-      );
-    }
-  });
-  res.end();
+  );
 });
 
 app.post("/updatepoststatus", (req, res) => {
@@ -282,6 +299,15 @@ app.post("/updatepoststatus", (req, res) => {
       res.send({ err: err });
     } else {
       res.send({ message: "updated" });
+    }
+  });
+});
+
+app.post("/getcommentcount", (req, res) => {
+  const post_id = req.body.post_id;
+  db.query("SELECT comments FROM post WHERE id = ?", post_id, (err, result) => {
+    if (result.length > 0) {
+      res.send(result[0]);
     }
   });
 });
@@ -315,6 +341,27 @@ app.post("/getsortedtags", (req, res) => {
 
 //replies
 
+app.post("/getreplydata", (req, res) => {
+  const { parent_id, child_id, user_id } = req.body;
+
+  let reply_id;
+  let sql = "SELECT * FROM reply_pref WHERE user_id = ? AND ";
+
+  if (child_id == null) {
+    sql += "parent_reply_id = ?";
+    reply_id = parent_id;
+  } else {
+    sql += "child_reply_id = ?";
+    reply_id = child_id;
+  }
+
+  db.query(sql, [user_id, reply_id], (err, replyPrefResult) => {
+    if (!err) {
+      res.send(replyPrefResult[0]);
+    }
+  });
+});
+
 app.post("/addreply", (req, res) => {
   const {
     parent_id,
@@ -340,7 +387,19 @@ app.post("/addreply", (req, res) => {
       ],
       (childReplyErr, result) => {
         if (!childReplyErr) {
-          res.send({ message: "success" });
+          db.query(
+            "SELECT id FROM child_reply WHERE user_id = ? AND replied_time = ?",
+            [user_id, replied_time],
+            (selectErr, selectResult) => {
+              if (!selectErr) {
+                res.send(selectResult[0]);
+              }
+            }
+          );
+          db.query(
+            "UPDATE post SET comments = comments + 1 WHERE id = ?",
+            post_id
+          );
         }
       }
     );
@@ -359,6 +418,10 @@ app.post("/addreply", (req, res) => {
               }
             }
           );
+          db.query(
+            "UPDATE post SET comments = comments + 1 WHERE id = ?",
+            post_id
+          );
         }
       }
     );
@@ -367,28 +430,24 @@ app.post("/addreply", (req, res) => {
 
 app.post("/getreplies", async (req, res) => {
   const post_id = req.body.post_id;
-
   let sql = "SELECT * FROM reply WHERE post_id = ?";
   db.query(sql, post_id, (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
-      let childRepliesSql = "SELECT * FROM child_reply WHERE post_id = ?";
-      db.query(childRepliesSql, post_id, (err, childReplyResult) => {
-        if (err) {
-          res.send({ err: err });
+    if (!err) {
+      db.query(
+        "SELECT * FROM child_reply WHERE post_id = ?",
+        post_id,
+        (childReplyErr, childReplyResult) => {
+          if (!childReplyErr) {
+            res.send({ replies: result, child_replies: childReplyResult });
+          }
         }
-        if (childReplyResult.length > 0) {
-          res.send({ replies: result, child_replies: childReplyResult });
-        }
-      });
+      );
     }
   });
 });
 
 app.post("/deletereply", (req, res) => {
-  const { reply_id, delete_child_only } = req.body;
+  const { post_id, reply_id, delete_child_only } = req.body;
 
   if (!delete_child_only) {
     db.query(
@@ -400,10 +459,16 @@ app.post("/deletereply", (req, res) => {
             "DELETE FROM child_reply WHERE parent_id = ?",
             reply_id,
             (err, result) => {
-              if (err) {
-                res.send({ err: err });
-              } else {
-                res.send({ message: "success" });
+              if (!err) {
+                db.query(
+                  "UPDATE post SET comments = comments - ? WHERE id = ?",
+                  [result.affectedRows + 1, post_id],
+                  (err, result) => {
+                    if (err) {
+                      res.send({ err: err });
+                    }
+                  }
+                );
               }
             }
           );
@@ -415,14 +480,78 @@ app.post("/deletereply", (req, res) => {
       "DELETE FROM child_reply WHERE id = ?",
       reply_id,
       (err, result) => {
-        if (err) {
-          res.send({ err: err });
-        } else {
-          res.send({ message: "success" });
+        if (!err) {
+          db.query(
+            "UPDATE post SET comments = comments - 1 WHERE id = ?",
+            post_id,
+            (err, result) => {
+              if (!err) {
+                res.send({ message: "success" });
+              }
+            }
+          );
         }
       }
     );
   }
+});
+
+app.post("/updatereplypref", (req, res) => {
+  const { id, parent_id, child_id, user_id, pref, previous_pref } = req.body;
+
+  let reply_id;
+  let updateLikesDislikesQuery = "";
+
+  if (id != null) {
+    db.query("UPDATE reply_pref SET preference = ? WHERE id = ?", [pref, id]);
+    if (child_id != null) {
+      reply_id = child_id;
+      updateLikesDislikesQuery = "UPDATE child_reply SET ";
+    } else if (parent_id != null) {
+      reply_id = parent_id;
+      updateLikesDislikesQuery = "UPDATE reply SET ";
+    }
+  } else {
+    if (child_id != null) {
+      reply_id = child_id;
+      updateLikesDislikesQuery = "UPDATE child_reply SET ";
+      db.query(
+        "INSERT INTO reply_pref(child_reply_id, user_id, preference) VALUES(?, ?, ?)",
+        [child_id, user_id, pref]
+      );
+    } else {
+      reply_id = parent_id;
+      updateLikesDislikesQuery = "UPDATE reply SET ";
+      db.query(
+        "INSERT INTO reply_pref(parent_reply_id, user_id, preference) VALUES(?, ?, ?)",
+        [parent_id, user_id, pref]
+      );
+    }
+  }
+
+  if (pref == "1") {
+    if (previous_pref == "disliked") {
+      updateLikesDislikesQuery +=
+        "likes = likes + 1 , dislikes = dislikes - 1 WHERE id = ?";
+    } else if (previous_pref == "") {
+      updateLikesDislikesQuery += "likes = likes + 1 WHERE id = ?";
+    }
+  } else if (pref == "0") {
+    if (previous_pref == "liked") {
+      updateLikesDislikesQuery +=
+        "dislikes = dislikes + 1 , likes = likes - 1 WHERE id = ?";
+    } else if (previous_pref == "") {
+      updateLikesDislikesQuery += "dislikes = dislikes + 1 WHERE id = ?";
+    }
+  } else {
+    if (previous_pref == "liked") {
+      updateLikesDislikesQuery += "likes = likes - 1 WHERE id = ?";
+    } else if (previous_pref == "disliked") {
+      updateLikesDislikesQuery += "dislikes = dislikes - 1 WHERE id = ?";
+    }
+  }
+
+  db.query(updateLikesDislikesQuery, reply_id);
 });
 
 app.listen(3001, () => {

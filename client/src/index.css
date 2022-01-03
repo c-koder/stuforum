@@ -11,6 +11,7 @@
   --bg: #f6f6f6;
   --white: #ffffff;
   --light-white: #ececec;
+  --main-font-size: 18px;
 }
 
 *,
@@ -69,7 +70,7 @@ body {
   border-color: var(--gray);
   border-width: 1px;
   border-radius: 6px;
-  font-size: 18px;
+  font-size: var(--main-font-size);
 
   float: left;
   position: relative;
@@ -122,7 +123,7 @@ body {
   border-radius: 50%;
   background: var(--primary);
   color: var(--white);
-  font-size: 18px;
+  font-size: var(--main-font-size);
 }
 
 .icon {
@@ -192,7 +193,7 @@ p {
   border-radius: 5px;
   cursor: pointer;
   text-decoration: none;
-  font-size: 18px;
+  font-size: var(--main-font-size);
   font-family: inherit;
   transition: all 200ms ease-out;
 }
@@ -219,7 +220,6 @@ p {
 
 .themeToggleBtn {
   cursor: pointer;
-  font-size: 20;
   z-index: 900;
   position: fixed;
   right: 0;
@@ -288,7 +288,7 @@ p {
   font-weight: 600;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: var(--main-font-size);
   transition: all 150ms ease-in;
 }
 
@@ -303,7 +303,7 @@ p {
   font-weight: 600;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: var(--main-font-size);
 }
 
 .rightbar-item:hover {
@@ -402,12 +402,13 @@ p {
 }
 
 .content {
+  overflow: scroll;
   margin: 5% auto;
   background-color: var(--white);
   box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
   border-radius: 10px;
   width: 50vw;
-  height: 79%;
+  height: 70%;
   padding: 40px;
   position: relative;
 }
@@ -463,7 +464,7 @@ p {
   display: block;
   transition: all 200ms ease-out;
   padding: 20px;
-  font-size: 18px;
+  font-size: var(--main-font-size);
 }
 
 .label {
@@ -472,7 +473,7 @@ p {
   margin: 5px 20px 0px 20px;
   padding: 5px 10px;
   font-weight: 600;
-  font-size: 18px;
+  font-size: var(--main-font-size);
   border-radius: 5px;
 }
 
@@ -486,7 +487,7 @@ p {
   border-color: var(--gray);
   border-width: 1px;
   border-radius: 5px;
-  font-size: 18px;
+  font-size: var(--main-font-size);
   padding: 12px 14px;
   margin: 0;
 }
@@ -495,7 +496,7 @@ p {
   width: 100%;
 }
 
-.txtArea {
+/* .txtArea {
   width: 100%;
   height: 150px;
   padding: 12px 14px;
@@ -503,9 +504,9 @@ p {
   border: 1px solid var(--gray);
   border-radius: 5px;
   background-color: transparent;
-  font-size: 16px;
+  font-size: var(--main-font-size);
   resize: none;
-}
+} */
 
 .profilepic {
   position: relative;
@@ -575,7 +576,7 @@ a {
   border-color: var(--gray);
   border-width: 1px;
   border-radius: 5px;
-  font-size: 18px;
+  font-size: var(--main-font-size);
   margin: 5px;
   padding: 13px 9px;
 }
@@ -672,7 +673,7 @@ a {
     border-radius: 50%;
     background: var(--primary);
     color: var(--white);
-    font-size: 18px;
+    font-size: var(--main-font-size);
   }
 }
 
@@ -685,7 +686,7 @@ a {
   border-radius: 5px;
   max-width: 300px;
   text-decoration: none;
-  font-size: 18px;
+  font-size: var(--main-font-size);
   font-family: inherit;
   opacity: 0;
   visibility: hidden;
@@ -781,7 +782,9 @@ a {
 .ql-editor {
   overflow-y: scroll;
   resize: vertical;
-  font-size: 16px;
+  font-size: var(--main-font-size);
+  min-height: 70px;
+  max-height: 140px;
 }
 
 .quill {
@@ -792,9 +795,12 @@ a {
   border-bottom-left-radius: 0.5em;
   border-bottom-right-radius: 0.5em;
   background: transparent;
+  border: 1px;
+  border-color: var(--gray) !important;
 }
 
 .quill .ql-snow.ql-toolbar {
+  border: 1px solid var(--gray);
   display: block;
   background: #ececec;
   border-top-left-radius: 0.5em;

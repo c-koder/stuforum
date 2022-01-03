@@ -20,21 +20,24 @@ const Home = () => {
 
   const containerVariants = {
     hidden: {
-      scale: 0.99,
+      scale: 0.96,
     },
     visible: {
       scale: 1,
-      transition: { duration: 0.15 },
+      transition: { duration: 0.5 },
     },
     exit: {
       transition: { ease: "easeIn" },
     },
   };
 
-  const [title, setTitle] = useState("stuforum");
   useEffect(() => {
-    document.title = title;
-  }, [title]);
+    document.title = "stuforum";
+  }, []);
+
+  const addPost = (post) => {
+    setPosts([...posts, post]);
+  };
 
   return (
     <motion.div
@@ -45,7 +48,7 @@ const Home = () => {
     >
       <div className={"container"}>
         <div className="container-div">
-          <LeftBar />
+          <LeftBar addPost={addPost} />
         </div>
         <div className="container-div" style={{ width: "225%" }}>
           {name != null && (
@@ -55,7 +58,9 @@ const Home = () => {
                 marginBottom: 20,
               }}
             >
-              <h3 style={{ color: "var(--secondary)", marginTop: 8 }}>Tagged</h3>
+              <h3 style={{ color: "var(--secondary)", marginTop: 8 }}>
+                Tagged
+              </h3>
               <a
                 href={{
                   pathname: `/home/tagged/${name}`,

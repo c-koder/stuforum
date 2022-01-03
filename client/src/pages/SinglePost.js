@@ -61,20 +61,55 @@ const SinglePost = () => {
 
   const containerVariants = {
     hidden: {
-      scale: 0.99,
+      scale: 0.96,
     },
     visible: {
       scale: 1,
-      transition: { duration: 0.15 },
+      transition: { duration: 0.5 },
     },
     exit: {
       transition: { ease: "easeIn" },
     },
   };
 
-  const handleChildReplyDelete = (parent_id, child_id) => {
+  const addReply = (data) => {
+    const newReply = data;
+    if (data.replied_to == null) {
+      setSortedReplies([...sortedReplies, newReply]);
+    } else {
+      setSortedReplies(
+        sortedReplies.map((reply) => {
+          if (reply.id == data.parent_id) {
+            let childArray = reply.replies === null ? [] : reply.replies;
+            childArray = [...childArray, newReply];
+            return { ...reply, replies: childArray };
+          } else {
+            return reply;
+          }
+        })
+      );
+    }
+    setCommentUpdated(true);
+  };
+
+  const onDelete = (reply_id, parent_id) => {
+    if (parent_id != null) {
+      handleChildReplyDelete(reply_id, parent_id);
+    } else {
+      axios.post("http://localhost:3001/deletereply", {
+        reply_id: reply_id,
+        post_id: id,
+        delete_child_only: false,
+      });
+      setSortedReplies(sortedReplies.filter((reply) => reply.id !== reply_id));
+    }
+    setCommentUpdated(true);
+  };
+
+  const handleChildReplyDelete = (child_id, parent_id) => {
     axios.post("http://localhost:3001/deletereply", {
       reply_id: child_id,
+      post_id: id,
       delete_child_only: true,
     });
     setSortedReplies(
@@ -91,37 +126,18 @@ const SinglePost = () => {
     );
   };
 
-  const onDelete = (id, parent_id) => {
-    if (parent_id != null) {
-      handleChildReplyDelete(parent_id, id);
-    } else {
-      axios.post("http://localhost:3001/deletereply", {
-        reply_id: id,
-        delete_child_only: false,
-      });
-      setSortedReplies(sortedReplies.filter((reply) => reply.id !== id));
-    }
-  };
+  const [commentUpdated, setCommentUpdated] = useState(false);
+  const [commentCount, setCommentCount] = useState();
 
-  const addReply = (data) => {
-    const newReply = data;
-    console.log(newReply);
-    if (data.replied_to == null) {
-      setSortedReplies([...sortedReplies, newReply]);
-    } else {
-      setSortedReplies(
-        sortedReplies.map((reply) => {
-          if (reply.id == data.parent_id) {
-            let childArray = reply.replies === null ? [] : reply.replies;
-            childArray = [...childArray, newReply];
-            return { ...reply, replies: childArray };
-          } else {
-            return reply;
-          }
-        })
-      );
+  useEffect(() => {
+    if (commentUpdated) {
+      axios
+        .post("http://localhost:3001/getcommentcount", { post_id: id })
+        .then((res) => {
+          setCommentCount(res.data.comments);
+        });
     }
-  };
+  });
 
   return (
     <>
@@ -158,7 +174,12 @@ const SinglePost = () => {
           </a>
         </motion.div>
         <div className="container-div" style={{ width: "347%" }}>
-          <Post key={post.id} post={post} singlePost={true} />
+          <Post
+            key={post.id}
+            post={post}
+            singlePost={true}
+            commentCount={commentCount}
+          />
           <CommentBox
             addReply={addReply}
             replyTo={""}
