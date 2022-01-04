@@ -1,6 +1,6 @@
 import Reply from "./Reply";
 
-const Replies = ({ replies, onDelete, addReply }) => {
+const Replies = ({ replies, onDelete, addReply, answered }) => {
   return (
     <div>
       {replies.map((reply) => {
@@ -10,6 +10,7 @@ const Replies = ({ replies, onDelete, addReply }) => {
             reply={reply}
             onDelete={onDelete}
             addReply={addReply}
+            answered={answered}
           />
         );
       })}

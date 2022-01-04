@@ -23,20 +23,24 @@ const MyQuestions = () => {
     setPosts(posts.filter((post) => post.id !== id));
   };
 
+  const updateStatus = (id, status, new_status) => {
+    axios.post("http://localhost:3001/updatepoststatus", {
+      post_id: id,
+      status: status,
+      new_status: new_status,
+    });
+  };
+
   const toggleUrgent = (id) => {
     setPosts(
       posts.map((post) =>
-        post.id === id ? { ...post, urgent: post.urgent == 1 ? 0 : 1 } : post
+        post.id === id ? { ...post, urgent: post.urgent == 0 ? 1 : 0 } : post
       )
     );
 
     posts.map((post) => {
-      if (post.id == id) {
-        axios.post("http://localhost:3001/updatepoststatus", {
-          post_id: id,
-          status: "urgent",
-          new_status: post.urgent,
-        });
+      if (post.id === id) {
+        updateStatus(post.id, "urgent", post.urgent);
       }
     });
   };
@@ -44,16 +48,14 @@ const MyQuestions = () => {
   const toggleAnswered = (id) => {
     setPosts(
       posts.map((post) =>
-        post.id === id ? { ...post, answered: !post.answered } : post
+        post.id === id
+          ? { ...post, answered: post.answered == 0 ? 1 : 0 }
+          : post
       )
     );
     posts.map((post) => {
       if (post.id == id) {
-        axios.post("http://localhost:3001/updatepoststatus", {
-          post_id: id,
-          status: "answered",
-          new_status: post.answered,
-        });
+        updateStatus(post.id, "answered", post.answered);
       }
     });
   };
@@ -90,8 +92,6 @@ const MyQuestions = () => {
         <div className="container-div" style={{ width: "225%" }}>
           <Posts
             posts={posts}
-            singlePost={false}
-            postedBy={"Lorem Ipsum"}
             onDelete={deletePost}
             onToggleUrgent={toggleUrgent}
             onToggleAnswered={toggleAnswered}

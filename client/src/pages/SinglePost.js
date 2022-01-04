@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Post from "../Components/posts/Post";
 import RightBar from "../Components/RightBar";
 import { useParams } from "react-router";
@@ -12,6 +13,7 @@ import back from "../resources/backArrow.png";
 import axios from "axios";
 
 const SinglePost = () => {
+  let navigate = useNavigate();
   const { authState } = useContext(AuthContext);
   const { id } = useParams();
 
@@ -139,6 +141,8 @@ const SinglePost = () => {
     }
   });
 
+  const answered = post.answered == 1 ? true : false;
+
   return (
     <>
       <motion.div
@@ -155,11 +159,16 @@ const SinglePost = () => {
             x: -5,
           }}
         >
-          <a
-            href="/home"
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(-1);
+            }}
+            className="btn"
             style={{
+              marginTop: 0,
               backgroundColor: "var(--white)",
-              padding: "20px 15px 10px 15px",
+              padding: "5px 15px 10px 15px",
               borderRadius: 10,
             }}
           >
@@ -171,7 +180,7 @@ const SinglePost = () => {
               }}
               src={back}
             />
-          </a>
+          </button>
         </motion.div>
         <div className="container-div" style={{ width: "347%" }}>
           <Post
@@ -187,11 +196,13 @@ const SinglePost = () => {
             user_name={authState.name}
             user_id={authState.id}
             post_id={id}
+            answered={answered}
           />
           <Replies
             replies={sortedReplies}
             onDelete={onDelete}
             addReply={addReply}
+            answered={answered}
           />
         </div>
         <div className="container-div">

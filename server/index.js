@@ -171,13 +171,11 @@ app.post("/getpostdata", (req, res) => {
   const post_id = req.body.post_id;
   const user_id = req.body.user_id;
 
-  //tags
   db.query(
     "SELECT * FROM tag INNER JOIN post_tag ON post_tag.tag_id = tag.id AND post_tag.post_id = ?",
     post_id,
     (err, tagsResult) => {
       if (!err) {
-        //post pref
         db.query(
           "SELECT * FROM post_pref WHERE user_id = ? AND post_id = ?",
           [user_id, post_id],
@@ -204,33 +202,39 @@ app.post("/addpost", (req, res) => {
     [question, description, user_id, user_name, posted_time, urgent],
     (addErr, addResult) => {
       if (!addErr) {
-        tags.map((tag) => {
-          db.query(
-            "SELECT id FROM tag WHERE name = ?",
-            tag.toLowerCase(),
-            (err, result) => {
-              if (result.length <= 0) {
-                db.query(
-                  "INSERT INTO tag(name) VALUES(?)",
-                  tag,
-                  (err, tagResult) => {
-                    if (!err) {
-                      db.query(
-                        "INSERT INTO post_tag(post_id, tag_id) VALUES(?, ?)",
-                        [addResult.insertId, tagResult.insertId]
-                      );
+        if (tags.length > 0) {
+          tags.map((tag) => {
+            db.query(
+              "SELECT id FROM tag WHERE name = ?",
+              tag,
+              (err, result) => {
+                if (result.length <= 0) {
+                  db.query(
+                    "INSERT INTO tag(name, frequency) VALUES(?, 1)",
+                    tag,
+                    (err, tagResult) => {
+                      if (!err) {
+                        db.query(
+                          "INSERT INTO post_tag(post_id, tag_id) VALUES(?, ?)",
+                          [addResult.insertId, tagResult.insertId]
+                        );
+                      }
                     }
-                  }
-                );
-              } else {
-                db.query("INSERT INTO post_tag(post_id, tag_id) VALUES(?, ?)", [
-                  addResult.insertId,
-                  result[0].id,
-                ]);
+                  );
+                } else {
+                  db.query(
+                    "INSERT INTO post_tag(post_id, tag_id) VALUES(?, ?)",
+                    [addResult.insertId, result[0].id]
+                  );
+                  db.query(
+                    "UPDATE tag SET frequency = frequency + 1 WHERE id = ?",
+                    result[0].id
+                  );
+                }
               }
-            }
-          );
-        });
+            );
+          });
+        }
         res.send({ id: addResult.insertId, message: "post_added" });
       }
     }
@@ -267,7 +271,12 @@ app.post("/updateleadsprefs", (req, res) => {
   } else {
     db.query(
       "INSERT INTO post_pref(post_id, user_id, preference) VALUES(?, ?, ?)",
-      [post_id, user_id, pref]
+      [post_id, user_id, pref],
+      (err, result) => {
+        if (!err) {
+          res.send({ id: result.insertId });
+        }
+      }
     );
   }
 
@@ -283,21 +292,19 @@ app.post("/updateleadsprefs", (req, res) => {
 });
 
 app.post("/updatepoststatus", (req, res) => {
-  const post_id = req.body.post_id;
-  const status = req.body.status;
-  const new_status = req.body.new_status;
+  const { post_id, status } = req.body;
+  const new_status = req.body.new_status == 0 ? 1 : 0;
 
-  let sql;
+  let sql = "UPDATE post SET ";
   if (status == "urgent") {
-    sql = "UPDATE post SET urgent = ? WHERE id = ?";
+    sql += "urgent = ?";
   } else if (status == "answered") {
-    sql = "UPDATE post SET answered = ? WHERE id = ?";
+    sql += "answered = ?";
   }
+  sql += " WHERE id = ?";
 
   db.query(sql, [new_status, post_id], (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    } else {
+    if (!err) {
       res.send({ message: "updated" });
     }
   });
@@ -328,7 +335,7 @@ app.post("/getalltags", (req, res) => {
 
 app.post("/getsortedtags", (req, res) => {
   let sql =
-    "SELECT * FROM tag WHERE frequency > 0 ORDER BY frequency DESC LIMIT 5";
+    "SELECT * FROM tag WHERE frequency > 0 ORDER BY frequency DESC LIMIT 3";
   db.query(sql, (err, result) => {
     if (err) {
       res.send({ err: err });
@@ -497,10 +504,19 @@ app.post("/deletereply", (req, res) => {
 });
 
 app.post("/updatereplypref", (req, res) => {
-  const { id, parent_id, child_id, user_id, pref, previous_pref } = req.body;
+  const {
+    id,
+    parent_id,
+    child_id,
+    user_id,
+    pref,
+    previous_pref,
+    reply_posted_user_id,
+  } = req.body;
 
   let reply_id;
   let updateLikesDislikesQuery = "";
+  let updateUserLikes = "UPDATE user SET ";
 
   if (id != null) {
     db.query("UPDATE reply_pref SET preference = ? WHERE id = ?", [pref, id]);
@@ -536,6 +552,7 @@ app.post("/updatereplypref", (req, res) => {
     } else if (previous_pref == "") {
       updateLikesDislikesQuery += "likes = likes + 1 WHERE id = ?";
     }
+    updateUserLikes += "likes = likes + 1";
   } else if (pref == "0") {
     if (previous_pref == "liked") {
       updateLikesDislikesQuery +=
@@ -549,9 +566,50 @@ app.post("/updatereplypref", (req, res) => {
     } else if (previous_pref == "disliked") {
       updateLikesDislikesQuery += "dislikes = dislikes - 1 WHERE id = ?";
     }
+    updateUserLikes += "likes = likes - 1";
   }
 
+  updateUserLikes += " WHERE id = ? AND NOT id = ?";
+
   db.query(updateLikesDislikesQuery, reply_id);
+  db.query(updateUserLikes, [reply_posted_user_id, user_id]);
+});
+
+// user_answers
+
+app.post("/getanswers", (req, res) => {
+  const user_id = req.body.user_id;
+  // "SELECT * FROM reply WHERE user_id = ? GROUP BY post_id ORDER BY id DESC"
+  db.query(
+    "SELECT p.* FROM reply r JOIN post p ON r.post_id = p.id WHERE NOT p.user_id = ? GROUP BY p.id ORDER BY p.id DESC",
+    user_id,
+    (err, postResults) => {
+      if (!err) {
+        db.query(
+          "SELECT r.* FROM reply r JOIN post p ON r.post_id = p.id WHERE r.user_id = ? AND NOT p.user_id = ? GROUP BY p.id ORDER BY p.id DESC",
+          [user_id, user_id],
+          (err, replyResults) => {
+            if (!err) res.send({ posts: postResults, replies: replyResults });
+          }
+        );
+      }
+    }
+  );
+});
+
+//error status
+
+app.use((req, res, next) => {
+  const err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  res.locals.error = err;
+  const status = err.status || 500;
+  res.status(status);
+  res.render("error");
 });
 
 app.listen(3001, () => {

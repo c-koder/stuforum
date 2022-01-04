@@ -7,8 +7,10 @@ import { motion } from "framer-motion";
 import useSortedUsers from "./dataHooks/useSortedUsers";
 import { AuthContext } from "../helpers/AuthContext";
 import useUserPosts from "./dataHooks/useUserPosts";
+import { Link } from "react-router-dom";
+import useUser from "./dataHooks/useUser";
 
-const LeftBar = ({ addPost }) => {
+const LeftBar = () => {
   const { authState } = useContext(AuthContext);
   const [questionPopup, setQuestionPopup] = useState(false);
 
@@ -20,6 +22,15 @@ const LeftBar = ({ addPost }) => {
       setTopUsers(response);
     }
   }, [response]);
+
+  const [user, setUser] = useState([]);
+  const { userResponse } = useUser(authState.id);
+
+  useEffect(() => {
+    if (userResponse !== null) {
+      setUser(userResponse);
+    }
+  }, [userResponse]);
 
   const [userQuestionCount, setUserQuestionCount] = useState();
   const { userQuestionsResponse } = useUserPosts(authState.id);
@@ -40,7 +51,6 @@ const LeftBar = ({ addPost }) => {
         <AskAQuestion
           questionPopup={questionPopup}
           setQuestionPopup={setQuestionPopup}
-          addPost={addPost}
         />
       )}
       <Button onClick={askQuestion} text={"Ask a Question"} />
@@ -55,17 +65,17 @@ const LeftBar = ({ addPost }) => {
             x: -1,
           }}
         >
-          <a href="/profile">
+          <Link to="/profile">
             <h3 style={{ color: "var(--primary)", fontSize: 22 }}>
               You{" "}
               <span style={{ color: "var(--secondary)" }}>
                 ({userQuestionCount})
               </span>
             </h3>
-          </a>
+          </Link>
           <span style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
             <h3 style={{ color: "var(--secondary)", fontSize: 22 }}>
-              {authState.likes}
+              {user.likes}
             </h3>
             <img
               style={{ marginLeft: 10, height: 25 }}

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Tag = ({ tag, tagOnly }) => {
   return (
     <>
@@ -5,18 +7,18 @@ const Tag = ({ tag, tagOnly }) => {
         style={{
           display: "flex",
           float: tagOnly && "left",
-          marginBottom: tagOnly ? 0 : 20,
+          marginBottom: tagOnly ? 0 : 0,
           marginTop: 10,
           marginRight: tagOnly && 10,
         }}
       >
-        <a
-          href={`/home/tagged/${tag.name}`}
+        <Link
+          to={`/tagged/${tag.name}`}
           className="tag"
           style={{ fontSize: tagOnly && 14 }}
         >
           {tag.name}
-        </a>
+        </Link>
         {!tagOnly && (
           <h3 style={{ color: "var(--secondary)", marginLeft: 15 }}>
             {tag.frequency}

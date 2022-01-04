@@ -113,22 +113,12 @@ const AskAQuestion = (props) => {
           urgent: urgent,
         })
         .then((response) => {
-          const post = {
-            id: response.data.id,
-            question: question,
-            description: description,
-            user_id: authState.id,
-            user_name: authState.name,
-            posted_time: posted_time,
-            urgent: urgent ? 1 : 0,
-          };
-
           if (response.data.message == "post_added") {
             setQuestion("");
             setDescription("");
             setSelectedTags();
             setCloseQuestionModal(true);
-            props.addPost(post);
+            window.location.reload();
           }
         });
     }

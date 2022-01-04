@@ -15,7 +15,7 @@ import moment from "moment";
 import axios from "axios";
 import useReplyData from "../dataHooks/useReplyData";
 
-const Reply = ({ reply, onDelete, addReply }) => {
+const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
   const { authState } = useContext(AuthContext);
 
   const [show, setShow] = useState(false);
@@ -76,6 +76,7 @@ const Reply = ({ reply, onDelete, addReply }) => {
       user_id: authState.id,
       pref: pref,
       previous_pref: previousPref,
+      reply_posted_user_id: reply.user_id,
     });
   };
 
@@ -172,6 +173,8 @@ const Reply = ({ reply, onDelete, addReply }) => {
     return () => clearInterval(timer);
   }, []);
 
+  const [showChildReplies, setShowChildReplies] = useState(false);
+
   return (
     <>
       <div
@@ -179,10 +182,15 @@ const Reply = ({ reply, onDelete, addReply }) => {
         style={{
           float: reply.replied_to != null && "right",
           width: reply.replied_to != null && "95%",
-          marginBottom: 20,
+          marginBottom: answerOnly ? 40 : 20,
         }}
       >
-        <ContextMenu reply={reply} show={show} onDelete={onDelete} />
+        <ContextMenu
+          reply={reply}
+          show={show}
+          onDelete={onDelete}
+          answerOnly={answerOnly}
+        />
 
         <div
           className="postsContainer-div"
@@ -324,18 +332,21 @@ const Reply = ({ reply, onDelete, addReply }) => {
                 {dislikes}
               </h3>
             </div>
-            <button
-              className="nullBtn"
-              style={{ display: "flex" }}
-              onClick={showCommentBoxFunc}
-            >
-              <img
-                className="navIcon"
-                src={replyIcon}
-                style={{ marginTop: 3 }}
-              />
-              <h3 style={{ color: "var(--secondary)" }}>Reply</h3>
-            </button>
+            {!answered && (
+              <button
+                className="nullBtn"
+                style={{ display: "flex" }}
+                onClick={showCommentBoxFunc}
+                disabled={answered}
+              >
+                <img
+                  className="navIcon"
+                  src={replyIcon}
+                  style={{ marginTop: 3 }}
+                />
+                <h3 style={{ color: "var(--secondary)" }}>Reply</h3>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -356,12 +367,32 @@ const Reply = ({ reply, onDelete, addReply }) => {
         />
       </div>
 
-      {reply.replies !== null && (
-        <Replies
-          replies={reply.replies}
-          onDelete={onDelete}
-          addReply={addReply}
-        />
+      {reply.replies != null && (
+        <div>
+          {reply.replies.length > 0 && (
+            <button
+              text="Show More"
+              className="btn showMoreLink"
+              style={{ marginTop: 0, marginBottom: 20 }}
+              onClick={(e) => {
+                e.preventDefault();
+                setShowChildReplies((oldState) => !oldState);
+              }}
+            >
+              {!showChildReplies
+                ? `Show ${reply.replies.length} replies ▼`
+                : "Hide replies ▲"}
+            </button>
+          )}
+          {showChildReplies && (
+            <Replies
+              replies={reply.replies}
+              onDelete={onDelete}
+              addReply={addReply}
+              answered={answered}
+            />
+          )}
+        </div>
       )}
     </>
   );

@@ -97,21 +97,36 @@ const CommentBox = (props) => {
   }, []);
 
   return (
-    <div className="postsContainer" style={{ marginBottom: 20 }}>
-      <div
-        className="postsContainer-div"
-        style={{
-          width: "10%",
-          margin: "0 10px 0 0px",
-          alignItems: "center",
-          textAlign: "center",
-        }}
-      >
-        <img href="#profile" className="avatar" src={avatar} alt="Profile" />
-      </div>
-      <div className="postsContainer-div">
-        <span style={{ width: "100%" }}>
-          <div className="form-control" style={{ marginBottom: 30 }}>
+    <>
+      {!props.answered && (
+        <div className="postsContainer" style={{ marginBottom: 20 }}>
+          <div
+            className="postsContainer-div"
+            style={{
+              width: "10%",
+              margin: "0 10px 0 0px",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <img
+              href="#profile"
+              className="avatar"
+              src={avatar}
+              alt="Profile"
+            />
+          </div>
+          <div className="postsContainer-div">
+            <span style={{ width: "100%" }}>
+              <div className="form-control" style={{ marginBottom: 30 }}>
+                <ReactQuill
+                  onChange={handleChange}
+                  value={description}
+                  modules={modules}
+                  bounds={".quill reply"}
+                  formats={formats}
+                />
+                {/* {props.replyTo == "" ? (
             <ReactQuill
               onChange={handleChange}
               value={description}
@@ -119,60 +134,54 @@ const CommentBox = (props) => {
               bounds={".quill"}
               formats={formats}
             />
-            {/* {props.replyTo == "" ? (
-              <ReactQuill
-                onChange={handleChange}
-                value={description}
-                modules={modules}
-                bounds={".quill"}
-                formats={formats}
-              />
-            ) : (
-              <textarea
+          ) : (
+            <textarea
+              style={{
+                margin: "-20px 0px 0px 0px",
+                resize: "vertical",
+                height: 50,
+                minHeight: 50,
+                maxHeight: 200,
+              }}
+              className="txtArea"
+              placeholder="Leave a reply..."
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+            />
+          )} */}
+              </div>
+              <button
+                type="button"
                 style={{
-                  margin: "-20px 0px 0px 0px",
-                  resize: "vertical",
-                  height: 50,
-                  minHeight: 50,
-                  maxHeight: 200,
+                  marginLeft: 5,
+                  float: "right",
+                  width: "20%",
+                  margin: "-5px 0px 0px 0px",
                 }}
-                className="txtArea"
-                placeholder="Leave a reply..."
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
+                onClick={submitComment}
+                className="btn btn-block"
+              >
+                Reply
+              </button>
+              <div
+                id="error"
+                className={error !== "" ? "error active" : "error"}
+                style={{
+                  float: "right",
+                  margin: 0,
+                  marginRight: 20,
+                  marginTop: -5,
                 }}
-              />
-            )} */}
+              >
+                {error}
+              </div>
+            </span>
           </div>
-          <button
-            type="button"
-            style={{
-              marginLeft: 5,
-              float: "right",
-              width: "20%",
-              margin: "-5px 0px 0px 0px",
-            }}
-            onClick={submitComment}
-            className="btn btn-block"
-          >
-            Reply
-          </button>
-          <div
-            id="error"
-            className={error !== "" ? "error active" : "error"}
-            style={{
-              float: "right",
-              margin: 0,
-              marginRight: 20,
-              marginTop: -5,
-            }}
-          >
-            {error}
-          </div>
-        </span>
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 

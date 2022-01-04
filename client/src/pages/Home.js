@@ -35,10 +35,6 @@ const Home = () => {
     document.title = "stuforum";
   }, []);
 
-  const addPost = (post) => {
-    setPosts([...posts, post]);
-  };
-
   return (
     <motion.div
       variants={containerVariants}
@@ -48,7 +44,7 @@ const Home = () => {
     >
       <div className={"container"}>
         <div className="container-div">
-          <LeftBar addPost={addPost} />
+          <LeftBar />
         </div>
         <div className="container-div" style={{ width: "225%" }}>
           {name != null && (

@@ -1,5 +1,6 @@
 import like from "../resources/like-blue.png";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const TopUser = ({ topUser }) => {
   return (
@@ -10,9 +11,11 @@ const TopUser = ({ topUser }) => {
           x: -1,
         }}
       >
-        <a href={`/user/${topUser.name}`}>
-          <h3 style={{ color: "var(--primary)", fontSize: 22 }}>{topUser.name}</h3>
-        </a>
+        <Link to={`/user/${topUser.name}`}>
+          <h3 style={{ color: "var(--primary)", fontSize: 22 }}>
+            {topUser.name}
+          </h3>
+        </Link>
         <span style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
           <h3 style={{ color: "var(--secondary)", fontSize: 22 }}>
             {topUser.likes}

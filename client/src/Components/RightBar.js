@@ -10,6 +10,7 @@ import activeTag from "../resources/tag-blue.png";
 import Tags from "./tags/Tags";
 import useSortedTags from "./dataHooks/useSortedTags";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const SideMenu = ({ activeTab }) => {
   const [tags, setTags] = useState([]);
@@ -24,15 +25,14 @@ const SideMenu = ({ activeTab }) => {
   return (
     <div>
       <div className="rightbar whiteContainer" style={{ marginTop: 0 }}>
-        <motion.a
-          href="/home"
+        <Link
+          to="/home"
           className={
             activeTab === "home" ? "active rightbar-item" : "rightbar-item"
           }
           whileHover={{
             scale: 1.03,
           }}
-          // transition={{ type: "spring", stiffness: 200, damping: 10 }}
         >
           <span>
             <img
@@ -41,9 +41,9 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           Home
-        </motion.a>
-        <motion.a
-          href="/myquestions"
+        </Link>
+        <Link
+          to="/myquestions"
           className={
             activeTab === "questions" ? "active rightbar-item" : "rightbar-item"
           }
@@ -58,9 +58,9 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           My Questions
-        </motion.a>
-        <motion.a
-          href="/myanswers"
+        </Link>
+        <Link
+          to="/myanswers"
           className={
             activeTab === "answers" ? "active rightbar-item" : "rightbar-item"
           }
@@ -75,9 +75,9 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           My Answers
-        </motion.a>
-        <motion.a
-          href="/tags"
+        </Link>
+        <Link
+          to="/tags"
           className={
             activeTab === "tags" ? "active rightbar-item" : "rightbar-item"
           }
@@ -92,7 +92,7 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           Tags
-        </motion.a>
+        </Link>
       </div>
       <div className="whiteContainer">
         <h2 style={{ marginBottom: 20 }}>Frequently used tags</h2>

@@ -152,7 +152,7 @@ const Routing = () => {
               />
 
               <Route
-                path="/home/tagged/:name"
+                path="/tagged/:name"
                 element={authState.status ? <Home /> : <Navigate to={"/"} />}
               />
 

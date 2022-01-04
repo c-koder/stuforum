@@ -5,7 +5,7 @@
   --primary: #3d5af1;
   --secondary: #b4b4b4;
   --gray: #444444;
-  --blue: #1a1a1a;
+  --blue: #e8ebfb;
   --red: #dd2541;
   --green: #33be2f;
   --bg: #f6f6f6;
@@ -473,6 +473,7 @@ p {
   margin: 5px 20px 0px 20px;
   padding: 5px 10px;
   font-weight: 600;
+  color: #444444;
   font-size: var(--main-font-size);
   border-radius: 5px;
 }
@@ -585,14 +586,12 @@ a {
   opacity: 0.6;
 }
 
-/* Oculto la caja original */
 .check-field [type="checkbox"] {
   position: absolute !important;
   border-radius: 5px;
   left: -9999px;
 }
 
-/* Posición de la label */
 .check-field [type="checkbox"] + label {
   position: relative !important;
   padding-left: 2rem !important;
@@ -624,7 +623,6 @@ a {
   transition: all 0.2s;
 }
 
-/* Checked */
 .check-field [type="checkbox"]:not(:checked) + label:after {
   opacity: 0;
   transform: scale(0);
@@ -779,12 +777,28 @@ a {
   padding: 10px !important;
 }
 
+.showMoreLink {
+  display: inline-block;
+  font-size: var(--main-font-size);
+  color: var(--secondary);
+  font-weight: bold;
+  margin-left: 60px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: var(--white);
+}
+
+.showmorelink:hover {
+  cursor: pointer;
+  background-color: var(--primary);
+}
+
 .ql-editor {
   overflow-y: scroll;
   resize: vertical;
   font-size: var(--main-font-size);
   min-height: 70px;
-  max-height: 140px;
+  max-height: 210px;
 }
 
 .quill {

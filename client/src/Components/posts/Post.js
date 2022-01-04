@@ -13,6 +13,7 @@ import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
 import axios from "axios";
 import usePostData from "../dataHooks/usePostData";
+import { Link } from "react-router-dom";
 
 const Post = ({
   post,
@@ -22,6 +23,7 @@ const Post = ({
   onToggleUrgent,
   onToggleAnswered,
   viewingQuestions,
+  answerOnly,
 }) => {
   const { authState } = useContext(AuthContext);
 
@@ -54,16 +56,18 @@ const Post = ({
           setUpVoted(false);
           setDownVoted(false);
         }
+      } else {
+        setPrefId(null);
       }
     }
   }, [response]);
 
   let labelColor;
 
-  if (post.urgent) {
+  if (post.urgent == 1) {
     labelColor = "var(--red)";
   }
-  if (post.answered) {
+  if (post.answered == 1) {
     labelColor = "var(--green)";
   }
 
@@ -81,13 +85,17 @@ const Post = ({
   }
 
   const updateLeadsPrefs = (leads, pref) => {
-    axios.post("http://localhost:3001/updateleadsprefs", {
-      id: prefId,
-      post_id: post.id,
-      leads: leads,
-      user_id: authState.id,
-      pref: pref,
-    });
+    axios
+      .post("http://localhost:3001/updateleadsprefs", {
+        id: prefId,
+        post_id: post.id,
+        leads: leads,
+        user_id: authState.id,
+        pref: pref,
+      })
+      .then((res) => {
+        setPrefId(res.data.id);
+      });
   };
 
   const upVote = (e) => {
@@ -185,10 +193,14 @@ const Post = ({
         arrowColor={"var(--secondary)"}
         delayShow={500}
       />
-      <div className="postsContainer">
+      <div
+        className="postsContainer"
+        style={{ marginBottom: answerOnly && 20 }}
+      >
         <ContextMenu
           post={post}
           show={show}
+          singlePost={singlePost}
           onDelete={onDelete}
           onToggleUrgent={onToggleUrgent}
           onToggleAnswered={onToggleAnswered}
@@ -256,9 +268,9 @@ const Post = ({
             </span>
           )}
 
-          <a href={`/post/${post.id}`} style={{ display: "flex" }}>
+          <Link to={`/post/${post.id}`} style={{ display: "flex" }}>
             <h2 style={{ float: "left" }}>{post.question}</h2>
-          </a>
+          </Link>
 
           <span
             style={{
@@ -269,11 +281,11 @@ const Post = ({
             }}
           >
             Posted by{" "}
-            <a href={`/user/${post.user_name}`}>
+            <Link to={`/user/${post.user_name}`}>
               <span style={{ color: "var(--primary)", fontWeight: 600 }}>
                 {post.user_name}
               </span>
-            </a>
+            </Link>
           </span>
           <br />
           <Tags tags={tags} tagOnly={true} />

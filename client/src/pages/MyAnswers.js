@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import RightBar from "../Components/RightBar";
 import LeftBar from "../Components/LeftBar";
 import Answer from "../Components/Answer";
+import useAnswers from "../Components/dataHooks/useAnswers";
 import { motion } from "framer-motion";
+import { AuthContext } from "../helpers/AuthContext";
 
 const MyAnswers = () => {
   const containerVariants = {
@@ -18,10 +20,26 @@ const MyAnswers = () => {
     },
   };
 
-  // const deleteReply = (id) => {
-  //   setReplies(replies.filter((reply) => reply.id !== id));
-  //   console.log(replies.length);
-  // };
+  const { authState } = useContext(AuthContext);
+
+  const [posts, setPosts] = useState([]);
+  const [replies, setReplies] = useState([]);
+  const { response } = useAnswers(authState.id);
+
+  useEffect(() => {
+    if (response !== null) {
+      setPosts(response.posts);
+      setReplies(response.replies);
+    }
+  }, [response]);
+
+  const deleteReply = (id) => {
+    const reply = replies.find((reply) => {
+      if (reply.id === id) return reply.post_id;
+    });
+    setReplies(replies.filter((reply) => reply.id !== id));
+    setPosts(posts.filter((post) => post.id !== reply.post_id));
+  };
 
   useEffect(() => {
     document.title = "My Answers";
@@ -40,13 +58,12 @@ const MyAnswers = () => {
           <LeftBar />
         </div>
         <div className="container-div" style={{ width: "225%" }}>
-          {/* <Answer
+          <Answer
             posts={posts}
             singlePost={false}
             replies={replies}
             onDelete={deleteReply}
-            repliedBy={"Lorem Ipsum Ipsum"}
-          /> */}
+          />
         </div>
         <div className="container-div">
           <RightBar activeTab={"answers"} />

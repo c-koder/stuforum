@@ -6,11 +6,28 @@ const ContextMenu = ({
   reply,
   post,
   show,
+  singlePost,
   onDelete,
   onToggleUrgent,
   onToggleAnswered,
+  answerOnly,
 }) => {
   const [confirmationPopup, setConfirmationPopup] = useState(false);
+
+  let contextMenuStyling;
+
+  if (reply != null) {
+    contextMenuStyling = "56.3%";
+    if (reply.replied_to != null) {
+      contextMenuStyling = "53%";
+    } else if (answerOnly) {
+      contextMenuStyling = "35.8%";
+    }
+  } else {
+    if (!singlePost) {
+      contextMenuStyling = "30.5%";
+    }
+  }
   return (
     <div
       style={{
@@ -29,8 +46,7 @@ const ContextMenu = ({
       <div
         style={{
           minWidth: reply != null && "120px",
-          marginLeft:
-            reply != null && reply.replied_to != null ? "53%" : "56.3%",
+          marginLeft: contextMenuStyling,
         }}
         className={"context-content" + (show ? " shown" : "")}
       >
@@ -43,7 +59,7 @@ const ContextMenu = ({
             <div>
               <motion.button
                 className="nullBtn"
-                disabled={post.answered && true}
+                disabled={post.answered == 1 && true}
                 onClick={() => {
                   onToggleUrgent(post.id);
                 }}
@@ -52,13 +68,13 @@ const ContextMenu = ({
                   x: -3,
                 }}
               >
-                <li style={{ color: post.answered && "var(--secondary)" }}>
-                  {post.urgent ? "Unmark as Urgent" : "Mark as Urgent"}
+                <li style={{ color: post.answered == 1 && "var(--secondary)" }}>
+                  {post.urgent == 1 ? "Unmark as Urgent" : "Mark as Urgent"}
                 </li>
               </motion.button>
               <hr style={{ width: "75%", marginLeft: 22 }} />
               <motion.button
-                disabled={post.urgent && true}
+                disabled={post.urgent == 1 && true}
                 className="nullBtn"
                 onClick={() => {
                   onToggleAnswered(post.id);
@@ -68,8 +84,10 @@ const ContextMenu = ({
                   x: -3,
                 }}
               >
-                <li style={{ color: post.urgent && "var(--secondary)" }}>
-                  {post.answered ? "Unmark as Answered" : "Mark as Answered"}
+                <li style={{ color: post.urgent == 1 && "var(--secondary)" }}>
+                  {post.answered == 1
+                    ? "Unmark as Answered"
+                    : "Mark as Answered"}
                 </li>
               </motion.button>
               <hr style={{ width: "75%", marginLeft: 22 }} />

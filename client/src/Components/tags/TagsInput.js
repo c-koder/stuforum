@@ -6,7 +6,7 @@ const TagsInput = (props) => {
     setTags([...tags.filter((_, index) => index !== indexToRemove)]);
   };
   const addTags = (e) => {
-    if (e.target.value != "") {
+    if (e.target.value != "" && !tags.includes(e.target.value)) {
       setTags([...tags, e.target.value]);
       props.setSelectedTags([...tags, e.target.value]);
       e.target.value = "";
