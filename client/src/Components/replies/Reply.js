@@ -14,6 +14,8 @@ import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
 import axios from "axios";
 import useReplyData from "../dataHooks/useReplyData";
+import ReactTooltip from "react-tooltip";
+import { Link } from "react-router-dom";
 
 const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
   const { authState } = useContext(AuthContext);
@@ -69,14 +71,17 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
   }
 
   const updateReplyPref = (pref, previousPref) => {
+    const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     axios.post("http://localhost:3001/updatereplypref", {
       id: prefId,
-      parent_id: reply.id,
+      parent_id: reply.parent_id == null ? reply.id : null,
       child_id: reply.parent_id != null ? reply.id : null,
       user_id: authState.id,
+      post_id: reply.post_id,
       pref: pref,
       previous_pref: previousPref,
       reply_posted_user_id: reply.user_id,
+      time: time,
     });
   };
 
@@ -177,6 +182,14 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
 
   return (
     <>
+      <ReactTooltip
+        effect="solid"
+        place="bottom"
+        type="info"
+        className="tooltip"
+        arrowColor={"var(--secondary)"}
+        delayShow={500}
+      />
       <div
         className="postsContainer"
         style={{
@@ -212,21 +225,23 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
           >
             <h4 style={{ color: "var(--secondary)" }}>
               Replied by{" "}
-              <a href={`/user/${reply.user_name}`}>
-                <span style={{ color: "var(--primary)", fontWeight: 600 }}>
-                  {reply.user_name}{" "}
-                  <span style={{ color: "var(--secondary)", fontSize: 12 }}>
-                    ●
-                  </span>{" "}
-                  <span
-                    style={{
-                      color: "var(--secondary)",
-                    }}
-                  >
-                    {repliedTime}
-                  </span>
-                </span>
-              </a>
+              <Link
+                to={`/user/${reply.user_name}`}
+                style={{ color: "var(--primary)", fontWeight: 600 }}
+              >
+                {reply.user_name}{" "}
+              </Link>
+              <span style={{ color: "var(--secondary)", fontSize: 12 }}>●</span>{" "}
+              <span
+                style={{
+                  color: "var(--secondary)",
+                }}
+                data-tip={moment(reply.replied_time).format(
+                  "MMMM Do YYYY, h:mm:ss a"
+                )}
+              >
+                {repliedTime}
+              </span>
             </h4>
           </div>
           {authState.name == reply.user_name && (
@@ -252,14 +267,14 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
           <div style={{ display: "flex" }}>
             <p style={{ color: "var(--gray)" }}>
               {reply.replied_to !== null && (
-                <a
-                  href={`/user/${reply.replied_to}`}
+                <Link
+                  to={`/user/${reply.replied_to}`}
                   style={{ marginRight: 5 }}
                 >
                   <span style={{ color: "var(--primary)", fontWeight: 600 }}>
                     @{reply.replied_to}
                   </span>
-                </a>
+                </Link>
               )}
             </p>
             {reply.description.includes("syntax") ? (
@@ -298,6 +313,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
                 className="nullBtn"
                 onClick={likedFunc}
                 disabled={disabled}
+                data-tip="Like this answer"
               >
                 <img
                   className="navIcon"
@@ -317,6 +333,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
                 className="nullBtn"
                 onClick={disLikedFunc}
                 disabled={disabled}
+                data-tip="Dislike this answer"
               >
                 <img
                   className="navIcon"
@@ -338,6 +355,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
                 style={{ display: "flex" }}
                 onClick={showCommentBoxFunc}
                 disabled={answered}
+                data-tip="Leave an answer"
               >
                 <img
                   className="navIcon"
@@ -360,8 +378,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
         <CommentBox
           addReply={addReply}
           parent_id={reply.parent_id ? reply.parent_id : reply.id}
-          replyTo={reply.user_name}
-          user_name={authState.name}
+          replyTo={reply.user_id}
           user_id={authState.id}
           post_id={reply.post_id}
         />
@@ -380,8 +397,10 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
               }}
             >
               {!showChildReplies
-                ? `Show ${reply.replies.length} replies ▼`
-                : "Hide replies ▲"}
+                ? `Show ${reply.replies.length} ${
+                    reply.replies.length > 1 ? "replies" : "reply"
+                  } ▼`
+                : `Hide ${reply.replies.length > 1 ? "replies" : "reply"} ▲`}
             </button>
           )}
           {showChildReplies && (

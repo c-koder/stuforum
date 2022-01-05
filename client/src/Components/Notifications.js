@@ -1,65 +1,38 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../helpers/AuthContext";
+import useNotifications from "./dataHooks/useNotifications";
 import Notification from "./Notification";
 
-const Notifications = ({ show, setNotificationCount }) => {
-  const [notificationsList, setNotifications] = useState([
-    {
-      id: 1,
-      byUser: "Lorem Piret",
-      type: "up voted",
-      postId: 3,
-      description: "your question",
-      time: "8hr ago",
-      viewed: false,
-    },
-    {
-      id: 2,
-      byUser: "Dimsum Lorem",
-      type: "liked",
-      postId: 1,
-      description: "your answer",
-      time: "6hr ago",
-      viewed: false,
-    },
-    {
-      id: 3,
-      byUser: "Peirtem Doemus",
-      type: "liked",
-      postId: 2,
-      description: "your question",
-      time: "3hr ago",
-      viewed: true,
-    },
-    {
-      id: 4,
-      byUser: "Peirtem Doemus",
-      type: "commented",
-      postId: 2,
-      description: "on your question",
-      time: "3hr ago",
-      viewed: true,
-    },
-    {
-      id: 5,
-      byUser: "Peirtem Doemus",
-      type: "commented",
-      postId: 1,
-      description: "on your question",
-      time: "3hr ago",
-      viewed: true,
-    },
-  ]);
+const Notifications = ({ show, notificationCount, setNotificationCount }) => {
+  const { authState } = useContext(AuthContext);
+
+  const [notificationsList, setNotifications] = useState([]);
+  const { response } = useNotifications(authState.id);
+
+  useEffect(() => {
+    if (response != null) {
+      setNotifications(response);
+    }
+  }, [response]);
+
+  useEffect(() => {
+    let count = 0;
+    notificationsList.forEach((notification) => {
+      notification.viewed == 0 && count++;
+    });
+    setNotificationCount(count);
+  }, [notificationsList]);
 
   const changeViewed = (id) => {
     setNotifications(
       notificationsList.map((notification) =>
-        notification.id === id && !notification.viewed
-          ? { ...notification, viewed: true }
+        notification.id === id
+          ? { ...notification, viewed: notification.viewed == 0 ? 1 : 0 }
           : notification
       )
     );
 
-    const exists = notificationsList.filter((item) => item.viewed === false);
+    const exists = notificationsList.filter((item) => item.viewed == 0);
     setNotificationCount(exists.length);
   };
 
@@ -67,8 +40,12 @@ const Notifications = ({ show, setNotificationCount }) => {
     setNotifications(notificationsList.filter((notif) => notif.id !== id));
   };
 
-  const removeNotifs = () => {
-    setNotifications(notificationsList.filter((notif) => !notif));
+  const markAsSeen = () => {
+    setNotifications(
+      notificationsList.map(
+        (notification) => notification && { ...notification, viewed: 1 }
+      )
+    );
   };
 
   return (
@@ -84,9 +61,10 @@ const Notifications = ({ show, setNotificationCount }) => {
                 padding: "5px 20px",
                 fontSize: 16,
               }}
-              onClick={removeNotifs}
+              onClick={markAsSeen}
+              disabled={notificationCount == 0 ? true : false}
             >
-              Clear All
+              Mark all seen
             </button>
           </div>
         </div>

@@ -207,6 +207,10 @@ p {
   transition: all 200ms ease-in;
 }
 
+button:disabled {
+  background-color: var(--gray);
+}
+
 .btn-block {
   display: block;
   width: 120%;
@@ -216,6 +220,10 @@ p {
   background-color: transparent;
   border: none;
   cursor: pointer;
+}
+
+.nullBtn:disabled {
+  background-color: transparent;
 }
 
 .themeToggleBtn {
@@ -419,7 +427,7 @@ p {
   left: 68%;
   width: 22%;
   z-index: 999;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--light-white);
   background-color: var(--white);
   box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
   border-radius: 10px;
@@ -775,6 +783,7 @@ a {
   color: var(--gray) !important;
   background-color: var(--secondary) !important;
   padding: 10px !important;
+  font-weight: bold !important;
 }
 
 .showMoreLink {

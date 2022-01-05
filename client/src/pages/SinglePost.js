@@ -191,9 +191,8 @@ const SinglePost = () => {
           />
           <CommentBox
             addReply={addReply}
-            replyTo={""}
+            replyTo={null}
             parent_id={""}
-            user_name={authState.name}
             user_id={authState.id}
             post_id={id}
             answered={answered}

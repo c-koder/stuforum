@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import NavContext from "./NavContext";
 
 const Navbar = ({ isLogged, onLogout }) => {
-  const [notificationCount, setNotificationCount] = useState(2);
+  const [notificationCount, setNotificationCount] = useState(0);
   const [show, setShow] = useState(false);
   const [showContext, setShowContext] = useState(false);
 
@@ -80,6 +80,7 @@ const Navbar = ({ isLogged, onLogout }) => {
               <Notifications
                 show={show}
                 setNotificationCount={setNotificationCount}
+                notificationCount={notificationCount}
               />
             </div>
 

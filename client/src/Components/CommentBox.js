@@ -42,13 +42,13 @@ const formats = [
 const CommentBox = (props) => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
+  const [disabled, setDisabled] = useState(false);
 
   const submitComment = (e) => {
     e.preventDefault();
     const parent_id = props.parent_id;
     const replyTo = props.replyTo;
     const user_id = props.user_id;
-    const user_name = props.user_name;
     const post_id = props.post_id;
     const replied_time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     if (description == "") {
@@ -58,7 +58,6 @@ const CommentBox = (props) => {
         .post("http://localhost:3001/addreply", {
           parent_id: parent_id,
           user_id: user_id,
-          user_name: user_name,
           replied_to: replyTo,
           post_id: post_id,
           replied_time: replied_time,
@@ -69,8 +68,11 @@ const CommentBox = (props) => {
             id: response.data.id,
             parent_id: parent_id == null ? response.data.id : parent_id,
             user_id: user_id,
-            user_name: user_name,
-            replied_to: replyTo == "" ? null : replyTo,
+            user_name: response.data.user_name,
+            replied_to:
+              response.data.replied_to != null
+                ? response.data.replied_to
+                : null,
             post_id: post_id,
             replied_time: replied_time,
             description: description,
@@ -78,7 +80,7 @@ const CommentBox = (props) => {
             likes: 0,
             dislikes: 0,
           };
-
+          setDisabled(true);
           setDescription("");
           props.addReply(data);
         });
@@ -126,31 +128,6 @@ const CommentBox = (props) => {
                   bounds={".quill reply"}
                   formats={formats}
                 />
-                {/* {props.replyTo == "" ? (
-            <ReactQuill
-              onChange={handleChange}
-              value={description}
-              modules={modules}
-              bounds={".quill"}
-              formats={formats}
-            />
-          ) : (
-            <textarea
-              style={{
-                margin: "-20px 0px 0px 0px",
-                resize: "vertical",
-                height: 50,
-                minHeight: 50,
-                maxHeight: 200,
-              }}
-              className="txtArea"
-              placeholder="Leave a reply..."
-              value={description}
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
-            />
-          )} */}
               </div>
               <button
                 type="button"
@@ -162,6 +139,7 @@ const CommentBox = (props) => {
                 }}
                 onClick={submitComment}
                 className="btn btn-block"
+                disabled={disabled}
               >
                 Reply
               </button>

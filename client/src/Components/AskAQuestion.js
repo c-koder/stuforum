@@ -108,7 +108,6 @@ const AskAQuestion = (props) => {
           description: description,
           tags: selectedTags,
           user_id: authState.id,
-          user_name: authState.name,
           posted_time: posted_time,
           urgent: urgent,
         })

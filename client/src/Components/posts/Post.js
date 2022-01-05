@@ -84,7 +84,10 @@ const Post = ({
     leadsColor = "var(--secondary)";
   }
 
+  const [disabled, setDisabled] = useState(false);
   const updateLeadsPrefs = (leads, pref) => {
+    setDisabled(true);
+    const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     axios
       .post("http://localhost:3001/updateleadsprefs", {
         id: prefId,
@@ -92,6 +95,7 @@ const Post = ({
         leads: leads,
         user_id: authState.id,
         pref: pref,
+        time: time,
       })
       .then((res) => {
         setPrefId(res.data.id);
@@ -325,6 +329,9 @@ const Post = ({
                 style={{
                   color: "var(--secondary)",
                 }}
+                data-tip={moment(post.posted_time).format(
+                  "MMMM Do YYYY, h:mm:ss a"
+                )}
               >
                 {postedTime}
               </h4>
@@ -341,13 +348,23 @@ const Post = ({
               {commentCount == null ? post.comments : commentCount}
             </span>
             <span style={{ float: "right" }}>
-              <button className="nullBtn" onClick={upVote}>
+              <button
+                className="nullBtn"
+                onClick={upVote}
+                data-tip="Vote as useful"
+                disabled={disabled}
+              >
                 <img
                   className="navIcon"
                   src={userVoted === "useful" ? upArrowBlue : upArrow}
                 />
               </button>
-              <button className="nullBtn" onClick={downVote}>
+              <button
+                className="nullBtn"
+                onClick={downVote}
+                data-tip="Vote as not useful"
+                disabled={disabled}
+              >
                 <img
                   className="navIcon"
                   src={userVoted === "useless" ? downArrowRed : downArrow}
