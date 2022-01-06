@@ -10,7 +10,6 @@ import activeTag from "../resources/tag-blue.png";
 import Tags from "./tags/Tags";
 import useSortedTags from "./dataHooks/useSortedTags";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 
 const SideMenu = ({ activeTab }) => {
   const [tags, setTags] = useState([]);
@@ -25,8 +24,8 @@ const SideMenu = ({ activeTab }) => {
   return (
     <div>
       <div className="rightbar whiteContainer" style={{ marginTop: 0 }}>
-        <Link
-          to="/home"
+        <motion.a
+          href="/home"
           className={
             activeTab === "home" ? "active rightbar-item" : "rightbar-item"
           }
@@ -41,9 +40,9 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           Home
-        </Link>
-        <Link
-          to="/myquestions"
+        </motion.a>
+        <motion.a
+          href="/myquestions"
           className={
             activeTab === "questions" ? "active rightbar-item" : "rightbar-item"
           }
@@ -58,9 +57,9 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           My Questions
-        </Link>
-        <Link
-          to="/myanswers"
+        </motion.a>
+        <motion.a
+          href="/myanswers"
           className={
             activeTab === "answers" ? "active rightbar-item" : "rightbar-item"
           }
@@ -75,9 +74,9 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           My Answers
-        </Link>
-        <Link
-          to="/tags"
+        </motion.a>
+        <motion.a
+          href="/tags"
           className={
             activeTab === "tags" ? "active rightbar-item" : "rightbar-item"
           }
@@ -92,7 +91,7 @@ const SideMenu = ({ activeTab }) => {
             />
           </span>
           Tags
-        </Link>
+        </motion.a>
       </div>
       <div className="whiteContainer">
         <h2 style={{ marginBottom: 20 }}>Frequently used tags</h2>

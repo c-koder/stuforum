@@ -19,6 +19,7 @@ import axios from "axios";
 import sun from "./resources/sun.png";
 import moon from "./resources/moon.png";
 import { motion } from "framer-motion";
+import NotFound from "./pages/NotFound";
 
 const Routing = () => {
   const [authState, setAuthState] = useState({
@@ -113,91 +114,87 @@ const Routing = () => {
 
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
-      <Router>
-        <Navbar isLogged={authState.status} onLogout={onLogout} />
+      <Navbar isLogged={authState.status} onLogout={onLogout} />
 
-        <Routes>
-          <Route
-            exact
-            path="/"
-            element={!authState.status ? <LogReg /> : <Navigate to={"/home"} />}
-          />
+      <Routes>
+        <Route
+          exact
+          path="/"
+          element={!authState.status ? <LogReg /> : <Navigate to={"/home"} />}
+        />
 
-          {authState.status !== null && (
-            <>
-              <Route
-                path="/home"
-                element={authState.status ? <Home /> : <Navigate to={"/"} />}
-              />
+        <Route path="*" element={<NotFound />} />
 
-              <Route
-                path="/myquestions"
-                element={
-                  authState.status ? <MyQuestions /> : <Navigate to={"/"} />
-                }
-              />
+        {authState.status !== null && (
+          <>
+            <Route
+              path="/home"
+              element={authState.status ? <Home /> : <Navigate to={"/"} />}
+            />
 
-              <Route
-                path="/myanswers"
-                element={
-                  authState.status ? <MyAnswers /> : <Navigate to={"/"} />
-                }
-              />
+            <Route
+              path="/myquestions"
+              element={
+                authState.status ? <MyQuestions /> : <Navigate to={"/"} />
+              }
+            />
 
-              <Route
-                path="/post/:id"
-                element={
-                  authState.status ? <SinglePost /> : <Navigate to={"/"} />
-                }
-              />
+            <Route
+              path="/myanswers"
+              element={authState.status ? <MyAnswers /> : <Navigate to={"/"} />}
+            />
 
-              <Route
-                path="/tagged/:name"
-                element={authState.status ? <Home /> : <Navigate to={"/"} />}
-              />
+            <Route
+              path="/post/:id"
+              element={
+                authState.status ? <SinglePost /> : <Navigate to={"/"} />
+              }
+            />
 
-              <Route
-                path="/myquestions"
-                element={
-                  authState.status ? <MyQuestions /> : <Navigate to={"/"} />
-                }
-              />
+            <Route
+              path="/tagged/:name"
+              element={authState.status ? <Home /> : <Navigate to={"/"} />}
+            />
 
-              <Route
-                path="/user/:name"
-                element={
-                  authState.status ? <ViewUser /> : <Navigate to={"/"} />
-                }
-              />
+            <Route
+              path="/myquestions"
+              element={
+                authState.status ? <MyQuestions /> : <Navigate to={"/"} />
+              }
+            />
 
-              <Route
-                path="/profile"
-                element={
-                  authState.status ? <UserProfile /> : <Navigate to={"/"} />
-                }
-              />
+            <Route
+              path="/user/:name"
+              element={authState.status ? <ViewUser /> : <Navigate to={"/"} />}
+            />
 
-              <Route
-                path="/tags"
-                element={authState.status ? <Tags /> : <Navigate to={"/"} />}
-              />
-            </>
-          )}
-        </Routes>
-        <motion.button
-          className="themeToggleBtn"
-          onClick={toggleTheme}
-          whileHover={{ y: -5 }}
-        >
-          <motion.img
-            className="icon"
-            style={{ height: "22px" }}
-            src={img}
-            variants={rotateVariant}
-            animate={currentMode === "light" ? "rotate" : "stop"}
-          />
-        </motion.button>
-      </Router>
+            <Route
+              path="/profile"
+              element={
+                authState.status ? <UserProfile /> : <Navigate to={"/"} />
+              }
+            />
+
+            <Route
+              path="/tags"
+              element={authState.status ? <Tags /> : <Navigate to={"/"} />}
+            />
+          </>
+        )}
+      </Routes>
+      <motion.button
+        className="themeToggleBtn"
+        onClick={toggleTheme}
+        whileHover={{ y: -5 }}
+      >
+        <motion.img
+          className="icon"
+          style={{ height: "22px" }}
+          src={img}
+          variants={rotateVariant}
+          animate={currentMode === "light" ? "rotate" : "stop"}
+        />
+      </motion.button>
     </AuthContext.Provider>
   );
 };

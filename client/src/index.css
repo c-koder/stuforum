@@ -23,7 +23,7 @@ html {
 }
 
 img {
-  pointer-events: none;
+  pointer-events: unset;
 }
 
 * {
@@ -452,12 +452,11 @@ button:disabled {
   background-color: var(--white);
   margin-top: 2.5%;
   margin-left: 30.5%;
-  min-width: 220px;
   border: 1px solid var(--light-white);
   z-index: 1;
   transition: all 200ms ease-out;
   opacity: 0;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .context-content.shown {
@@ -470,9 +469,30 @@ button:disabled {
   color: var(--gray);
   text-decoration: none;
   display: block;
-  transition: all 200ms ease-out;
   padding: 20px;
+  text-align: right;
   font-size: var(--main-font-size);
+}
+
+.context-content .button {
+  color: var(--secondary);
+  text-decoration: none;
+  display: flex;
+  padding: 10px 15px;
+  margin-top: 4px;
+  font-size: var(--main-font-size);
+}
+
+.sortLabel {
+  border: 1px solid var(--light-white);
+  font-size: 18px;
+  color: var(--secondary);
+  margin-bottom: 40px;
+  background-color: var(--white);
+  padding: 12px;
+  border-radius: 5px;
+  text-align: center;
+  width: 12%;
 }
 
 .label {
@@ -789,6 +809,7 @@ a {
 .showMoreLink {
   display: inline-block;
   font-size: var(--main-font-size);
+  border: 1px solid var(--light-white);
   color: var(--secondary);
   font-weight: bold;
   margin-left: 60px;
@@ -834,11 +855,13 @@ a {
 .quill .ql-bubble .ql-editor pre.ql-syntax {
   background-color: var(--bg);
   color: var(--gray);
-  overflow: visible;
+  overflow-y: scroll;
+  max-height: 600px;
 }
 
 .quill .ql-bubble .ql-editor pre.ql-syntax {
   padding: 10px 15px 10px 15px;
+  border-radius: 5px;
 }
 
 .quill .ql-bubble {
@@ -848,9 +871,12 @@ a {
 }
 
 .quill .ql-bubble .ql-editor {
-  padding: 17px 0px 20px 0px;
-  padding-top: 15px;
+  padding: 7px 0px 20px 0px;
+  margin-bottom: 20px;
   resize: none;
+  max-height: unset;
+  height: 100%;
+  overflow: hidden;
 }
 
 .strength-Weak::-webkit-progress-value {

@@ -25,9 +25,12 @@ const ContextMenu = ({
     }
   } else {
     if (!singlePost) {
-      contextMenuStyling = "30.5%";
+      contextMenuStyling = "32.1%";
+    } else {
+      contextMenuStyling = "51.7%";
     }
   }
+
   return (
     <div
       style={{

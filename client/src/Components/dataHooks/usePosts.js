@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const usePosts = () => {
+const usePosts = (active) => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
     axios.post("http://localhost:3001/getposts").then((res) => {

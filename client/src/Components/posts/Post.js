@@ -14,6 +14,42 @@ import moment from "moment";
 import axios from "axios";
 import usePostData from "../dataHooks/usePostData";
 import { Link } from "react-router-dom";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.bubble.css";
+import hljs from "highlight.js";
+import "highlight.js/styles/stackoverflow-light.css";
+
+hljs.configure({
+  languages: ["javascript", "java", "c", "c++", "python"],
+});
+
+const modules = {
+  syntax: {
+    highlight: (description) => hljs.highlightAuto(description).value,
+  },
+  toolbar: [
+    ["bold", "italic", "underline"],
+    ["code-block"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["link", "image"],
+  ],
+
+  clipboard: {
+    matchVisual: false,
+  },
+};
+
+const formats = [
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "code-block",
+  "list",
+  "bullet",
+  "link",
+  "image",
+];
 
 const Post = ({
   post,
@@ -232,7 +268,7 @@ const Post = ({
           </h2>
         </div>
         <div className="postsContainer-div">
-          {post.user_name === authState.name && (
+          {post.user_id == authState.id && (
             <button
               ref={ref}
               style={{ float: "right" }}
@@ -244,7 +280,7 @@ const Post = ({
                   height: "25px",
                   marginTop: 5,
                   marginLeft: 20,
-                  display: viewingQuestions ? "block" : "none",
+                  display: viewingQuestions || singlePost ? "block" : "none",
                 }}
                 alt="Settings"
                 className="icon"
@@ -272,9 +308,9 @@ const Post = ({
             </span>
           )}
 
-          <Link to={`/post/${post.id}`} style={{ display: "flex" }}>
+          <a href={`/post/${post.id}`} style={{ display: "flex" }}>
             <h2 style={{ float: "left" }}>{post.question}</h2>
-          </Link>
+          </a>
 
           <span
             style={{
@@ -294,12 +330,30 @@ const Post = ({
           <br />
           <Tags tags={tags} tagOnly={true} />
 
-          {post.description.includes("syntax") ? (
+          <span>
+            <ReactQuill
+              readOnly={true}
+              theme="bubble"
+              value={description}
+              modules={modules}
+              bounds={".quill reply"}
+              formats={formats}
+            />
+          </span>
+
+          {/* <span
+            dangerouslySetInnerHTML={{
+              __html: description,
+            }}
+          ></span> */}
+
+          {/* {post.description.includes("syntax") ? (
             <span
               style={{
                 backgroundColor: "var(--bg)",
                 marginTop: 7,
                 padding: 10,
+                maxWidth: "100px",
                 borderRadius: 7,
               }}
               dangerouslySetInnerHTML={{
@@ -312,9 +366,9 @@ const Post = ({
                 __html: description,
               }}
             ></span>
-          )}
+          )} */}
 
-          <hr style={{ margin: "15px 0" }} />
+          <hr style={{ margin: "15px 0 15px 0" }} />
 
           <div style={{ display: "flex", marginBottom: 20, width: "100%" }}>
             <span

@@ -5,10 +5,10 @@ import LeftBar from "../Components/LeftBar";
 import { useParams } from "react-router";
 import { motion } from "framer-motion";
 import usePosts from "../Components/dataHooks/usePosts";
+import FilterMenu from "../Components/FilterMenu";
 
 const Home = () => {
   const { name } = useParams();
-
   const { response } = usePosts();
   const [posts, setPosts] = useState([]);
 
@@ -17,6 +17,16 @@ const Home = () => {
       setPosts(response);
     }
   }, [response]);
+
+  const sortPosts = (sortBy) => {
+    // if (sortBy == "getposts") {
+    //   setPosts(posts);
+    // } else if (sortBy == "getascleadsposts") {
+    //   posts.sort((a, b) => a.leads - b.leads);
+    // } else if (sortBy == "getdescleadsposts") {
+    //   posts.sort((a, b) => b.leads - a.leads);
+    // }
+  };
 
   const containerVariants = {
     hidden: {
@@ -46,7 +56,15 @@ const Home = () => {
         <div className="container-div">
           <LeftBar />
         </div>
-        <div className="container-div" style={{ width: "225%" }}>
+        <div className="container-div" style={{ width: "225%", marginTop: 0 }}>
+          {posts.length > 0 && (
+            <FilterMenu show={true} posts={true} sortPosts={sortPosts} />
+          )}
+          {posts.length == 0 ? (
+            <h2>No posts yet</h2>
+          ) : (
+            <div className="sortLabel">Sort By</div>
+          )}
           {name != null && (
             <div
               style={{

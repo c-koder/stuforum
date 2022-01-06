@@ -2,7 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import avatar from "../resources/img_avatar.png";
-import ReactQuill from "react-quill";
+import ReactQuill, { Delta } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
@@ -87,16 +87,22 @@ const CommentBox = (props) => {
     }
   };
 
-  const handleChange = (html) => {
-    setDescription(html);
-  };
-
   useEffect(() => {
     const timer = setInterval(() => {
       setError("");
     }, 5000);
     return () => clearInterval(timer);
   }, []);
+
+  window.onbeforeunload = () => {
+    if (description != "") {
+      return "There are unsaved changes. Are you sure you want to proceed?";
+    }
+  };
+
+  const handleChange = (html) => {
+    setDescription(html);
+  };
 
   return (
     <>

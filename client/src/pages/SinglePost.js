@@ -141,6 +141,16 @@ const SinglePost = () => {
     }
   });
 
+  const deletePost = (id) => {
+    axios
+      .post("http://localhost:3001/deletepost", {
+        post_id: id,
+      })
+      .then((res) => {
+        if (res.data.message == "success") navigate("/home");
+      });
+  };
+
   const answered = post.answered == 1 ? true : false;
 
   return (
@@ -188,6 +198,7 @@ const SinglePost = () => {
             post={post}
             singlePost={true}
             commentCount={commentCount}
+            onDelete={deletePost}
           />
           <CommentBox
             addReply={addReply}

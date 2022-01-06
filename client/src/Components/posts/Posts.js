@@ -10,7 +10,7 @@ const Posts = ({
 }) => {
   const [pageNumber, setPageNumber] = useState(0);
 
-  const postsPerPage = 6;
+  const postsPerPage = 10;
   const pagesVisited = pageNumber * postsPerPage;
 
   const displayPosts = posts

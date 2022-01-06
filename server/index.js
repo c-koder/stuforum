@@ -14,36 +14,17 @@ const db = mysql.createConnection({
   database: "stuforum",
 });
 
-// app.use(function (req, res, next) {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.setHeader("Access-Control-Allow-Credentials", true);
-//   next();
-// });
-
 app.use(cors());
-
-// app.use(
-//   cors({
-//     origin: true,
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//     preflightContinue: true,
-//     optionsSuccessStatus: 204,
-//     credentials: true,
-//   })
-// );
-
 app.use(express.json());
 
 //register
 
 app.post("/register", (req, res) => {
-  const { name, studentId, studentEmail, password, joinDate } = req.body;
+  const { name, student_id, student_email, password, join_date } = req.body;
 
   let userExistsQuery =
     "SELECT * FROM user WHERE student_email = ? OR student_id = ?";
-  db.query(userExistsQuery, [studentEmail, studentId], (err, result) => {
+  db.query(userExistsQuery, [student_email, student_id], (err, result) => {
     if (err) {
       res.send({ err: err });
     }
@@ -58,7 +39,7 @@ app.post("/register", (req, res) => {
           "INSERT INTO user(name, student_id, student_email, password, join_date) VALUES (?, ?, ?, ?, ?)";
         db.query(
           sql,
-          [name, studentId, studentEmail, hash, joinDate],
+          [name, student_id, student_email, hash, join_date],
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -140,7 +121,7 @@ app.post("/getuser", (req, res) => {
 });
 
 app.post("/getsortedusers", (req, res) => {
-  let sql = "SELECT * FROM user WHERE likes >= 0 ORDER BY likes DESC LIMIT 5";
+  let sql = "SELECT * FROM user WHERE likes > 0 ORDER BY likes DESC LIMIT 5";
   db.query(sql, (err, result) => {
     if (err) {
       res.send({ err: err });
@@ -240,9 +221,48 @@ app.post("/addpost", (req, res) => {
   );
 });
 
+app.post("/deletepost", (req, res) => {
+  const post_id = req.body.post_id;
+  db.query(
+    "DELETE p.*, r.*, cr.* FROM post p LEFT JOIN reply r ON r.post_id = p.id LEFT JOIN child_reply cr ON cr.post_id = p.id WHERE p.id = ?",
+    post_id,
+    (err, result) => {
+      if (!err) {
+        res.send({ message: "success" });
+      }
+    }
+  );
+});
+
 app.post("/getposts", (req, res) => {
   let sql =
     "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY id DESC";
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.send({ err: err });
+    }
+    if (result.length > 0) {
+      res.send(result);
+    }
+  });
+});
+
+app.post("/getascleadsposts", (req, res) => {
+  let sql =
+    "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY leads ASC";
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.send({ err: err });
+    }
+    if (result.length > 0) {
+      res.send(result);
+    }
+  });
+});
+
+app.post("/getdescleadsposts", (req, res) => {
+  let sql =
+    "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY leads DESC";
   db.query(sql, (err, result) => {
     if (err) {
       res.send({ err: err });
@@ -459,21 +479,47 @@ app.post("/addreply", (req, res) => {
     );
   }
 
-  db.query("SELECT user_id FROM post WHERE id = ?", post_id, (err, result) => {
-    if (result[0].user_id != user_id && !err) {
+  if (replied_to != null) {
+    if (replied_to != user_id) {
       const data = {
         user_from_id: user_id,
-        user_to_id: result[0].user_id,
+        user_to_id: replied_to,
         type: "CM",
         post_id: post_id,
         parent_reply_id: parent_id != null ? parent_id : null,
         child_reply_id: null,
-        description: "answered on your question",
+        description:
+          parent_id != null
+            ? "sub-answered on your question"
+            : "answered on your question",
         time: replied_time,
       };
       insertNotification(data);
     }
-  });
+  } else {
+    db.query(
+      "SELECT user_id FROM post WHERE id = ?",
+      post_id,
+      (err, result) => {
+        if (result[0].user_id != user_id && !err) {
+          const data = {
+            user_from_id: user_id,
+            user_to_id: result[0].user_id,
+            type: "CM",
+            post_id: post_id,
+            parent_reply_id: parent_id != null ? parent_id : null,
+            child_reply_id: null,
+            description:
+              parent_id != null
+                ? "sub-answered on your question"
+                : "answered on your question",
+            time: replied_time,
+          };
+          insertNotification(data);
+        }
+      }
+    );
+  }
 });
 
 app.post("/deletereply", (req, res) => {
@@ -617,7 +663,7 @@ app.post("/updatereplypref", (req, res) => {
         parent_reply_id: reply_id == parent_id ? parent_id : null,
         child_reply_id: reply_id == child_id ? child_id : null,
         description:
-          child_id != null ? "liked your reply" : "liked your answer",
+          child_id != null ? "liked your sub-answer" : "liked your answer",
         time: time,
       };
       insertNotification(data);
@@ -669,42 +715,43 @@ app.post("/getnotifications", (req, res) => {
  */
 
 const insertNotification = (data) => {
-  let sql;
   if (data.type == "CM") {
-    sql =
-      "INSERT INTO notification(user_from_id, user_to_id, type, post_id, parent_reply_id, child_reply_id, description, time) SELECT ?, ?, ?, ?, ?, ?, ?, ? FROM DUAL WHERE NOT EXISTS (SELECT id FROM notification WHERE user_from_id = ? AND user_to_id = ? AND type = ? AND time = ?)";
-    db.query(sql, [
-      data.user_from_id,
-      data.user_to_id,
-      data.type,
-      data.post_id,
-      data.parent_reply_id,
-      data.child_reply_id,
-      data.description,
-      data.time,
-      data.user_from_id,
-      data.user_to_id,
-      data.type,
-      data.time,
-    ]);
+    db.query(
+      "INSERT INTO notification(user_from_id, user_to_id, type, post_id, parent_reply_id, child_reply_id, description, time) SELECT ?, ?, ?, ?, ?, ?, ?, ? FROM DUAL WHERE NOT EXISTS (SELECT id FROM notification WHERE user_from_id = ? AND user_to_id = ? AND type = ? AND time = ?)",
+      [
+        data.user_from_id,
+        data.user_to_id,
+        data.type,
+        data.post_id,
+        data.parent_reply_id,
+        data.child_reply_id,
+        data.description,
+        data.time,
+        data.user_from_id,
+        data.user_to_id,
+        data.type,
+        data.time,
+      ]
+    );
   } else {
-    sql =
-      "INSERT INTO notification(user_from_id, user_to_id, type, post_id, parent_reply_id, child_reply_id, description, time) SELECT ?, ?, ?, ?, ?, ?, ?, ? FROM DUAL WHERE NOT EXISTS (SELECT id FROM notification WHERE user_from_id = ? AND user_to_id = ? AND type = ? AND (parent_reply_id = ? OR child_reply_id = ?))";
-    db.query(sql, [
-      data.user_from_id,
-      data.user_to_id,
-      data.type,
-      data.post_id,
-      data.parent_reply_id,
-      data.child_reply_id,
-      data.description,
-      data.time,
-      data.user_from_id,
-      data.user_to_id,
-      data.type,
-      data.parent_reply_id,
-      data.child_reply_id,
-    ]);
+    db.query(
+      "INSERT INTO notification(user_from_id, user_to_id, type, post_id, parent_reply_id, child_reply_id, description, time) SELECT ?, ?, ?, ?, ?, ?, ?, ? FROM DUAL WHERE NOT EXISTS (SELECT id FROM notification WHERE user_from_id = ? AND user_to_id = ? AND type = ? AND (parent_reply_id = ? OR child_reply_id = ?))",
+      [
+        data.user_from_id,
+        data.user_to_id,
+        data.type,
+        data.post_id,
+        data.parent_reply_id,
+        data.child_reply_id,
+        data.description,
+        data.time,
+        data.user_from_id,
+        data.user_to_id,
+        data.type,
+        data.parent_reply_id,
+        data.child_reply_id,
+      ]
+    );
   }
 };
 

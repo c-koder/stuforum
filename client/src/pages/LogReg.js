@@ -67,7 +67,7 @@ const LogReg = () => {
         join_date: joinDate,
       }).then((response) => {
         if (response.data.err) {
-          setError("Error : SFX0001");
+          setError(`Error : ${response.data.err}`);
         } else if (response.data.message == "user_exists") {
           setError("User with Student ID/Email already exists.");
         } else if (response.data.message == "user_added") {

@@ -20,7 +20,14 @@ const MyQuestions = () => {
   }, [userQuestionsResponse]);
 
   const deletePost = (id) => {
-    setPosts(posts.filter((post) => post.id !== id));
+    axios
+      .post("http://localhost:3001/deletepost", {
+        post_id: id,
+      })
+      .then((res) => {
+        if (res.data.message == "success")
+          setPosts(posts.filter((post) => post.id !== id));
+      });
   };
 
   const updateStatus = (id, status, new_status) => {
