@@ -13,43 +13,7 @@ import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.bubble.css";
-import hljs from "highlight.js";
-import "highlight.js/styles/stackoverflow-light.css";
-import "react-loading-skeleton/dist/skeleton.css";
-
-hljs.configure({
-  languages: ["javascript", "java", "c", "c++", "python"],
-});
-
-const modules = {
-  syntax: {
-    highlight: (description) => hljs.highlightAuto(description).value,
-  },
-  toolbar: [
-    ["bold", "italic", "underline"],
-    ["code-block"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["link", "image"],
-  ],
-
-  clipboard: {
-    matchVisual: false,
-  },
-};
-
-const formats = [
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "code-block",
-  "list",
-  "bullet",
-  "link",
-  "image",
-];
+import { Parser } from "html-to-react";
 
 const Post = ({
   post,
@@ -324,15 +288,8 @@ const Post = ({
           </span>
           <br />
           {tags != null ? <Tags tags={tags} tagOnly={true} /> : <br />}
-
-          <ReactQuill
-            readOnly={true}
-            theme="bubble"
-            value={description}
-            modules={modules}
-            bounds={".quill reply"}
-            formats={formats}
-          />
+          
+          <div>{Parser().parse(description)}</div>
 
           <hr style={{ margin: "15px 0 15px 0" }} />
 

@@ -44,11 +44,11 @@ const Posts = ({
     <div>
       <InfiniteScoll
         dataLength={pagesVisited}
-        hasMore={true}
+        hasMore={pagesVisited < posts.length}
         next={() => {
           setTimeout(() => {
             setPageNumber(pageNumber + 1);
-          }, 2000);
+          }, 1000);
         }}
         loader={
           <div

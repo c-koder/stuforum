@@ -27,7 +27,7 @@ const ContextMenu = ({
     if (!singlePost) {
       contextMenuStyling = "32.1%";
     } else {
-      contextMenuStyling = "51.7%";
+      contextMenuStyling = "52.7%";
     }
   }
 

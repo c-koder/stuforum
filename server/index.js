@@ -229,7 +229,6 @@ app.post("/getposts", (req, res) => {
               user_id,
               (err, postPrefResult) => {
                 if (!err) {
-        
                   res.send({
                     posts: result,
                     post_pref: postPrefResult,
@@ -370,13 +369,15 @@ app.post("/getsortedtags", (req, res) => {
   });
 });
 
+// insert into post(question, description, user_id, posted_time) select question, description, user_id, posted_time from post where id=1;
+
 //replies
 
 app.post("/getreplies", async (req, res) => {
   const post_id = req.body.post_id;
 
   let sql =
-    "SELECT r.*, u.name AS user_name, u2.name AS replied_to FROM reply r LEFT JOIN user u ON u.id = r.user_id LEFT JOIN user u2 ON u2.id = r.replied_to_id";
+    "SELECT r.*, u.name AS user_name, u2.name AS replied_to FROM reply r LEFT JOIN user u ON u.id = r.user_id LEFT JOIN user u2 ON u2.id = r.replied_to_id WHERE r.post_id = ?";
   db.query(sql, post_id, (err, result) => {
     if (!err) {
       db.query(

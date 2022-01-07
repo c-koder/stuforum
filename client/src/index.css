@@ -384,7 +384,7 @@ button:disabled {
 
 .postsContainer {
   background-color: var(--white);
-  box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
+  box-shadow: 0px 40px 80px rgba(0, 0, 0, 0.01);
   padding: 20px;
   margin-bottom: 40px;
   border-radius: 10px;
@@ -851,15 +851,26 @@ a {
   border-top-right-radius: 0.5em;
 }
 
-.quill .ql-snow .ql-editor pre.ql-syntax,
-.quill .ql-bubble .ql-editor pre.ql-syntax {
+.ql-syntax {
+  background-color: var(--bg);
+  color: var(--gray);
+  overflow: scroll;
+  max-height: 600px;
+  word-wrap: break-word;
+  max-width: 0px;
+  min-width: 100%;
+  padding: 10px 10px 0px 10px;
+  border-radius: 5px;
+}
+
+.quill .ql-snow .ql-editor pre.ql-syntax {
   background-color: var(--bg);
   color: var(--gray);
   overflow: scroll;
   max-height: 600px;
 }
 
-.quill .ql-bubble .ql-editor pre.ql-syntax {
+/* .quill .ql-bubble .ql-editor pre.ql-syntax {
   word-wrap: break-word;
   max-width: 0px;
   min-width: 100%;
@@ -879,7 +890,7 @@ a {
   max-height: unset;
   height: 100%;
   overflow: hidden;
-}
+} */
 
 .strength-Weak::-webkit-progress-value {
   background-color: #f25f5c;

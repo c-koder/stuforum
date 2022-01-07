@@ -16,6 +16,7 @@ import axios from "axios";
 import useReplyData from "../dataHooks/useReplyData";
 import ReactTooltip from "react-tooltip";
 import { Link } from "react-router-dom";
+import { Parser } from "html-to-react";
 
 const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
   const { authState } = useContext(AuthContext);
@@ -277,21 +278,10 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
                 </Link>
               )}
             </p>
-            {reply.description.includes("syntax") ? (
-              <span
-                style={{
-                  backgroundColor: "var(--bg)",
-                  marginTop: 7,
-                  padding: 10,
-                  borderRadius: 7,
-                }}
-                dangerouslySetInnerHTML={{ __html: reply.description }}
-              ></span>
-            ) : (
-              <span
-                dangerouslySetInnerHTML={{ __html: reply.description }}
-              ></span>
-            )}
+          </div>
+
+          <div style={{ marginTop: 5 }}>
+            {Parser().parse(reply.description)}
           </div>
 
           <hr style={{ margin: "15px 0" }} />
