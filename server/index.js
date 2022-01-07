@@ -148,29 +148,6 @@ app.post("/getuserposts", (req, res) => {
 
 //posts
 
-app.post("/getpostdata", (req, res) => {
-  const post_id = req.body.post_id;
-  const user_id = req.body.user_id;
-
-  db.query(
-    "SELECT * FROM tag INNER JOIN post_tag ON post_tag.tag_id = tag.id AND post_tag.post_id = ?",
-    post_id,
-    (err, tagsResult) => {
-      if (!err) {
-        db.query(
-          "SELECT * FROM post_pref WHERE user_id = ? AND post_id = ?",
-          [user_id, post_id],
-          (err, postPrefResult) => {
-            if (!err) {
-              res.send({ post_pref: postPrefResult[0], tags: tagsResult });
-            }
-          }
-        );
-      }
-    }
-  );
-});
-
 app.post("/addpost", (req, res) => {
   const { question, description, tags, user_id, posted_time } = req.body;
   const urgent = req.body.urgent ? 1 : 0;
@@ -235,40 +212,35 @@ app.post("/deletepost", (req, res) => {
 });
 
 app.post("/getposts", (req, res) => {
-  let sql =
-    "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY id DESC";
-  db.query(sql, (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
-      res.send(result);
-    }
-  });
-});
+  const { user_id, user_posts } = req.body;
 
-app.post("/getascleadsposts", (req, res) => {
-  let sql =
-    "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY leads ASC";
-  db.query(sql, (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
-      res.send(result);
-    }
-  });
-});
+  let sql = user_posts
+    ? "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id WHERE p.user_id = ? ORDER BY id DESC"
+    : "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY id DESC";
 
-app.post("/getdescleadsposts", (req, res) => {
-  let sql =
-    "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY leads DESC";
-  db.query(sql, (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
-      res.send(result);
+  db.query(sql, user_id, (err, result) => {
+    if (!err) {
+      db.query(
+        "SELECT * FROM tag INNER JOIN post_tag ON post_tag.tag_id = tag.id AND post_tag.post_id in(SELECT p.id FROM post p, user u WHERE u.id = p.user_id)",
+        (err, tagsResult) => {
+          if (!err) {
+            db.query(
+              "SELECT * FROM post_pref pp WHERE post_id in (SELECT p.id FROM post p, user u WHERE u.id = p.user_id) AND user_id = ?",
+              user_id,
+              (err, postPrefResult) => {
+                if (!err) {
+        
+                  res.send({
+                    posts: result,
+                    post_pref: postPrefResult,
+                    tags: tagsResult,
+                  });
+                }
+              }
+            );
+          }
+        }
+      );
     }
   });
 });
@@ -281,7 +253,27 @@ app.post("/getsinglepost", (req, res) => {
     post_id,
     (err, result) => {
       if (!err) {
-        res.send(result);
+        db.query(
+          "SELECT * FROM tag INNER JOIN post_tag ON post_tag.tag_id = tag.id AND post_tag.post_id = ?",
+          post_id,
+          (err, tagsResult) => {
+            if (!err) {
+              db.query(
+                "SELECT * FROM post_pref WHERE post_id in (SELECT p.id FROM post p, user u WHERE u.id = p.user_id) AND post_id = ?",
+                post_id,
+                (err, postPrefResult) => {
+                  if (!err) {
+                    res.send({
+                      post: result[0],
+                      post_pref: postPrefResult,
+                      tags: tagsResult,
+                    });
+                  }
+                }
+              );
+            }
+          }
+        );
       }
     }
   );
@@ -304,15 +296,7 @@ app.post("/updateleadsprefs", (req, res) => {
     );
   }
 
-  db.query(
-    "UPDATE post SET leads = leads + ? WHERE id = ?",
-    [leads, post_id]
-    // (err, result) => {
-    //   if (!err) {
-
-    //   }
-    // }
-  );
+  db.query("UPDATE post SET leads = leads + ? WHERE id = ?", [leads, post_id]);
 
   db.query("SELECT user_id FROM post WHERE id = ?", post_id, (err, result) => {
     if (result[0].user_id != user_id && leads >= 1 && !err) {

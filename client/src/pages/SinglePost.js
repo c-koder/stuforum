@@ -29,12 +29,16 @@ const SinglePost = () => {
     urgent: 0,
     answered: 0,
   });
+  const [tags, setTags] = useState([]);
+  const [postPref, setPostPref] = useState([]);
 
   const { response } = useSinglePost(id);
 
   useEffect(() => {
     if (response !== null) {
-      setPost(response);
+      setPost(response.post);
+      setTags(response.tags);
+      setPostPref(response.post_pref);
     }
   }, [response]);
 
@@ -196,6 +200,8 @@ const SinglePost = () => {
           <Post
             key={post.id}
             post={post}
+            tags={tags}
+            postPref={postPref}
             singlePost={true}
             commentCount={commentCount}
             onDelete={deletePost}

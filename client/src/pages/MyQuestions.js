@@ -6,18 +6,23 @@ import { motion } from "framer-motion";
 import useUserPosts from "../Components/dataHooks/useUserPosts";
 import { AuthContext } from "../helpers/AuthContext";
 import axios from "axios";
+import usePosts from "../Components/dataHooks/usePosts";
 
 const MyQuestions = () => {
   const { authState } = useContext(AuthContext);
 
   const [posts, setPosts] = useState([]);
-  const { userQuestionsResponse } = useUserPosts(authState.id);
+  const [tags, setTags] = useState([]);
+  const [postPref, setPostPref] = useState([]);
+  const { response } = usePosts(authState.id, true);
 
   useEffect(() => {
-    if (userQuestionsResponse !== null) {
-      setPosts(userQuestionsResponse);
+    if (response !== null) {
+      setPosts(response.posts);
+      setTags(response.tags);
+      setPostPref(response.post_pref);
     }
-  }, [userQuestionsResponse]);
+  }, [response]);
 
   const deletePost = (id) => {
     axios
@@ -99,6 +104,8 @@ const MyQuestions = () => {
         <div className="container-div" style={{ width: "225%" }}>
           <Posts
             posts={posts}
+            tags={tags}
+            postPref={postPref}
             onDelete={deletePost}
             onToggleUrgent={toggleUrgent}
             onToggleAnswered={toggleAnswered}

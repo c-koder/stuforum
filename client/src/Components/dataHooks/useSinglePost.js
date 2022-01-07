@@ -7,7 +7,7 @@ const useSinglePost = (id) => {
     axios
       .post("http://localhost:3001/getsinglepost", { post_id: id })
       .then((res) => {
-        setResponse(res.data[0]);
+        setResponse(res.data);
       });
   };
 

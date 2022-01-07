@@ -12,12 +12,12 @@ import { motion } from "framer-motion";
 import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
 import axios from "axios";
-import usePostData from "../dataHooks/usePostData";
 import { Link } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 hljs.configure({
   languages: ["javascript", "java", "c", "c++", "python"],
@@ -53,6 +53,8 @@ const formats = [
 
 const Post = ({
   post,
+  tags,
+  postPref,
   singlePost,
   commentCount,
   onDelete,
@@ -66,37 +68,31 @@ const Post = ({
   const [show, setShow] = useState(false);
   const [leads, setLeads] = useState(post.leads);
 
-  const [tags, setTags] = useState([]);
-  const [userVoted, setUserVoted] = useState("");
+  const [userVoted, setUserVoted] = useState();
   const [upVoted, setUpVoted] = useState();
   const [downVoted, setDownVoted] = useState();
   const [prefId, setPrefId] = useState(null);
 
-  const { response } = usePostData(post.id, authState.id);
   useEffect(() => {
-    if (response !== null) {
-      setTags(response.tags);
-
-      if (response.post_pref != null) {
-        setPrefId(response.post_pref.id);
-        if (response.post_pref.preference == "1") {
-          setUserVoted("useful");
-          setUpVoted(true);
-          setDownVoted(false);
-        } else if (response.post_pref.preference == "0") {
-          setUserVoted("useless");
-          setUpVoted(false);
-          setDownVoted(true);
-        } else {
-          setUserVoted("");
-          setUpVoted(false);
-          setDownVoted(false);
-        }
+    if (postPref[0] != null) {
+      setPrefId(postPref[0].id);
+      if (postPref[0].preference == "1") {
+        setUserVoted("useful");
+        setUpVoted(true);
+        setDownVoted(false);
+      } else if (postPref[0].preference == "0") {
+        setUserVoted("useless");
+        setUpVoted(false);
+        setDownVoted(true);
       } else {
-        setPrefId(null);
+        setUserVoted("");
+        setUpVoted(false);
+        setDownVoted(false);
       }
+    } else {
+      setPrefId(null);
     }
-  }, [response]);
+  }, [postPref]);
 
   let labelColor;
 
@@ -206,11 +202,10 @@ const Post = ({
     };
   }, [ref]);
 
-  const [description, setDescription] = useState(
+  const description =
     post.description.length > 600 && !singlePost
       ? post.description.substring(0, 600) + " . . ."
-      : post.description
-  );
+      : post.description;
 
   const [postedTime, setPostedTime] = useState(
     moment(post.posted_time).local().fromNow()
@@ -328,45 +323,16 @@ const Post = ({
             </Link>
           </span>
           <br />
-          <Tags tags={tags} tagOnly={true} />
+          {tags != null ? <Tags tags={tags} tagOnly={true} /> : <br />}
 
-          <span>
-            <ReactQuill
-              readOnly={true}
-              theme="bubble"
-              value={description}
-              modules={modules}
-              bounds={".quill reply"}
-              formats={formats}
-            />
-          </span>
-
-          {/* <span
-            dangerouslySetInnerHTML={{
-              __html: description,
-            }}
-          ></span> */}
-
-          {/* {post.description.includes("syntax") ? (
-            <span
-              style={{
-                backgroundColor: "var(--bg)",
-                marginTop: 7,
-                padding: 10,
-                maxWidth: "100px",
-                borderRadius: 7,
-              }}
-              dangerouslySetInnerHTML={{
-                __html: description,
-              }}
-            ></span>
-          ) : (
-            <span
-              dangerouslySetInnerHTML={{
-                __html: description,
-              }}
-            ></span>
-          )} */}
+          <ReactQuill
+            readOnly={true}
+            theme="bubble"
+            value={description}
+            modules={modules}
+            bounds={".quill reply"}
+            formats={formats}
+          />
 
           <hr style={{ margin: "15px 0 15px 0" }} />
 

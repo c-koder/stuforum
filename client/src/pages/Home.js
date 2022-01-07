@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Posts from "../Components/posts/Posts";
 import RightBar from "../Components/RightBar";
 import LeftBar from "../Components/LeftBar";
@@ -6,26 +6,32 @@ import { useParams } from "react-router";
 import { motion } from "framer-motion";
 import usePosts from "../Components/dataHooks/usePosts";
 import FilterMenu from "../Components/FilterMenu";
+import { AuthContext } from "../helpers/AuthContext";
 
 const Home = () => {
+  const { authState } = useContext(AuthContext);
   const { name } = useParams();
-  const { response } = usePosts();
+  const { response } = usePosts(authState.id, false);
   const [posts, setPosts] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [postPref, setPostPref] = useState([]);
 
   useEffect(() => {
     if (response !== null) {
-      setPosts(response);
+      setPosts(response.posts);
+      setTags(response.tags);
+      setPostPref(response.post_pref);
     }
   }, [response]);
 
   const sortPosts = (sortBy) => {
-    // if (sortBy == "getposts") {
-    //   setPosts(posts);
-    // } else if (sortBy == "getascleadsposts") {
-    //   posts.sort((a, b) => a.leads - b.leads);
-    // } else if (sortBy == "getdescleadsposts") {
-    //   posts.sort((a, b) => b.leads - a.leads);
-    // }
+    if (sortBy == "getposts") {
+      setPosts(posts);
+    } else if (sortBy == "getascleadsposts") {
+      posts.sort((a, b) => a.leads - b.leads);
+    } else if (sortBy == "getdescleadsposts") {
+      posts.sort((a, b) => b.leads - a.leads);
+    }
   };
 
   const containerVariants = {
@@ -87,7 +93,12 @@ const Home = () => {
             </div>
           )}
 
-          <Posts posts={posts} singlePost={false} />
+          <Posts
+            posts={posts}
+            tags={tags}
+            postPref={postPref}
+            singlePost={false}
+          />
         </div>
         <div className="container-div">
           <RightBar activeTab={"home"} />

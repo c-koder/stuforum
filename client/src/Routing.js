@@ -123,7 +123,7 @@ const Routing = () => {
           element={!authState.status ? <LogReg /> : <Navigate to={"/home"} />}
         />
 
-        <Route path="*" element={<NotFound />} />
+        {/* <Route path="*" element={<NotFound />} /> */}
 
         {authState.status !== null && (
           <>
