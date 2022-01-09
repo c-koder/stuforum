@@ -30,8 +30,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
   const [liked, setLiked] = useState();
   const [disliked, setDisLiked] = useState();
 
-  const child_reply_id = reply.parent_id != null ? reply.id : null;
-  const { response } = useReplyData(reply.id, child_reply_id, authState.id);
+  const { response } = useReplyData(reply.id, authState.id);
 
   useEffect(() => {
     if (response != null) {
@@ -75,8 +74,8 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     axios.post("http://localhost:3001/updatereplypref", {
       id: prefId,
-      parent_id: reply.parent_id == null ? reply.id : null,
-      child_id: reply.parent_id != null ? reply.id : null,
+      reply_id: reply.id,
+      parent_id: reply.parent_id,
       user_id: authState.id,
       post_id: reply.post_id,
       pref: pref,
@@ -181,6 +180,8 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
 
   const [showChildReplies, setShowChildReplies] = useState(false);
 
+  console.log(reply.parent_id);
+
   return (
     <>
       <ReactTooltip
@@ -227,7 +228,11 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
             <h4 style={{ color: "var(--secondary)" }}>
               Replied by{" "}
               <Link
-                to={`/user/${reply.user_name}`}
+                to={
+                  authState.name == reply.user_name
+                    ? "/profile"
+                    : `/user/${reply.user_name}`
+                }
                 style={{ color: "var(--primary)", fontWeight: 600 }}
               >
                 {reply.user_name}{" "}
@@ -280,7 +285,12 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
             </p>
           </div>
 
-          <div style={{ marginTop: 5 }}>
+          <div
+            style={{
+              marginTop: 5,
+              marginLeft: reply.description.includes("<ul>") && 20,
+            }}
+          >
             {Parser().parse(reply.description)}
           </div>
 
@@ -367,9 +377,10 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
       >
         <CommentBox
           addReply={addReply}
-          parent_id={reply.parent_id ? reply.parent_id : reply.id}
+          parent_id={reply.parent_id == null ? reply.id : reply.parent_id}
           replyTo={reply.user_id}
           user_id={authState.id}
+          user_name={authState.name}
           post_id={reply.post_id}
         />
       </div>

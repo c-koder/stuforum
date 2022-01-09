@@ -49,6 +49,7 @@ const CommentBox = (props) => {
     const parent_id = props.parent_id;
     const replyTo = props.replyTo;
     const user_id = props.user_id;
+    const user_name = props.user_name;
     const post_id = props.post_id;
     const replied_time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     if (description == "") {
@@ -66,13 +67,10 @@ const CommentBox = (props) => {
         .then((response) => {
           const data = {
             id: response.data.id,
-            parent_id: parent_id == null ? response.data.id : parent_id,
+            parent_id: parent_id,
             user_id: user_id,
-            user_name: response.data.user_name,
-            replied_to:
-              response.data.replied_to != null
-                ? response.data.replied_to
-                : null,
+            user_name: user_name,
+            replied_to: response.data.replied_to,
             post_id: post_id,
             replied_time: replied_time,
             description: description,

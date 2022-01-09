@@ -14,14 +14,6 @@
   --main-font-size: 18px;
 }
 
-*,
-body,
-html {
-  text-rendering: optimizeLegibility;
-  font-feature-settings: "kern";
-  transition: background-color 100ms ease-in;
-}
-
 img {
   pointer-events: unset;
 }
@@ -30,13 +22,14 @@ img {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Overpass", sans-serif;
+  font-family: "DM Sans", sans-serif;
   color: var(--gray);
   outline-width: 0;
 }
 
 body {
   background-color: var(--bg);
+  transition: background-color 200ms ease-in;
 }
 
 .topnav {
@@ -46,6 +39,9 @@ body {
   overflow: hidden;
   background-color: var(--white);
   box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--light-white);
+  border-radius: 0px 0px 10px 10px;
+  transition: all 200ms ease-in;
 }
 
 .topnav a {
@@ -64,24 +60,18 @@ body {
 }
 
 .topnav-centered input[type="text"] {
-  width: 43%;
+  width: 42%;
   background-color: transparent;
   padding: 13px 36px;
   border-color: var(--gray);
   border-width: 1px;
   border-radius: 6px;
   font-size: var(--main-font-size);
-
   float: left;
   position: relative;
   left: 36%;
   transform: translate(-50%, 50%);
   transition: all 200ms ease-out;
-}
-
-.topnav-centered input[type="text"]:hover {
-  width: 44%;
-  transition: all 200ms ease-in;
 }
 
 .searchInput {
@@ -274,14 +264,18 @@ button:disabled {
   margin-top: 40px;
   border-radius: 10px;
   padding: 20px;
+  border: 1px solid var(--light-white);
   background-color: var(--white);
   box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
+  transition: all 200ms ease-in;
 }
 
 .horizontalContainer {
   display: flex;
   border-radius: 10px;
   padding: 40px;
+  border: 1px solid var(--light-white);
+  transition: all 200ms ease-in;
   background-color: var(--white);
   box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
 }
@@ -386,9 +380,11 @@ button:disabled {
   background-color: var(--white);
   box-shadow: 0px 40px 80px rgba(0, 0, 0, 0.01);
   padding: 20px;
+  border: 1px solid var(--light-white);
   margin-bottom: 40px;
   border-radius: 10px;
   display: flex;
+  transition: all 200ms ease-in;
   width: 100%;
 }
 
@@ -454,7 +450,7 @@ button:disabled {
   margin-left: 30.5%;
   border: 1px solid var(--light-white);
   z-index: 1;
-  transition: all 200ms ease-out;
+  transition: all 200ms ease-in;
   opacity: 0;
   border-radius: 5px;
 }
@@ -489,6 +485,7 @@ button:disabled {
   color: var(--secondary);
   margin-bottom: 40px;
   background-color: var(--white);
+  transition: all 200ms ease-in;
   padding: 12px;
   border-radius: 5px;
   text-align: center;
@@ -799,13 +796,6 @@ a {
   color: var(--secondary);
 }
 
-.tooltip {
-  color: var(--gray) !important;
-  background-color: var(--secondary) !important;
-  padding: 10px !important;
-  font-weight: bold !important;
-}
-
 .showMoreLink {
   display: inline-block;
   font-size: var(--main-font-size);
@@ -821,6 +811,13 @@ a {
 .showmorelink:hover {
   cursor: pointer;
   background-color: var(--primary);
+}
+
+.tooltip {
+  color: var(--gray) !important;
+  background-color: var(--secondary) !important;
+  padding: 10px !important;
+  font-weight: bold !important;
 }
 
 .ql-editor {
@@ -861,6 +858,7 @@ a {
   min-width: 100%;
   padding: 10px 10px 0px 10px;
   border-radius: 5px;
+  transition: all 200ms ease-in;
 }
 
 .quill .ql-snow .ql-editor pre.ql-syntax {

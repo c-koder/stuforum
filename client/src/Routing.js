@@ -26,9 +26,6 @@ const Routing = () => {
     name: "",
     id: 0,
     status: null,
-    join_date: "",
-    description: "",
-    likes: 0,
   });
 
   useEffect(() => {
@@ -46,9 +43,6 @@ const Routing = () => {
             name: response.data.name,
             id: response.data.id,
             status: true,
-            join_date: response.data.join_date,
-            description: response.data.description,
-            likes: response.data.likes,
           });
         }
       });
@@ -118,12 +112,9 @@ const Routing = () => {
 
       <Routes>
         <Route
-          exact
           path="/"
           element={!authState.status ? <LogReg /> : <Navigate to={"/home"} />}
         />
-
-        {/* <Route path="*" element={<NotFound />} /> */}
 
         {authState.status !== null && (
           <>
@@ -179,6 +170,10 @@ const Routing = () => {
               path="/tags"
               element={authState.status ? <Tags /> : <Navigate to={"/"} />}
             />
+
+            <Route path="*" element={<Navigate to={"/404"} />} />
+
+            <Route path="/404" element={<NotFound />} />
           </>
         )}
       </Routes>

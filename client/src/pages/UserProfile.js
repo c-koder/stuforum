@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import Posts from "../Components/posts/Posts";
 import RightBar from "../Components/RightBar";
 import LeftBarUser from "../Components/LeftBarUser";
 import { motion } from "framer-motion";
@@ -34,10 +33,9 @@ const UserProfile = () => {
         exit="exit"
       >
         <div className="container-div">
-          <LeftBarUser user={authState.name} />
+          <LeftBarUser/>
         </div>
         <div className="container-div" style={{ width: "225%" }}>
-          {/* <Posts posts={posts} singlePost={false} postedBy={"Lorem Ipsum"} /> */}
         </div>
         <div className="container-div">
           <RightBar activeTab={""} />

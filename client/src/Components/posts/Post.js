@@ -280,7 +280,13 @@ const Post = ({
             }}
           >
             Posted by{" "}
-            <Link to={`/user/${post.user_name}`}>
+            <Link
+              to={
+                authState.name == post.user_name
+                  ? "/profile"
+                  : `/user/${post.user_name}`
+              }
+            >
               <span style={{ color: "var(--primary)", fontWeight: 600 }}>
                 {post.user_name}
               </span>
@@ -288,7 +294,7 @@ const Post = ({
           </span>
           <br />
           {tags != null ? <Tags tags={tags} tagOnly={true} /> : <br />}
-          
+
           <div>{Parser().parse(description)}</div>
 
           <hr style={{ margin: "15px 0 15px 0" }} />

@@ -1,11 +1,31 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import like from "../resources/like-blue.png";
 import avatar from "../resources/img_avatar.png";
 import Button from "./Button";
+import useUser from "./dataHooks/useUser";
 import { AuthContext } from "../helpers/AuthContext";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { Parser } from "html-to-react";
 
-const LeftBarUser = ({ user }) => {
+const LeftBarUser = ({ id }) => {
   const { authState } = useContext(AuthContext);
+  const [user, setUser] = useState({
+    id: 0,
+    name: "",
+    student_email: "",
+    description: "",
+    avatar: "",
+    join_date: "",
+    likes: "",
+  });
+
+  const { userResponse } = useUser(authState.id);
+  useEffect(() => {
+    if (userResponse !== null) {
+      setUser(userResponse);
+    }
+  }, [userResponse]);
+
   const onIconClick = () => {
     const input = document.getElementById("file-input");
     if (input) {
@@ -34,7 +54,7 @@ const LeftBarUser = ({ user }) => {
   ];
 
   const formatDate = () => {
-    let date = authState.join_date.substring(0, 10);
+    let date = user.join_date.substring(0, 10);
     let year = date.substring(0, 4);
     let month = monthArray[parseInt(date.substring(5, 7)) - 1];
     let day = date.substring(8, 10);
@@ -81,11 +101,11 @@ const LeftBarUser = ({ user }) => {
               </div>
             </div>
 
-            <h2 style={{ marginTop: 20 }}>{authState.name}</h2>
+            <h2 style={{ marginTop: 20 }}>{user.name}</h2>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <h3 style={{ color: "var(--secondary)" }}>{authState.likes}</h3>
+              <h3 style={{ color: "var(--secondary)" }}>{user.likes}</h3>
               <img
-                style={{ marginLeft: 10, height: 20, marginTop: 3 }}
+                style={{ marginLeft: 10, height: 20, marginTop: 4 }}
                 className="icon"
                 src={like}
               />
@@ -93,22 +113,24 @@ const LeftBarUser = ({ user }) => {
             <div
               className="whiteContainer"
               style={{
-                marginTop: -10,
+                marginTop: 10,
                 boxShadow: "none",
               }}
             >
-              <p style={{ textAlign: "justify" }}>{authState.description}</p>
+              <p style={{ textAlign: "center" }}>
+                {Parser().parse(user.description)}
+              </p>
               <hr style={{ marginTop: 20, marginBottom: 20 }} />
               <h4
                 style={{
                   color: "var(--secondary)",
                   textAlign: "center",
-                  marginBottom: user === authState.name && 20,
+                  marginBottom: authState.name == user.name && 20,
                 }}
               >
                 Joined {formatDate()}
               </h4>
-              {user === authState.name && <Button text={"Edit Details"} />}
+              {authState.name === user.name && <Button text={"Edit Details"} />}
             </div>
           </div>
         </center>

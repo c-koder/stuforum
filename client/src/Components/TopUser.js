@@ -21,7 +21,7 @@ const TopUser = ({ topUser }) => {
             {topUser.likes}
           </h3>
           <img
-            style={{ marginLeft: 10, height: 25 }}
+            style={{ marginLeft: 10, height: 25, marginTop: 3 }}
             className="icon"
             src={like}
           />

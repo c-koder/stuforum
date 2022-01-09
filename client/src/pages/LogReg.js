@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 const LogReg = () => {
   const [name, setName] = useState("");
   const [studentId, setStudentId] = useState("");
+  const [username, setUsername] = useState("");
   const [studentEmail, setStudentEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,7 +30,9 @@ const LogReg = () => {
       register();
     }
   };
-
+  // else if (username === "") {
+  //   setError("Username is required");
+  // }
   const register = () => {
     const joinDate = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     if (
@@ -184,14 +187,13 @@ const LogReg = () => {
             <label>Student ID</label>
             <input
               type="text"
-              placeholder="Student ID"
+              placeholder="Student ID (XXABCXXXX)"
               value={studentId}
               onChange={(e) => {
                 setStudentId(e.target.value);
               }}
             />
           </div>
-
           <input
             type="button"
             style={{ marginLeft: 5 }}
@@ -210,6 +212,17 @@ const LogReg = () => {
           </div>
         </div>
         <div className="container-div" style={{ width: "25%", marginTop: 52 }}>
+          <div className="form-control">
+            <label>Username</label>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+            />
+          </div>
           <div className="form-control">
             <label>Student Email</label>
             <input

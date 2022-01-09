@@ -37,9 +37,6 @@ const Login = () => {
             name: response.data.name,
             id: response.data.id,
             status: true,
-            join_date: response.data.join_date,
-            description: response.data.description,
-            likes: response.data.likes,
           });
           navigate("/home");
         }

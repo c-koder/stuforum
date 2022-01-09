@@ -17,6 +17,16 @@ const SinglePost = () => {
   const { authState } = useContext(AuthContext);
   const { id } = useParams();
 
+  useEffect(() => {
+    axios
+      .post("http://localhost:3001/postexists", { post_id: id })
+      .then((res) => {
+        res.data.message == null && navigate("/404")
+      });
+    {
+    }
+  }, []);
+
   const [post, setPost] = useState({
     id: 0,
     question: "",
@@ -40,26 +50,27 @@ const SinglePost = () => {
       setTags(response.tags);
       setPostPref(response.post_pref);
     }
-  }, [response]);
+  }, [response, post]);
 
-  const { replies, childReplies } = useReplies(id);
-  const [sortedReplies, setSortedReplies] = useState([]);
+  const { replyResponse } = useReplies(id);
+  const [replies, setReplies] = useState([]);
 
   useEffect(() => {
-    if (replies !== null && childReplies !== null) {
-      const populateReplies = (obj) => {
-        const childs = childReplies.filter(
-          (childObj) => childObj["parent_id"] === obj["id"]
+    if (replyResponse != null) {
+      const populateReplies = (reply) => {
+        const childs = replyResponse.filter(
+          (childObj) => childObj["parent_id"] === reply["id"]
         );
-        let childArray = obj.replies === null ? [] : obj.replies;
+        let childArray = reply.replies === null ? [] : reply.replies;
         childArray = [...childArray, ...childs];
-        return { ...obj, replies: childArray };
+        replyResponse.filter((reply) => reply["parent_id"] != null);
+        return { ...reply, replies: childArray };
       };
 
-      const result = replies.map(populateReplies);
-      setSortedReplies(result);
+      const result = replyResponse.map(populateReplies);
+      setReplies(result.filter((reply) => reply.parent_id === null));
     }
-  }, [replies, childReplies]);
+  }, [replyResponse]);
 
   useEffect(() => {
     document.title = post.question;
@@ -81,10 +92,10 @@ const SinglePost = () => {
   const addReply = (data) => {
     const newReply = data;
     if (data.replied_to == null) {
-      setSortedReplies([...sortedReplies, newReply]);
+      setReplies([...replies, newReply]);
     } else {
-      setSortedReplies(
-        sortedReplies.map((reply) => {
+      setReplies(
+        replies.map((reply) => {
           if (reply.id == data.parent_id) {
             let childArray = reply.replies === null ? [] : reply.replies;
             childArray = [...childArray, newReply];
@@ -100,33 +111,30 @@ const SinglePost = () => {
 
   const onDelete = (reply_id, parent_id) => {
     if (parent_id != null) {
-      handleChildReplyDelete(reply_id, parent_id);
+      handleChildReplyDelete(reply_id);
     } else {
       axios.post("http://localhost:3001/deletereply", {
         reply_id: reply_id,
         post_id: id,
         delete_child_only: false,
       });
-      setSortedReplies(sortedReplies.filter((reply) => reply.id !== reply_id));
+      setReplies(replies.filter((reply) => reply.id !== reply_id));
     }
     setCommentUpdated(true);
   };
 
-  const handleChildReplyDelete = (child_id, parent_id) => {
+  const handleChildReplyDelete = (reply_id) => {
     axios.post("http://localhost:3001/deletereply", {
-      reply_id: child_id,
+      reply_id: reply_id,
       post_id: id,
       delete_child_only: true,
     });
-    setSortedReplies(
-      sortedReplies.map((reply) => {
+    setReplies(
+      replies.map((reply) => {
         const { id, replies } = reply;
-        if (id !== parent_id) {
-          return reply;
-        }
         return {
           ...reply,
-          replies: replies.filter(({ id }) => id !== child_id),
+          replies: replies.filter(({ id }) => id !== reply_id),
         };
       })
     );
@@ -209,13 +217,14 @@ const SinglePost = () => {
           <CommentBox
             addReply={addReply}
             replyTo={null}
-            parent_id={""}
+            parent_id={null}
             user_id={authState.id}
+            user_name={authState.name}
             post_id={id}
             answered={answered}
           />
           <Replies
-            replies={sortedReplies}
+            replies={replies}
             onDelete={onDelete}
             addReply={addReply}
             answered={answered}

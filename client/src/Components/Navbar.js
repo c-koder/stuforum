@@ -5,6 +5,7 @@ import Notifications from "./Notifications";
 import logo from "../logo.png";
 import { useEffect, useRef, useState } from "react";
 import NavContext from "./NavContext";
+import { motion } from "framer-motion";
 
 const Navbar = ({ isLogged, onLogout }) => {
   const [notificationCount, setNotificationCount] = useState(0);
@@ -49,11 +50,12 @@ const Navbar = ({ isLogged, onLogout }) => {
       {isLogged && (
         <div>
           <div className="topnav-centered">
-            <input
+            <motion.input
               className="searchInput"
               type="text"
               placeholder="Search"
-            ></input>
+              whileFocus={{ width: "44%" }}
+            ></motion.input>
           </div>
           <div className="topnav-right">
             <div ref={notifRef}>

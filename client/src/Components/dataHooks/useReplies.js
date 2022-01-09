@@ -2,15 +2,13 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 const useReplies = (post_id) => {
-  const [replies, setReplies] = useState(null);
-  const [childReplies, setChildReplies] = useState(null);
+  const [replyResponse, setReplyResponse] = useState(null);
 
   const fetchData = () => {
     axios
       .post("http://localhost:3001/getreplies", { post_id: post_id })
       .then((res) => {
-        setReplies(res.data.replies);
-        setChildReplies(res.data.child_replies);
+        setReplyResponse(res.data);
       });
   };
 
@@ -18,7 +16,7 @@ const useReplies = (post_id) => {
     fetchData();
   }, []);
 
-  return { replies, childReplies };
+  return { replyResponse };
 };
 
 export default useReplies;
