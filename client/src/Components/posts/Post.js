@@ -12,8 +12,9 @@ import { motion } from "framer-motion";
 import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { Parser } from "html-to-react";
+import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
+import useWindowDimensions from "../dataHooks/useWindowDimensions";
 
 const Post = ({
   post,
@@ -27,6 +28,7 @@ const Post = ({
   viewingQuestions,
   answerOnly,
 }) => {
+  const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
 
   const [show, setShow] = useState(false);
@@ -207,7 +209,7 @@ const Post = ({
         <div
           className="postsContainer-div"
           style={{
-            width: "10%",
+            width: width > 900 ? "11%": "24%",
             margin: "0 10px 0 0px",
             alignItems: "center",
             textAlign: "center",
@@ -219,7 +221,7 @@ const Post = ({
               color: leadsColor,
             }}
           >
-            {leads}
+            {abbreviateNumber(leads)}
             <br />
             <span style={{ color: "var(--secondary)", fontSize: 18 }}>
               Leads
@@ -280,17 +282,17 @@ const Post = ({
             }}
           >
             Posted by{" "}
-            <Link
-              to={
-                authState.name == post.user_name
+            <a
+              href={
+                authState.nick_name == post.nick_name
                   ? "/profile"
-                  : `/user/${post.user_name}`
+                  : `/user/${post.nick_name}`
               }
             >
               <span style={{ color: "var(--primary)", fontWeight: 600 }}>
-                {post.user_name}
+                {post.nick_name}
               </span>
-            </Link>
+            </a>
           </span>
           <br />
           {tags != null ? <Tags tags={tags} tagOnly={true} /> : <br />}
@@ -328,7 +330,7 @@ const Post = ({
               }}
             >
               <img className="navIcon" src={answers} />
-              {commentCount == null ? post.comments : commentCount}
+              {commentCount == null ? abbreviateNumber(post.comments) : abbreviateNumber(commentCount)}
             </span>
             <span style={{ float: "right" }}>
               <button

@@ -58,12 +58,14 @@ const MyAnswers = () => {
           <LeftBar />
         </div>
         <div className="container-div" style={{ width: "225%" }}>
-          <Answer
-            posts={posts}
-            singlePost={false}
-            replies={replies}
-            onDelete={deleteReply}
-          />
+          {posts.length != 0 && replies.length != 0 && (
+            <Answer
+              posts={posts}
+              singlePost={false}
+              replies={replies}
+              onDelete={deleteReply}
+            />
+          )}
         </div>
         <div className="container-div">
           <RightBar activeTab={"answers"} />

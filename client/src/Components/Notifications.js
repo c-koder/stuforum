@@ -27,7 +27,7 @@ const Notifications = ({ show, notificationCount, setNotificationCount }) => {
     setNotifications(
       notificationsList.map((notification) =>
         notification.id === id
-          ? { ...notification, viewed: notification.viewed == 0 ? 1 : 0 }
+          ? { ...notification, viewed: notification.viewed == 0 ? 1 : 1 }
           : notification
       )
     );

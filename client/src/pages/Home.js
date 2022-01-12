@@ -7,14 +7,19 @@ import { motion } from "framer-motion";
 import usePosts from "../Components/dataHooks/usePosts";
 import FilterMenu from "../Components/FilterMenu";
 import { AuthContext } from "../helpers/AuthContext";
+import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
+import AskAQuestion from "../Components/AskAQuestion";
+import Button from "../Components/Button";
 
 const Home = () => {
+  const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
   const { name } = useParams();
-  const { response } = usePosts(authState.id, false);
+
   const [posts, setPosts] = useState([]);
   const [tags, setTags] = useState([]);
   const [postPref, setPostPref] = useState([]);
+  const { response } = usePosts(authState.id, false);
 
   useEffect(() => {
     if (response !== null) {
@@ -24,14 +29,25 @@ const Home = () => {
     }
   }, [response]);
 
+  const [sortedPosts, setSortedPosts] = useState([]);
+  useEffect(() => {
+    setSortedPosts(posts);
+  }, [posts]);
+
   const sortPosts = (sortBy) => {
-    if (sortBy == "getposts") {
-      setPosts(posts);
-    } else if (sortBy == "getascleadsposts") {
-      posts.sort((a, b) => a.leads - b.leads);
-    } else if (sortBy == "getdescleadsposts") {
-      posts.sort((a, b) => b.leads - a.leads);
+    let obj = [...posts];
+
+    if (sortBy == "dateasc") {
+      obj.sort((a, b) => a.id - b.id);
+    } else if (sortBy == "datedesc") {
+      obj.sort((a, b) => b.id - a.id);
+    } else if (sortBy == "leadsasc") {
+      obj.sort((a, b) => a.leads - b.leads);
+    } else if (sortBy == "leadsdesc") {
+      obj.sort((a, b) => b.leads - a.leads);
     }
+
+    setPosts(obj);
   };
 
   const containerVariants = {
@@ -51,25 +67,60 @@ const Home = () => {
     document.title = "stuforum";
   }, []);
 
+  const [questionPopup, setQuestionPopup] = useState(false);
+
+  const askQuestion = (e) => {
+    e.preventDefault();
+    setQuestionPopup(true);
+  };
+
   return (
     <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
+      style={{
+        padding: width < 900 && "0px 0px",
+        margin: width < 900 && "0px 0px",
+      }}
     >
-      <div className={"container"}>
-        <div className="container-div">
-          <LeftBar />
+      {questionPopup && (
+        <AskAQuestion
+          questionPopup={questionPopup}
+          setQuestionPopup={setQuestionPopup}
+        />
+      )}
+      {width < 900 && (
+        <div style={{ margin: "40px" }}>
+          <Button onClick={askQuestion} text={"Ask a Question"} />
         </div>
-        <div className="container-div" style={{ width: "225%", marginTop: 0 }}>
+      )}
+
+      <div className={"container"}>
+        {width > 900 && (
+          <div className="container-div">
+            <LeftBar />
+          </div>
+        )}
+
+        <div
+          className="container-div"
+          style={{
+            width: "225%",
+            margin: width < 900 && "-80px 0px 0px 0px",
+            marginTop: width < 900 ? "-80px" : 0,
+          }}
+        >
           {posts.length > 0 && (
-            <FilterMenu show={true} posts={true} sortPosts={sortPosts} />
+            <FilterMenu show={true} posts={true} sortData={sortPosts} />
           )}
           {posts.length == 0 ? (
             <h2>No posts yet</h2>
           ) : (
-            <div className="sortLabel">Sort By</div>
+            <div className="sortLabel" style={{ width: "100px" }}>
+              Sort By
+            </div>
           )}
           {name != null && (
             <div
@@ -94,15 +145,17 @@ const Home = () => {
           )}
 
           <Posts
-            posts={posts}
+            posts={sortedPosts}
             tags={tags}
             postPref={postPref}
             singlePost={false}
           />
         </div>
-        <div className="container-div">
-          <RightBar activeTab={"home"} />
-        </div>
+        {width > 900 && (
+          <div className="container-div">
+            <RightBar activeTab={"home"} />
+          </div>
+        )}
       </div>
     </motion.div>
   );

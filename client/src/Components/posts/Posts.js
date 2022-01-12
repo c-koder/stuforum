@@ -88,20 +88,6 @@ const Posts = ({
       >
         {displayPosts}
       </InfiniteScoll>
-
-      {/* {pageCount > 1 && (
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          pageCount={pageCount}
-          onPageChange={changePage}
-          containerClassName={"paginationBtns"}
-          previousLinkClassName={"previousBtn"}
-          nextLinkClassName={"nextBtn"}
-          disabledClassName={"paginationDisabled"}
-          activeClassName={"paginationActive"}
-        />
-      )} */}
     </div>
   );
 };

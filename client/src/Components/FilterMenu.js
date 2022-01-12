@@ -1,8 +1,43 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-const FilterMenu = ({ replies, posts, sortPosts, show }) => {
-  const [active, setActive] = useState("getposts");
+const FilterMenu = ({ replies, sortData, posts, show }) => {
+  const [active, setActive] = useState("");
+  const [toggleDateSort, setToggleDateSort] = useState("asc");
+  const [toggleLikesSort, setToggleLikesSort] = useState("asc");
+  const [toggleLeadsSort, setToggleLeadsSort] = useState("asc");
+
+  const dates = () => {
+    setActive("date");
+    if (toggleDateSort == "asc") {
+      setToggleDateSort("desc");
+      sortData("dateasc");
+    } else {
+      setToggleDateSort("asc");
+      sortData("datedesc");
+    }
+  };
+
+  const likesLeads = () => {
+    setActive("likesLeads");
+    if (replies != null) {
+      if (toggleLikesSort == "asc") {
+        setToggleLikesSort("desc");
+        sortData("likesdesc");
+      } else {
+        setToggleLikesSort("asc");
+        sortData("likesasc");
+      }
+    } else {
+      if (toggleLeadsSort == "asc") {
+        setToggleLeadsSort("desc");
+        sortData("leadsdesc");
+      } else {
+        setToggleLeadsSort("asc");
+        sortData("leadsasc");
+      }
+    }
+  };
 
   return (
     <div style={{ position: "relative" }}>
@@ -10,22 +45,19 @@ const FilterMenu = ({ replies, posts, sortPosts, show }) => {
         style={{
           marginTop: 0,
           display: "flex",
-          marginLeft: posts ? "15%" : "",
+          marginLeft: 120,
         }}
         className={"context-content" + (show ? " shown" : "")}
       >
         <motion.button
           className="nullBtn button"
-          style={{ fontWeight: active == "getposts" && "bold" }}
-          onClick={() => {
-            sortPosts("getposts");
-            setActive("getposts");
-          }}
+          style={{ fontWeight: active == "date" && "bold" }}
+          onClick={dates}
           whileHover={{
             y: 2,
           }}
         >
-          Latest (Date)
+          Date
         </motion.button>
         <div
           style={{
@@ -38,40 +70,14 @@ const FilterMenu = ({ replies, posts, sortPosts, show }) => {
         <motion.button
           className="nullBtn button"
           style={{
-            fontWeight: active == "getascleadsposts" && "bold",
+            fontWeight: active == "likesLeads" && "bold",
           }}
-          onClick={() => {
-            sortPosts("getascleadsposts");
-            setActive("getascleadsposts");
-          }}
+          onClick={likesLeads}
           whileHover={{
             y: 2,
           }}
         >
-          Leads (Low to High)
-        </motion.button>
-        <div
-          style={{
-            borderLeft: "1px solid var(--secondary)",
-            marginTop: "8px",
-            borderRadius: 25,
-            height: "30px",
-          }}
-        ></div>
-        <motion.button
-          className="nullBtn button"
-          style={{
-            fontWeight: active == "getdescleadsposts" && "bold",
-          }}
-          onClick={() => {
-            sortPosts("getdescleadsposts");
-            setActive("getdescleadsposts");
-          }}
-          whileHover={{
-            y: 2,
-          }}
-        >
-          Leads (High to Low)
+          {replies != null ? "Likes " : "Leads "}
         </motion.button>
       </div>
     </div>

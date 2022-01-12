@@ -2,29 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import like from "../resources/like-blue.png";
 import avatar from "../resources/img_avatar.png";
 import Button from "./Button";
-import useUser from "./dataHooks/useUser";
 import { AuthContext } from "../helpers/AuthContext";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { Parser } from "html-to-react";
+import { abbreviateNumber } from "../helpers/AbbreviateNumber";
 
-const LeftBarUser = ({ id }) => {
+const UserDetails = ({ user }) => {
   const { authState } = useContext(AuthContext);
-  const [user, setUser] = useState({
-    id: 0,
-    name: "",
-    student_email: "",
-    description: "",
-    avatar: "",
-    join_date: "",
-    likes: "",
-  });
-
-  const { userResponse } = useUser(authState.id);
-  useEffect(() => {
-    if (userResponse !== null) {
-      setUser(userResponse);
-    }
-  }, [userResponse]);
 
   const onIconClick = () => {
     const input = document.getElementById("file-input");
@@ -54,18 +37,20 @@ const LeftBarUser = ({ id }) => {
   ];
 
   const formatDate = () => {
-    let date = user.join_date.substring(0, 10);
-    let year = date.substring(0, 4);
-    let month = monthArray[parseInt(date.substring(5, 7)) - 1];
-    let day = date.substring(8, 10);
-    let dayStringAddition = "th";
-    if (day == 1 || day == 21 || day == 31) {
-      dayStringAddition = "st";
+    if (user.join_date != null) {
+      let date = user.join_date.substring(0, 10);
+      let year = date.substring(0, 4);
+      let month = monthArray[parseInt(date.substring(5, 7)) - 1];
+      let day = date.substring(8, 10);
+      let dayStringAddition = "th";
+      if (day == 1 || day == 21 || day == 31) {
+        dayStringAddition = "st";
+      }
+      if (day == 2 || day == 22) {
+        dayStringAddition = "nd";
+      }
+      return `${day}${dayStringAddition} of ${month} ${year}`;
     }
-    if (day == 2 || day == 22) {
-      dayStringAddition = "nd";
-    }
-    return `${day}${dayStringAddition} of ${month} ${year}`;
   };
 
   return (
@@ -94,16 +79,16 @@ const LeftBarUser = ({ id }) => {
                 className="profilepic__image"
                 src={avatar}
                 width="150"
-                alt="Profile Poc"
+                alt="Profile Pic"
               />
               <div className="profilepic__content">
                 <span className="profilepic__text">Edit Profile</span>
               </div>
             </div>
 
-            <h2 style={{ marginTop: 20 }}>{user.name}</h2>
+            <h2 style={{ marginTop: 20 }}>{user.full_name}<br/><span style={{ fontSize: 16 }}>- {user.nick_name} -</span></h2>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <h3 style={{ color: "var(--secondary)" }}>{user.likes}</h3>
+              <h3 style={{ color: "var(--secondary)" }}>{abbreviateNumber(user.likes)}</h3>
               <img
                 style={{ marginLeft: 10, height: 20, marginTop: 4 }}
                 className="icon"
@@ -113,24 +98,25 @@ const LeftBarUser = ({ id }) => {
             <div
               className="whiteContainer"
               style={{
-                marginTop: 10,
+                marginTop: -10,
                 boxShadow: "none",
+                border: "none"
               }}
             >
-              <p style={{ textAlign: "center" }}>
+              <span style={{ textAlign: "center", fontSize: 18 }}>
                 {Parser().parse(user.description)}
-              </p>
+              </span>
               <hr style={{ marginTop: 20, marginBottom: 20 }} />
               <h4
                 style={{
                   color: "var(--secondary)",
                   textAlign: "center",
-                  marginBottom: authState.name == user.name && 20,
+                  marginBottom: authState.nick_name == user.nick_name && 20,
                 }}
               >
                 Joined {formatDate()}
               </h4>
-              {authState.name === user.name && <Button text={"Edit Details"} />}
+              {authState.nick_name === user.nick_name && <Button text={"Edit Details"} />}
             </div>
           </div>
         </center>
@@ -139,4 +125,4 @@ const LeftBarUser = ({ id }) => {
   );
 };
 
-export default LeftBarUser;
+export default UserDetails;

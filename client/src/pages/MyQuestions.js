@@ -3,7 +3,6 @@ import Posts from "../Components/posts/Posts";
 import RightBar from "../Components/RightBar";
 import LeftBar from "../Components/LeftBar";
 import { motion } from "framer-motion";
-import useUserPosts from "../Components/dataHooks/useUserPosts";
 import { AuthContext } from "../helpers/AuthContext";
 import axios from "axios";
 import usePosts from "../Components/dataHooks/usePosts";
@@ -71,6 +70,8 @@ const MyQuestions = () => {
       }
     });
   };
+
+  
 
   const containerVariants = {
     hidden: {

@@ -9,6 +9,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
+import useWindowDimensions from "./dataHooks/useWindowDimensions";
 
 hljs.configure({
   languages: ["javascript", "java", "c", "c++", "python"],
@@ -43,6 +44,7 @@ const formats = [
 ];
 
 const AskAQuestion = (props) => {
+  const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
 
   const { setQuestionPopup } = props;
@@ -144,6 +146,7 @@ const AskAQuestion = (props) => {
           initial="hidden"
           animate="visible"
           exit="hidden"
+          style={{ width: width < 900 && "80%", height: width < 900 && "85%" }}
         >
           <div>
             <h2 style={{ display: "inline-block", float: "left" }}>
@@ -173,7 +176,7 @@ const AskAQuestion = (props) => {
               &emsp;- Double check grammar and spelling
             </p>
           </div>
-          <h4>{authState.name} is asking...</h4>
+          <h4>{authState.nick_name} is asking...</h4>
           <div
             className="form-control"
             style={{ marginBottom: 30, marginTop: 10 }}
@@ -218,12 +221,20 @@ const AskAQuestion = (props) => {
               id="error"
               className={error == "" ? "error" : "error active"}
               style={{
-                margin: "5px auto 0px 400px",
+                margin: "0px auto",
+                display: width < 900 && "none",
               }}
             >
               {error}
             </div>
-            <span style={{ float: "right", marginBottom: 0, marginLeft: 10 }}>
+            <span
+              style={{
+                float: "right",
+                marginBottom: 0,
+                marginLeft: width < 900 ? "30%" : 10,
+                width: 120,
+              }}
+            >
               <button
                 style={{ width: "100%" }}
                 className="btn btn-block"

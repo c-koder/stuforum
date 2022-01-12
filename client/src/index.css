@@ -33,7 +33,6 @@ body {
 }
 
 .topnav {
-  /* position: absolute; */
   width: 100%;
   padding: 10px 0;
   overflow: hidden;
@@ -67,9 +66,9 @@ body {
   border-width: 1px;
   border-radius: 6px;
   font-size: var(--main-font-size);
-  float: left;
-  position: relative;
-  left: 36%;
+  position: absolute;
+  left: 50%;
+  float: center;
   transform: translate(-50%, 50%);
   transition: all 200ms ease-out;
 }
@@ -92,12 +91,13 @@ body {
 
 .notification-item {
   display: flex;
-  margin: 20px 0;
-  border-right: "2px solid green";
+  margin: 0px 0;
+  padding: 10px 5px;
+  border-radius: 10px;
 }
 
 .notification-item:hover {
-  cursor: pointer;
+  background-color: var(--bg);
 }
 
 .notification-item.viewed {
@@ -107,14 +107,30 @@ body {
 
 .badge {
   position: absolute;
+  top: -3px;
+  right: -3px;
+  background: var(--primary);
+  color: var(--white);
+  padding: 3px;
+  border-radius: 28px;
+
+  width: 28px;
+  height: 28px;
+  text-align: center;
+}
+
+/* .badge {
+  position: relative;
   top: -5px;
-  right: 0px;
-  padding: 2px 8px;
+  right: -5px;
+  min-height: 100px;
+  text-align: center;
+  padding: 4px;
   border-radius: 50%;
   background: var(--primary);
   color: var(--white);
   font-size: var(--main-font-size);
-}
+} */
 
 .icon {
   height: 30px;
@@ -319,19 +335,19 @@ button:disabled {
 
 .tags-input {
   display: flex;
-  /* align-items: flex-start; */
-  /* flex-wrap: wrap; */
+  align-items: flex-start;
+  flex-wrap: wrap;
   width: 100%;
-  padding: 0 4px;
+  padding: 0px;
   border: 1px solid var(--gray);
   border-radius: 6px;
 }
 
 #tags {
   display: flex;
-  /* flex-wrap: wrap; */
+  flex-wrap: wrap;
   padding: 0;
-  margin: 8px 0 0 0;
+  margin: 8px 8px -8px 8px;
 }
 
 .tag {
@@ -484,12 +500,12 @@ button:disabled {
   font-size: 18px;
   color: var(--secondary);
   margin-bottom: 40px;
+  min-width: 100px;
   background-color: var(--white);
   transition: all 200ms ease-in;
-  padding: 12px;
+  padding: 12px 12px;
   border-radius: 5px;
   text-align: center;
-  width: 12%;
 }
 
 .label {
@@ -665,7 +681,6 @@ a {
 @media screen and (max-width: 1200px) {
   .topnav a,
   .topnav-right {
-    float: none;
     display: block;
   }
 
@@ -673,8 +688,7 @@ a {
     position: absolute;
     left: 50%;
     transform: none;
-    float: left;
-    position: relative;
+    float: center;
     transform: translate(-50%, 50%);
   }
 
@@ -685,7 +699,7 @@ a {
     display: block;
   }
 
-  .notification .badge {
+  /* .notification .badge {
     display: flex;
     align-content: center;
     text-align: center;
@@ -697,7 +711,7 @@ a {
     background: var(--primary);
     color: var(--white);
     font-size: var(--main-font-size);
-  }
+  } */
 }
 
 .error {
@@ -911,7 +925,8 @@ a {
 }
 
 ::-webkit-scrollbar {
-  width: 9px;
+  width: 8px;
+  height: 8px;
   background-color: transparent;
 }
 

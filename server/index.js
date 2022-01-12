@@ -20,11 +20,11 @@ app.use(express.json());
 //register
 
 app.post("/register", (req, res) => {
-  const { name, student_id, student_email, password, join_date } = req.body;
+  const { full_name, nick_name, student_id, student_email, password, join_date } = req.body;
 
   let userExistsQuery =
-    "SELECT * FROM user WHERE student_email = ? OR student_id = ?";
-  db.query(userExistsQuery, [student_email, student_id], (err, result) => {
+    "SELECT * FROM user WHERE nick_name = ? OR student_email = ? OR student_id = ?";
+  db.query(userExistsQuery, [nick_name, student_email, student_id], (err, result) => {
     if (err) {
       res.send({ err: err });
     }
@@ -36,10 +36,10 @@ app.post("/register", (req, res) => {
           console.log(hash_error);
         }
         let sql =
-          "INSERT INTO user(name, student_id, student_email, password, join_date) VALUES (?, ?, ?, ?, ?)";
+          "INSERT INTO user(full_name, nick_name, student_id, student_email, password, join_date) VALUES (?, ?, ?, ?, ?, ?)";
         db.query(
           sql,
-          [name, student_id, student_email, hash, join_date],
+          [full_name, nick_name, student_id, student_email, hash, join_date],
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -59,8 +59,8 @@ app.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   let usernameSql =
-    "SELECT * FROM user WHERE student_id = ? OR student_email = ?";
-  db.query(usernameSql, [username, username], (err, result) => {
+    "SELECT * FROM user WHERE nick_name = ? OR student_id = ? OR student_email = ?";
+  db.query(usernameSql, [username, username, username], (err, result) => {
     if (err) {
       res.send({ err: err });
     }
@@ -69,7 +69,7 @@ app.post("/login", (req, res) => {
         if (response) {
           const accessToken = jwt.sign(
             {
-              name: result[0].name,
+              nick_name: result[0].nick_name,
               id: result[0].id,
             },
             "murofuts"
@@ -79,7 +79,7 @@ app.post("/login", (req, res) => {
           );
           res.send({
             token: accessToken,
-            name: result[0].name,
+            nick_name: result[0].nick_name,
             id: result[0].id,
           });
         } else {
@@ -101,10 +101,10 @@ app.get("/auth", validateToken, (req, res) => {
 //users
 
 app.post("/getuser", (req, res) => {
-  const id = req.body.id;
+  const nick_name = req.body.nick_name;
   let sql =
-    "SELECT id, name, student_email, description, avatar, join_date, likes FROM user WHERE id = ?";
-  db.query(sql, id, (err, result) => {
+    "SELECT id, full_name, nick_name, student_email, description, avatar, join_date, likes FROM user WHERE nick_name = ?";
+  db.query(sql, nick_name, (err, result) => {
     if (err) {
       res.send({ err: err });
     }
@@ -126,15 +126,11 @@ app.post("/getsortedusers", (req, res) => {
   });
 });
 
-app.post("/getuserposts", (req, res) => {
+app.post("/getuserpostcount", (req, res) => {
   const user_id = req.body.user_id;
-
-  let sql = "SELECT * FROM post WHERE user_id = ? ORDER BY id DESC";
+  let sql = "SELECT COUNT(*) AS count FROM post WHERE user_id = ?";
   db.query(sql, user_id, (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
+    if (!err) {
       res.send(result);
     }
   });
@@ -218,12 +214,12 @@ app.post("/deletepost", (req, res) => {
   );
 });
 
-app.post("/getposts", (req, res) => {
+app.post("/getposts", async (req, res) => {
   const { user_id, user_posts } = req.body;
 
   let sql = user_posts
-    ? "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id WHERE p.user_id = ? ORDER BY id DESC"
-    : "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY id DESC";
+    ? "SELECT p.*, u.nick_name AS nick_name FROM post p INNER JOIN user u ON u.id = p.user_id WHERE p.user_id = ? ORDER BY id DESC"
+    : "SELECT p.*, u.nick_name AS nick_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY id DESC";
 
   db.query(sql, user_id, (err, result) => {
     if (!err) {
@@ -255,7 +251,7 @@ app.post("/getsinglepost", (req, res) => {
   const post_id = req.body.post_id;
 
   db.query(
-    "SELECT p.*, u.name AS user_name FROM post p INNER JOIN user u ON u.id = p.user_id WHERE p.id = ?",
+    "SELECT p.*, u.nick_name AS nick_name FROM post p INNER JOIN user u ON u.id = p.user_id WHERE p.id = ?",
     post_id,
     (err, result) => {
       if (!err) {
@@ -383,7 +379,7 @@ app.post("/getsortedtags", (req, res) => {
 app.post("/getreplies", (req, res) => {
   const post_id = req.body.post_id;
   db.query(
-    "SELECT r.*, u.name AS user_name, u2.name AS replied_to FROM reply r LEFT JOIN user u ON u.id = r.user_id LEFT JOIN user u2 ON u2.id = r.replied_to_id WHERE r.post_id = ?",
+    "SELECT r.*, u.nick_name AS nick_name, u2.nick_name AS replied_to FROM reply r LEFT JOIN user u ON u.id = r.user_id LEFT JOIN user u2 ON u2.id = r.replied_to_id WHERE r.post_id = ?",
     post_id,
     (err, result) => {
       if (!err) {
@@ -447,12 +443,12 @@ app.post("/addreply", (req, res) => {
         );
         if (replied_to != null) {
           db.query(
-            "SELECT u.name FROM user u, reply r WHERE u.id = ? AND r.id = ?",
+            "SELECT u.nick_name FROM user u, reply r WHERE u.id = ? AND r.id = ?",
             [replied_to, result.insertId],
             (err, repliedToResult) => {
               res.send({
                 id: result.insertId,
-                replied_to: repliedToResult[0].name,
+                replied_to: repliedToResult[0].nick_name,
               });
             }
           );
@@ -597,7 +593,7 @@ app.post("/getnotifications", (req, res) => {
   const user_id = req.body.user_id;
 
   db.query(
-    "SELECT n.*, u.name AS user_from, u2.name AS user_to FROM notification n LEFT JOIN user u ON u.id = n.user_from_id LEFT JOIN user u2 ON u2.id = n.user_to_id WHERE user_to_id = ? ORDER BY id DESC",
+    "SELECT n.*, u.nick_name AS user_from, u2.nick_name AS user_to FROM notification n LEFT JOIN user u ON u.id = n.user_from_id LEFT JOIN user u2 ON u2.id = n.user_to_id WHERE user_to_id = ? ORDER BY id DESC",
     user_id,
     (err, result) => {
       if (!err) {

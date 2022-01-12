@@ -15,10 +15,12 @@ import moment from "moment";
 import axios from "axios";
 import useReplyData from "../dataHooks/useReplyData";
 import ReactTooltip from "react-tooltip";
-import { Link } from "react-router-dom";
 import { Parser } from "html-to-react";
+import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
+import useWindowDimensions from "../dataHooks/useWindowDimensions";
 
 const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
+  const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
 
   const [show, setShow] = useState(false);
@@ -180,8 +182,6 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
 
   const [showChildReplies, setShowChildReplies] = useState(false);
 
-  console.log(reply.parent_id);
-
   return (
     <>
       <ReactTooltip
@@ -210,8 +210,8 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
         <div
           className="postsContainer-div"
           style={{
-            width: "10%",
-            margin: "0 10px 0 0px",
+            width: width > 900 ? "10%" : "25%",
+            margin: width > 900 ? "0 10px 0 0px" : "0 5px 0px -10px",
             alignItems: "center",
             textAlign: "center",
           }}
@@ -227,16 +227,16 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
           >
             <h4 style={{ color: "var(--secondary)" }}>
               Replied by{" "}
-              <Link
-                to={
-                  authState.name == reply.user_name
+              <a
+                href={
+                  authState.nick_name == reply.nick_name
                     ? "/profile"
-                    : `/user/${reply.user_name}`
+                    : `/user/${reply.nick_name}`
                 }
                 style={{ color: "var(--primary)", fontWeight: 600 }}
               >
-                {reply.user_name}{" "}
-              </Link>
+                {reply.nick_name}{" "}
+              </a>
               <span style={{ color: "var(--secondary)", fontSize: 12 }}>●</span>{" "}
               <span
                 style={{
@@ -250,7 +250,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
               </span>
             </h4>
           </div>
-          {authState.name == reply.user_name && (
+          {authState.nick_name == reply.nick_name && (
             <button
               ref={ref}
               style={{ float: "right", marginTop: "-32px" }}
@@ -273,14 +273,14 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
           <div style={{ display: "flex" }}>
             <p style={{ color: "var(--gray)" }}>
               {reply.replied_to !== null && (
-                <Link
-                  to={`/user/${reply.replied_to}`}
+                <a
+                  href={`/user/${reply.replied_to}`}
                   style={{ marginRight: 5 }}
                 >
                   <span style={{ color: "var(--primary)", fontWeight: 600 }}>
                     @{reply.replied_to}
                   </span>
-                </Link>
+                </a>
               )}
             </p>
           </div>
@@ -326,7 +326,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
                   marginRight: 10,
                 }}
               >
-                {likes}
+                {abbreviateNumber(likes)}
               </h3>
               <button
                 style={{ marginTop: 5 }}
@@ -346,7 +346,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
                   marginRight: 20,
                 }}
               >
-                {dislikes}
+                {abbreviateNumber(dislikes)}
               </h3>
             </div>
             {!answered && (
@@ -380,7 +380,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
           parent_id={reply.parent_id == null ? reply.id : reply.parent_id}
           replyTo={reply.user_id}
           user_id={authState.id}
-          user_name={authState.name}
+          nick_name={authState.nick_name}
           post_id={reply.post_id}
         />
       </div>

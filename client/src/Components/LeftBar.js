@@ -5,26 +5,21 @@ import TopUsers from "./TopUsers";
 import like from "../resources/like-blue.png";
 import { motion } from "framer-motion";
 import useSortedUsers from "./dataHooks/useSortedUsers";
-import { AuthContext } from "../helpers/AuthContext";
-import useUserPosts from "./dataHooks/useUserPosts";
 import { Link } from "react-router-dom";
-import useUser from "./dataHooks/useUser";
+import { abbreviateNumber } from "../helpers/AbbreviateNumber";
+import axios from "axios";
+import useUser from "../Components/dataHooks/useUser";
+import { AuthContext } from "../helpers/AuthContext";
 
 const LeftBar = () => {
   const { authState } = useContext(AuthContext);
+
   const [questionPopup, setQuestionPopup] = useState(false);
 
-  const [topUsers, setTopUsers] = useState([]);
-  const { response } = useSortedUsers();
-
-  useEffect(() => {
-    if (response !== null) {
-      setTopUsers(response);
-    }
-  }, [response]);
-
+  const [userQuestionCount, setUserQuestionCount] = useState(0);
+  
   const [user, setUser] = useState([]);
-  const { userResponse } = useUser(authState.id);
+  const { userResponse } = useUser(authState.nick_name);
 
   useEffect(() => {
     if (userResponse !== null) {
@@ -32,19 +27,26 @@ const LeftBar = () => {
     }
   }, [userResponse]);
 
-  const [userQuestionCount, setUserQuestionCount] = useState();
-  const { userQuestionsResponse } = useUserPosts(authState.id);
+  axios
+    .post("http://localhost:3001/getuserpostcount", { user_id: user.id })
+    .then((res) => {
+      setUserQuestionCount(res.data[0].count);
+    });
+
+  const [topUsers, setTopUsers] = useState([]);
+  const { sortedUserResponse } = useSortedUsers();
 
   useEffect(() => {
-    if (userQuestionsResponse !== null) {
-      setUserQuestionCount(userQuestionsResponse.length);
+    if (sortedUserResponse !== null) {
+      setTopUsers(sortedUserResponse);
     }
-  }, [userQuestionsResponse]);
+  }, [sortedUserResponse]);
 
   const askQuestion = (e) => {
     e.preventDefault();
     setQuestionPopup(true);
   };
+  
   return (
     <div>
       {questionPopup && (
@@ -69,13 +71,13 @@ const LeftBar = () => {
             <h3 style={{ color: "var(--primary)", fontSize: 22 }}>
               You{" "}
               <span style={{ color: "var(--secondary)" }}>
-                ({userQuestionCount})
+                ({abbreviateNumber(userQuestionCount)})
               </span>
             </h3>
           </Link>
           <span style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
             <h3 style={{ color: "var(--secondary)", fontSize: 22 }}>
-              {user.likes}
+              {abbreviateNumber(user != null && user.likes)}
             </h3>
             <img
               style={{ marginLeft: 10, height: 25, marginTop: 3 }}

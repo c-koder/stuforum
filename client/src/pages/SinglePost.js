@@ -9,10 +9,12 @@ import { motion } from "framer-motion";
 import useSinglePost from "../Components/dataHooks/useSinglePost";
 import useReplies from "../Components/dataHooks/useReplies";
 import { AuthContext } from "../helpers/AuthContext";
-import back from "../resources/backArrow.png";
 import axios from "axios";
+import FilterMenu from "../Components/FilterMenu";
+import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
 
 const SinglePost = () => {
+  const { width } = useWindowDimensions();
   let navigate = useNavigate();
   const { authState } = useContext(AuthContext);
   const { id } = useParams();
@@ -21,7 +23,7 @@ const SinglePost = () => {
     axios
       .post("http://localhost:3001/postexists", { post_id: id })
       .then((res) => {
-        res.data.message == null && navigate("/404")
+        res.data.message == null && navigate("/404");
       });
     {
     }
@@ -32,7 +34,7 @@ const SinglePost = () => {
     question: "",
     description: "",
     user_id: 0,
-    user_name: "",
+    nick_name: "",
     comments: 0,
     leads: 0,
     posted_time: "",
@@ -71,6 +73,22 @@ const SinglePost = () => {
       setReplies(result.filter((reply) => reply.parent_id === null));
     }
   }, [replyResponse]);
+
+  const sortReplies = (sortBy) => {
+    let obj = [...replies];
+
+    if (sortBy == "dateasc") {
+      obj.sort((a, b) => a.id - b.id);
+    } else if (sortBy == "datedesc") {
+      obj.sort((a, b) => b.id - a.id);
+    } else if (sortBy == "likesasc") {
+      obj.sort((a, b) => a.likes - b.likes);
+    } else if (sortBy == "likesdesc") {
+      obj.sort((a, b) => b.likes - a.likes);
+    }
+
+    setReplies(obj);
+  };
 
   useEffect(() => {
     document.title = post.question;
@@ -173,8 +191,12 @@ const SinglePost = () => {
         initial="hidden"
         animate="visible"
         exit="exit"
+        style={{
+          padding: width < 900 && "20px 0px",
+          margin: width < 900 && "20px 0px",
+        }}
       >
-        <motion.div
+        {/* <motion.div
           className="container-div"
           style={{ width: "0%" }}
           whileHover={{
@@ -203,7 +225,7 @@ const SinglePost = () => {
               src={back}
             />
           </button>
-        </motion.div>
+        </motion.div> */}
         <div className="container-div" style={{ width: "347%" }}>
           <Post
             key={post.id}
@@ -219,10 +241,19 @@ const SinglePost = () => {
             replyTo={null}
             parent_id={null}
             user_id={authState.id}
-            user_name={authState.name}
+            nick_name={authState.nick_name}
             post_id={id}
             answered={answered}
           />
+
+          {replies.length > 0 && (
+            <div style={{ marginBottom: -20 }}>
+              <FilterMenu show={true} replies={true} sortData={sortReplies} />
+              <div className="sortLabel" style={{ width: "8%" }}>
+                Sort By
+              </div>
+            </div>
+          )}
           <Replies
             replies={replies}
             onDelete={onDelete}
@@ -230,9 +261,11 @@ const SinglePost = () => {
             answered={answered}
           />
         </div>
-        <div className="container-div">
-          <RightBar activeTab={""} />
-        </div>
+        {width > 900 && (
+          <div className="container-div">
+            <RightBar activeTab={""} />
+          </div>
+        )}
       </motion.div>
     </>
   );

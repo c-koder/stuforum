@@ -1,11 +1,23 @@
 import { useEffect, useState, useContext } from "react";
 import RightBar from "../Components/RightBar";
-import LeftBarUser from "../Components/LeftBarUser";
+import UserDetails from "../Components/UserDetails";
 import { motion } from "framer-motion";
 import { AuthContext } from "../helpers/AuthContext";
+import useUser from "../Components/dataHooks/useUser";
 
 const UserProfile = () => {
   const { authState } = useContext(AuthContext);
+
+  const [user, setUser] = useState([])
+  const { userResponse } = useUser(authState.nick_name);
+  
+
+  useEffect(() => {
+    if (userResponse !== null) {
+      setUser(userResponse);
+    }
+  }, [userResponse]);
+
   const containerVariants = {
     hidden: {
       scale: 0.96,
@@ -33,7 +45,7 @@ const UserProfile = () => {
         exit="exit"
       >
         <div className="container-div">
-          <LeftBarUser/>
+          <UserDetails user={user}/>
         </div>
         <div className="container-div" style={{ width: "225%" }}>
         </div>

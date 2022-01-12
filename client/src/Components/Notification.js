@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import close from "../resources/close.png";
 import avatar from "../resources/img_avatar.png";
 import liked from "../resources/round/liked.png";
@@ -6,6 +5,7 @@ import upVoted from "../resources/round/upvoted.png";
 import commented from "../resources/round/commented.png";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const Notification = ({ notification, changeViewed, onDelete }) => {
   const [time, setTime] = useState(moment(notification.time).local().fromNow());
@@ -19,21 +19,7 @@ const Notification = ({ notification, changeViewed, onDelete }) => {
 
   return (
     <>
-      <span
-        style={{ cursor: "pointer", float: "right" }}
-        onClick={() => {
-          onDelete(notification.id);
-        }}
-      >
-        <img className="icon" src={close} style={{ height: "20px" }} />
-      </span>
-
-      <div
-        className="notification-item"
-        onClick={() => {
-          changeViewed(notification.id);
-        }}
-      >
+      <div className="notification-item">
         <img
           src={avatar}
           alt="Profile Poc"
@@ -57,37 +43,57 @@ const Notification = ({ notification, changeViewed, onDelete }) => {
         />
         <div>
           <div style={{ display: "flex" }}>
-            <h4>
-              <span style={{ color: "var(--primary)" }}>
-                <Link
+            <span style={{ float: "left", width: "260px" }}>
+              <h4>
+                <span style={{ color: "var(--primary)" }}>
+                  <motion.a
+                    style={{ all: "unset" }}
+                    href={`/user/${notification.user_from}`}
+                    whileHover={{ cursor: "pointer" }}
+                    onClick={() => {
+                      changeViewed(notification.id);
+                    }}
+                  >
+                    {notification.user_from}
+                  </motion.a>
+                </span>{" "}
+                <motion.a
                   style={{ all: "unset" }}
-                  to={{
-                    pathname: `/user/${notification.user_from}`,
-                  }}
+                  href={`/post/${notification.post_id}`}
+                  whileHover={{ cursor: "pointer" }}
                 >
-                  {notification.user_from}
-                </Link>
-              </span>{" "}
-              <Link
-                style={{ all: "unset" }}
-                to={{
-                  pathname: `/post/${notification.post_id}`,
-                }}
-              >
-                {notification.description}{" "}
-              </Link>
-            </h4>
+                  {notification.description}{" "}
+                </motion.a>
+              </h4>
+            </span>
+            <span
+              style={{ cursor: "pointer", float: "right", marginLeft: 5 }}
+              onClick={() => {
+                onDelete(notification.id);
+              }}
+            >
+              <img className="icon" src={close} style={{ height: "20px" }} />
+            </span>
           </div>
           <h5 style={{ float: "left", color: "var(--secondary)" }}>{time}</h5>
           {notification.viewed == 0 && (
             <h6>
-              <pre style={{ color: "var(--primary)" }}> 🔵</pre>
+              <pre
+                style={{
+                  color: "var(--primary)",
+                  fontSize: 26,
+                  marginTop: -10,
+                }}
+              >
+                {" "}
+                ●
+              </pre>
             </h6>
           )}
         </div>
       </div>
 
-      <hr style={{ marginBottom: 20, opacity: 0.3 }} />
+      <hr style={{ opacity: 0.3 }} />
     </>
   );
 };

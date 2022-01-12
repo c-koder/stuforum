@@ -34,7 +34,7 @@ const Login = () => {
         else {
           localStorage.setItem("accessToken", response.data.token);
           setAuthState({
-            name: response.data.name,
+            nick_name: response.data.nick_name,
             id: response.data.id,
             status: true,
           });
@@ -58,10 +58,10 @@ const Login = () => {
       <p>Find the answer to your question!</p>
       <form onSubmit={login}>
         <div className="form-control">
-          <label>Username</label>
+          <label>Credential</label>
           <input
             type="text"
-            placeholder="Email or Student ID"
+            placeholder="Nickname/Email/Student ID"
             value={username}
             onChange={(e) => {
               setUsername(e.target.value);

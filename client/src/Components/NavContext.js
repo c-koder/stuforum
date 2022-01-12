@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 
 const NavContext = ({ show, onLogout }) => {
   return (
@@ -29,7 +28,7 @@ const NavContext = ({ show, onLogout }) => {
                 x: -3,
               }}
             >
-              <Link
+              <a
                 style={{
                   float: "right",
                   cursor: "pointer",
@@ -37,12 +36,12 @@ const NavContext = ({ show, onLogout }) => {
                   margin: 0,
                   padding: 0,
                 }}
-                to={"/profile"}
+                href={"/profile"}
               >
                 <li style={{ color: "var(--secondary)", textAlign: "right" }}>
                   Profile
                 </li>
-              </Link>
+              </a>
             </motion.button>
             <hr style={{ width: "75%", marginLeft: 24, marginTop: -10 }} />
             <motion.button

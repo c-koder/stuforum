@@ -7,9 +7,9 @@ import Login from "../Components/Login";
 import { motion } from "framer-motion";
 
 const LogReg = () => {
-  const [name, setName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [studentId, setStudentId] = useState("");
-  const [username, setUsername] = useState("");
+  const [nickName, setNickName] = useState("");
   const [studentEmail, setStudentEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,7 +21,7 @@ const LogReg = () => {
   onkeydown = (e) => {
     if (
       e.key === "Enter" &&
-      (name !== "" ||
+      (fullName !== "" ||
         studentId !== "" ||
         studentEmail !== "" ||
         password !== "" ||
@@ -30,25 +30,25 @@ const LogReg = () => {
       register();
     }
   };
-  // else if (username === "") {
-  //   setError("Username is required");
-  // }
   const register = () => {
     const joinDate = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     if (
-      name === "" &&
+      fullName === "" &&
+      nickName === "" &&
       studentId === "" &&
       studentEmail === "" &&
       password === "" &&
       confirmPassword === ""
     ) {
       setError("Please fill all the fields");
-    } else if (name === "") {
+    } else if (fullName === "") {
       setError("Full name is required");
     } else if (studentId === "") {
       setError("Student ID is required");
     } else if (!validStudentID.test(studentId)) {
       setError("Invalid Student ID format (Ex: 12ABC1234)");
+    } else if (nickName === "") {
+      setError("Nickname is required");
     } else if (studentEmail === "") {
       setError("Student Email is required");
     } else if (!validEmail.test(studentEmail)) {
@@ -63,7 +63,8 @@ const LogReg = () => {
       setError("Passwords don't match");
     } else {
       Axios.post("http://localhost:3001/register", {
-        name: name,
+        full_name: fullName,
+        nick_name: nickName,
         student_id: studentId,
         student_email: studentEmail,
         password: password,
@@ -72,11 +73,12 @@ const LogReg = () => {
         if (response.data.err) {
           setError(`Error : ${response.data.err}`);
         } else if (response.data.message == "user_exists") {
-          setError("User with Student ID/Email already exists.");
+          setError("User with Nickname/Student ID/Email already exists.");
         } else if (response.data.message == "user_added") {
           setError("Registration Successful");
 
-          setName("");
+          setFullName("");
+          setNickName("");
           setStudentId("");
           setStudentEmail("");
           setPassword("");
@@ -175,11 +177,11 @@ const LogReg = () => {
             <input
               type="text"
               placeholder="Full Name"
-              value={name}
+              value={fullName}
               onChange={(e) => {
                 let value = e.target.value;
                 value = value.replace(/[^A-Za-z ]/gi, "");
-                setName(value);
+                setFullName(value);
               }}
             />
           </div>
@@ -213,13 +215,13 @@ const LogReg = () => {
         </div>
         <div className="container-div" style={{ width: "25%", marginTop: 52 }}>
           <div className="form-control">
-            <label>Username</label>
+            <label>Nickname</label>
             <input
               type="text"
-              placeholder="Username"
-              value={username}
+              placeholder="Nickname"
+              value={nickName}
               onChange={(e) => {
-                setUsername(e.target.value);
+                setNickName(e.target.value);
               }}
             />
           </div>

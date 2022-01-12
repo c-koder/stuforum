@@ -20,10 +20,12 @@ import sun from "./resources/sun.png";
 import moon from "./resources/moon.png";
 import { motion } from "framer-motion";
 import NotFound from "./pages/NotFound";
+import useWindowDimensions from "./Components/dataHooks/useWindowDimensions";
 
 const Routing = () => {
+  const { width } = useWindowDimensions();
   const [authState, setAuthState] = useState({
-    name: "",
+    nick_name: "",
     id: 0,
     status: null,
   });
@@ -40,7 +42,7 @@ const Routing = () => {
           setAuthState({ ...authState, status: false });
         } else {
           setAuthState({
-            name: response.data.name,
+            nick_name: response.data.nick_name,
             id: response.data.id,
             status: true,
           });
@@ -177,19 +179,21 @@ const Routing = () => {
           </>
         )}
       </Routes>
-      <motion.button
-        className="themeToggleBtn"
-        onClick={toggleTheme}
-        whileHover={{ y: -5 }}
-      >
-        <motion.img
-          className="icon"
-          style={{ height: "22px" }}
-          src={img}
-          variants={rotateVariant}
-          animate={currentMode === "light" ? "rotate" : "stop"}
-        />
-      </motion.button>
+      {width > 900 && (
+        <motion.button
+          className="themeToggleBtn"
+          onClick={toggleTheme}
+          whileHover={{ y: -5 }}
+        >
+          <motion.img
+            className="icon"
+            style={{ height: "22px" }}
+            src={img}
+            variants={rotateVariant}
+            animate={currentMode === "light" ? "rotate" : "stop"}
+          />
+        </motion.button>
+      )}
     </AuthContext.Provider>
   );
 };

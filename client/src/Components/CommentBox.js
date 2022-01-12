@@ -6,6 +6,7 @@ import ReactQuill, { Delta } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
+import useWindowDimensions from "./dataHooks/useWindowDimensions";
 
 hljs.configure({
   languages: ["javascript", "java", "c", "c++", "python"],
@@ -40,6 +41,7 @@ const formats = [
 ];
 
 const CommentBox = (props) => {
+  const { width } = useWindowDimensions();
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -49,7 +51,7 @@ const CommentBox = (props) => {
     const parent_id = props.parent_id;
     const replyTo = props.replyTo;
     const user_id = props.user_id;
-    const user_name = props.user_name;
+    const nick_name = props.nick_name;
     const post_id = props.post_id;
     const replied_time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     if (description == "") {
@@ -69,7 +71,7 @@ const CommentBox = (props) => {
             id: response.data.id,
             parent_id: parent_id,
             user_id: user_id,
-            user_name: user_name,
+            nick_name: nick_name,
             replied_to: response.data.replied_to,
             post_id: post_id,
             replied_time: replied_time,
@@ -109,8 +111,8 @@ const CommentBox = (props) => {
           <div
             className="postsContainer-div"
             style={{
-              width: "10%",
-              margin: "0 10px 0 0px",
+              width: width > 900 ? "10%" : "25%",
+              margin: width > 900 ? "0 10px 0 0px" : "0 5px 0px -10px",
               alignItems: "center",
               textAlign: "center",
             }}
@@ -138,7 +140,7 @@ const CommentBox = (props) => {
                 style={{
                   marginLeft: 5,
                   float: "right",
-                  width: "20%",
+                  width: width > 900 ? "20%" : "30%",
                   margin: "-5px 0px 0px 0px",
                 }}
                 onClick={submitComment}
