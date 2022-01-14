@@ -209,7 +209,7 @@ const Post = ({
         <div
           className="postsContainer-div"
           style={{
-            width: width > 900 ? "11%": "24%",
+            width: width > 900 ? "11%": "15%",
             margin: "0 10px 0 0px",
             alignItems: "center",
             textAlign: "center",
@@ -223,8 +223,8 @@ const Post = ({
           >
             {abbreviateNumber(leads)}
             <br />
-            <span style={{ color: "var(--secondary)", fontSize: 18 }}>
-              Leads
+            <span style={{ color: leadsColor, fontSize: 20 }}>
+            ●
             </span>
           </h2>
         </div>

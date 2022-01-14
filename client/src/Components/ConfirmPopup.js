@@ -54,7 +54,7 @@ const ConfirmPopup = (props) => {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            style={{ width: "20%", height: "27%", top: "25%" }}
+            style={{ width: "20%", height: "28%", top: "25%" }}
           >
             <div style={{ display: "block" }}>
               <h2>Confirm Delete?</h2>

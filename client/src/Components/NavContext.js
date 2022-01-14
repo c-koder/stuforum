@@ -6,8 +6,8 @@ const NavContext = ({ show, onLogout }) => {
       <div
         className={"context-content" + (show ? " shown" : "")}
         style={{
-          minWidth: "160px",
-          marginLeft: "88%",
+          minWidth: "120px",
+          marginLeft: "90%",
           marginTop: "5%",
         }}
       >
@@ -21,6 +21,7 @@ const NavContext = ({ show, onLogout }) => {
               className="nullBtn"
               style={{
                 width: "100%",
+           
                 margin: 0,
                 padding: 0,
               }}
@@ -38,12 +39,12 @@ const NavContext = ({ show, onLogout }) => {
                 }}
                 href={"/profile"}
               >
-                <li style={{ color: "var(--secondary)", textAlign: "right" }}>
+                <li style={{ color: "var(--gray)", textAlign: "right", marginBottom: -5 }}>
                   Profile
                 </li>
               </a>
             </motion.button>
-            <hr style={{ width: "75%", marginLeft: 24, marginTop: -10 }} />
+            <hr style={{ width: "75%", marginLeft: 18, marginTop: 0 }} />
             <motion.button
               className="nullBtn"
               style={{ width: "100%", textAlign: "right" }}
@@ -53,7 +54,7 @@ const NavContext = ({ show, onLogout }) => {
               onClick={onLogout}
             >
               {" "}
-              <li style={{ color: "var(--secondary)" }}>Logout</li>
+              <li style={{ color: "var(--gray)" }}>Logout</li>
             </motion.button>
           </div>
         </ul>

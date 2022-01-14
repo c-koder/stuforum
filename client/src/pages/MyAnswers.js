@@ -5,8 +5,12 @@ import Answer from "../Components/Answer";
 import useAnswers from "../Components/dataHooks/useAnswers";
 import { motion } from "framer-motion";
 import { AuthContext } from "../helpers/AuthContext";
+import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
+import axios from "axios";
 
 const MyAnswers = () => {
+  const { width } = useWindowDimensions();
+
   const containerVariants = {
     hidden: {
       scale: 0.96,
@@ -41,6 +45,16 @@ const MyAnswers = () => {
     setPosts(posts.filter((post) => post.id !== reply.post_id));
   };
 
+  const [userQuestionCount, setUserQuestionCount] = useState(0);
+
+  useEffect(() => {
+    axios
+      .post("http://localhost:3001/getuserpostcount", { user_id: authState.id })
+      .then((res) => {
+        setUserQuestionCount(res.data[0].count);
+      });
+  }, []);
+
   useEffect(() => {
     document.title = "My Answers";
   }, []);
@@ -54,10 +68,25 @@ const MyAnswers = () => {
         animate="visible"
         exit="exit"
       >
-        <div className="container-div">
-          <LeftBar />
+        <div
+          className="container-div"
+          style={{ display: width < 900 && "none" }}
+        >
+          <LeftBar userQuestionCount={userQuestionCount} />
         </div>
-        <div className="container-div" style={{ width: "225%" }}>
+        <div
+          className="container-div"
+          style={{
+            width: "225%",
+            margin: width < 900 && "-80px 0px 0px 0px",
+            marginTop: width < 900 ? "-40px" : 0,
+          }}
+        >
+          {posts.length == 0 && replies.length == 0 && (
+            <div className="sortLabel" style={{ width: "300px" }}>
+              You haven't answered any yet
+            </div>
+          )}
           {posts.length != 0 && replies.length != 0 && (
             <Answer
               posts={posts}
@@ -67,7 +96,10 @@ const MyAnswers = () => {
             />
           )}
         </div>
-        <div className="container-div">
+        <div
+          className="container-div"
+          style={{ display: width < 900 && "none" }}
+        >
           <RightBar activeTab={"answers"} />
         </div>
       </motion.div>

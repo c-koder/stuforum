@@ -20,37 +20,48 @@ app.use(express.json());
 //register
 
 app.post("/register", (req, res) => {
-  const { full_name, nick_name, student_id, student_email, password, join_date } = req.body;
+  const {
+    full_name,
+    nick_name,
+    student_id,
+    student_email,
+    password,
+    join_date,
+  } = req.body;
 
   let userExistsQuery =
     "SELECT * FROM user WHERE nick_name = ? OR student_email = ? OR student_id = ?";
-  db.query(userExistsQuery, [nick_name, student_email, student_id], (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
-      res.send({ message: "user_exists" });
-    } else {
-      bcrypt.hash(password, 10, (hash_error, hash) => {
-        if (hash_error) {
-          console.log(hash_error);
-        }
-        let sql =
-          "INSERT INTO user(full_name, nick_name, student_id, student_email, password, join_date) VALUES (?, ?, ?, ?, ?, ?)";
-        db.query(
-          sql,
-          [full_name, nick_name, student_id, student_email, hash, join_date],
-          (err, result) => {
-            if (err) {
-              res.send({ err: err });
-            } else {
-              res.send({ message: "user_added" });
-            }
+  db.query(
+    userExistsQuery,
+    [nick_name, student_email, student_id],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
+      if (result.length > 0) {
+        res.send({ message: "user_exists" });
+      } else {
+        bcrypt.hash(password, 10, (hash_error, hash) => {
+          if (hash_error) {
+            console.log(hash_error);
           }
-        );
-      });
+          let sql =
+            "INSERT INTO user(full_name, nick_name, student_id, student_email, password, join_date) VALUES (?, ?, ?, ?, ?, ?)";
+          db.query(
+            sql,
+            [full_name, nick_name, student_id, student_email, hash, join_date],
+            (err, result) => {
+              if (err) {
+                res.send({ err: err });
+              } else {
+                res.send({ message: "user_added" });
+              }
+            }
+          );
+        });
+      }
     }
-  });
+  );
 });
 
 //login
@@ -215,13 +226,20 @@ app.post("/deletepost", (req, res) => {
 });
 
 app.post("/getposts", async (req, res) => {
-  const { user_id, user_posts } = req.body;
+  const { user_id, user_posts, tagged } = req.body;
+
+  let params = user_id;
 
   let sql = user_posts
     ? "SELECT p.*, u.nick_name AS nick_name FROM post p INNER JOIN user u ON u.id = p.user_id WHERE p.user_id = ? ORDER BY id DESC"
     : "SELECT p.*, u.nick_name AS nick_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY id DESC";
 
-  db.query(sql, user_id, (err, result) => {
+  if (tagged != null) {
+    sql = `SELECT p.*, u.nick_name AS nick_name FROM post p, user u, tag t, post_tag pt WHERE u.id = p.user_id AND t.name = ? AND pt.post_id = p.id ORDER BY id DESC`;
+    params = tagged;
+  }
+
+  db.query(sql, params, (err, result) => {
     if (!err) {
       db.query(
         "SELECT * FROM tag INNER JOIN post_tag ON post_tag.tag_id = tag.id AND post_tag.post_id in(SELECT p.id FROM post p, user u WHERE u.id = p.user_id)",

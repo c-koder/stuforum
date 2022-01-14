@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 const Tag = ({ tag, tagOnly }) => {
   return (
     <>
@@ -12,13 +10,13 @@ const Tag = ({ tag, tagOnly }) => {
           marginRight: tagOnly && 10,
         }}
       >
-        <Link
-          to={`/tagged/${tag.name}`}
+        <a
+          href={`/tagged/${tag.name}`}
           className="tag"
           style={{ fontSize: tagOnly && 14 }}
         >
           {tag.name}
-        </Link>
+        </a>
         {!tagOnly && (
           <h3 style={{ color: "var(--secondary)", marginLeft: 15 }}>
             {tag.frequency}

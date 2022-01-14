@@ -6,14 +6,17 @@ import { motion } from "framer-motion";
 import { AuthContext } from "../helpers/AuthContext";
 import axios from "axios";
 import usePosts from "../Components/dataHooks/usePosts";
+import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
+import FilterMenu from "../Components/FilterMenu";
 
 const MyQuestions = () => {
+  const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
 
   const [posts, setPosts] = useState([]);
   const [tags, setTags] = useState([]);
   const [postPref, setPostPref] = useState([]);
-  const { response } = usePosts(authState.id, true);
+  const { response } = usePosts(authState.id, true, null);
 
   useEffect(() => {
     if (response !== null) {
@@ -71,7 +74,36 @@ const MyQuestions = () => {
     });
   };
 
-  
+  const [userQuestionCount, setUserQuestionCount] = useState(0);
+
+  const [sortedPosts, setSortedPosts] = useState([]);
+  useEffect(() => {
+    setSortedPosts(posts);
+  }, [posts]);
+
+  const sortPosts = (sortBy) => {
+    let obj = [...posts];
+
+    if (sortBy == "dateasc") {
+      obj.sort((a, b) => a.id - b.id);
+    } else if (sortBy == "datedesc") {
+      obj.sort((a, b) => b.id - a.id);
+    } else if (sortBy == "leadsasc") {
+      obj.sort((a, b) => a.leads - b.leads);
+    } else if (sortBy == "leadsdesc") {
+      obj.sort((a, b) => b.leads - a.leads);
+    }
+
+    setPosts(obj);
+  };
+
+  useEffect(() => {
+    axios
+      .post("http://localhost:3001/getuserpostcount", { user_id: authState.id })
+      .then((res) => {
+        setUserQuestionCount(res.data[0].count);
+      });
+  }, []);
 
   const containerVariants = {
     hidden: {
@@ -99,12 +131,34 @@ const MyQuestions = () => {
         animate="visible"
         exit="exit"
       >
-        <div className="container-div">
-          <LeftBar />
+        <div
+          className="container-div"
+          style={{ display: width < 900 && "none" }}
+        >
+          <LeftBar userQuestionCount={userQuestionCount} />
         </div>
-        <div className="container-div" style={{ width: "225%" }}>
+        <div
+          className="container-div"
+          style={{
+            width: "225%",
+            margin: width < 900 && "-80px 0px 0px 0px",
+            marginTop: width < 900 ? "-40px" : 0,
+          }}
+        >
+          {posts.length > 0 && (
+            <FilterMenu show={true} posts={true} sortData={sortPosts} />
+          )}
+          {posts.length == 0 ? (
+            <div className="sortLabel" style={{ width: "200px" }}>
+              No questions yet
+            </div>
+          ) : (
+            <div className="sortLabel" style={{ width: "100px" }}>
+              Sort By
+            </div>
+          )}
           <Posts
-            posts={posts}
+            posts={sortedPosts}
             tags={tags}
             postPref={postPref}
             onDelete={deletePost}
@@ -113,7 +167,10 @@ const MyQuestions = () => {
             viewingQuestions={true}
           />
         </div>
-        <div className="container-div">
+        <div
+          className="container-div"
+          style={{ display: width < 900 && "none" }}
+        >
           <RightBar activeTab={"questions"} />
         </div>
       </motion.div>

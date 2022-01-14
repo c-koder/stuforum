@@ -10,6 +10,7 @@ import { AuthContext } from "../helpers/AuthContext";
 import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
 import AskAQuestion from "../Components/AskAQuestion";
 import Button from "../Components/Button";
+import axios from "axios";
 
 const Home = () => {
   const { width } = useWindowDimensions();
@@ -19,7 +20,7 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [tags, setTags] = useState([]);
   const [postPref, setPostPref] = useState([]);
-  const { response } = usePosts(authState.id, false);
+  const { response } = usePosts(authState.id, false, name);
 
   useEffect(() => {
     if (response !== null) {
@@ -33,6 +34,16 @@ const Home = () => {
   useEffect(() => {
     setSortedPosts(posts);
   }, [posts]);
+
+  const [userQuestionCount, setUserQuestionCount] = useState(0);
+
+  useEffect(() => {
+    axios
+      .post("http://localhost:3001/getuserpostcount", { user_id: authState.id })
+      .then((res) => {
+        setUserQuestionCount(res.data[0].count);
+      });
+  }, []);
 
   const sortPosts = (sortBy) => {
     let obj = [...posts];
@@ -98,11 +109,12 @@ const Home = () => {
       )}
 
       <div className={"container"}>
-        {width > 900 && (
-          <div className="container-div">
-            <LeftBar />
-          </div>
-        )}
+        <div
+          className="container-div"
+          style={{ display: width < 900 && "none" }}
+        >
+          <LeftBar userQuestionCount={userQuestionCount} />
+        </div>
 
         <div
           className="container-div"
@@ -116,7 +128,9 @@ const Home = () => {
             <FilterMenu show={true} posts={true} sortData={sortPosts} />
           )}
           {posts.length == 0 ? (
-            <h2>No posts yet</h2>
+            <div className="sortLabel" style={{ width: "200px" }}>
+              No questions yet
+            </div>
           ) : (
             <div className="sortLabel" style={{ width: "100px" }}>
               Sort By
@@ -151,11 +165,12 @@ const Home = () => {
             singlePost={false}
           />
         </div>
-        {width > 900 && (
-          <div className="container-div">
-            <RightBar activeTab={"home"} />
-          </div>
-        )}
+        <div
+          className="container-div"
+          style={{ display: width < 900 && "none" }}
+        >
+          <RightBar activeTab={"home"} />
+        </div>
       </div>
     </motion.div>
   );

@@ -11,12 +11,10 @@ import axios from "axios";
 import useUser from "../Components/dataHooks/useUser";
 import { AuthContext } from "../helpers/AuthContext";
 
-const LeftBar = () => {
+const LeftBar = ({ userQuestionCount }) => {
   const { authState } = useContext(AuthContext);
 
   const [questionPopup, setQuestionPopup] = useState(false);
-
-  const [userQuestionCount, setUserQuestionCount] = useState(0);
   
   const [user, setUser] = useState([]);
   const { userResponse } = useUser(authState.nick_name);
@@ -26,12 +24,6 @@ const LeftBar = () => {
       setUser(userResponse);
     }
   }, [userResponse]);
-
-  axios
-    .post("http://localhost:3001/getuserpostcount", { user_id: user.id })
-    .then((res) => {
-      setUserQuestionCount(res.data[0].count);
-    });
 
   const [topUsers, setTopUsers] = useState([]);
   const { sortedUserResponse } = useSortedUsers();

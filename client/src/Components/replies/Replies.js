@@ -1,16 +1,14 @@
 import Reply from "./Reply";
 import InfiniteScoll from "react-infinite-scroll-component";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useState } from "react";
 
 const Replies = ({ replies, onDelete, addReply, answered }) => {
   const [scrollNumber, setScollNumber] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
   const repliesPerPage = 8;
   const scrollsVisited = scrollNumber * repliesPerPage;
-
-  console.log(scrollsVisited);
+  const [hasMore, setHasMore] = useState(true);
 
   const displayPosts = replies
     .slice(0, scrollsVisited + repliesPerPage)
@@ -29,13 +27,13 @@ const Replies = ({ replies, onDelete, addReply, answered }) => {
   return (
     <InfiniteScoll
       dataLength={scrollsVisited}
+      hasMore={hasMore}
       next={() => {
+        setHasMore(replies[scrollsVisited] != null);
         setTimeout(() => {
           setScollNumber(scrollNumber + 1);
-          scrollsVisited <= replies.length && setHasMore(false);
         }, 1000);
       }}
-      hasMore={hasMore}
       loader={
         <div className="postsContainer">
           <div

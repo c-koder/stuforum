@@ -261,11 +261,12 @@ const SinglePost = () => {
             answered={answered}
           />
         </div>
-        {width > 900 && (
-          <div className="container-div">
-            <RightBar activeTab={""} />
-          </div>
-        )}
+        <div
+          className="container-div"
+          style={{ display: width < 900 && "none" }}
+        >
+          <RightBar activeTab={""} />
+        </div>
       </motion.div>
     </>
   );

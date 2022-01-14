@@ -113,24 +113,10 @@ body {
   color: var(--white);
   padding: 3px;
   border-radius: 28px;
-
   width: 28px;
   height: 28px;
   text-align: center;
 }
-
-/* .badge {
-  position: relative;
-  top: -5px;
-  right: -5px;
-  min-height: 100px;
-  text-align: center;
-  padding: 4px;
-  border-radius: 50%;
-  background: var(--primary);
-  color: var(--white);
-  font-size: var(--main-font-size);
-} */
 
 .icon {
   height: 30px;
@@ -481,7 +467,7 @@ button:disabled {
   color: var(--gray);
   text-decoration: none;
   display: block;
-  padding: 20px;
+  padding: 10px;
   text-align: right;
   font-size: var(--main-font-size);
 }
@@ -882,28 +868,6 @@ a {
   max-height: 600px;
 }
 
-/* .quill .ql-bubble .ql-editor pre.ql-syntax {
-  word-wrap: break-word;
-  max-width: 0px;
-  min-width: 100%;
-  padding: 10px 15px 10px 15px;
-  border-radius: 5px;
-}
-
-.quill .ql-bubble {
-  margin: 0px 0px -27px 0px;
-  resize: none;
-}
-
-.quill .ql-bubble .ql-editor {
-  padding: 7px 0px 20px 0px;
-  margin-bottom: 20px;
-  resize: none;
-  max-height: unset;
-  height: 100%;
-  overflow: hidden;
-} */
-
 .strength-Weak::-webkit-progress-value {
   background-color: #f25f5c;
 }
@@ -950,14 +914,13 @@ a {
   }
 }
 
-/* .footer {
+.footer {
   width: 100%;
-  padding: 20px 0;
-  margin-top: auto;
+  padding: 30px 0;
   text-align: center;
   background-color: white;
-  box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
   color: var(--gray);
+  overflow: auto;
   position: absolute;
-  bottom: 0;
-} */
+  margin-top: 100vh;
+}

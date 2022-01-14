@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import home from "../resources/home.png";
 import activeHome from "../resources/home-blue.png";
 import questions from "../resources/questions.png";
@@ -7,28 +6,35 @@ import answers from "../resources/answers.png";
 import activeAnswers from "../resources/answers-blue.png";
 import tag from "../resources/tag.png";
 import activeTag from "../resources/tag-blue.png";
-import Tags from "./tags/Tags";
-import useSortedTags from "./dataHooks/useSortedTags";
+import profile from "../resources/profile.png";
+import activeProfile from "../resources/profile-blue.png";
+import logout from "../resources/logout.png";
 import { motion } from "framer-motion";
 
-const RightBar = ({ activeTab }) => {
-  const [tags, setTags] = useState([]);
-  const { response } = useSortedTags();
-
-  useEffect(() => {
-    if (response !== null) {
-      setTags(response);
-    }
-  }, [response]);
-
+const MobileNav = ({ activeTab, onLogout, display }) => {
   return (
-    <div>
-      <div className="rightbar whiteContainer" style={{ marginTop: 0 }}>
+    <div
+      className="rightbar"
+      style={{
+        overflow: "hidden",
+        backgroundColor: "var(--bg)",
+        margin: 0,
+        marginTop: -10,
+        marginBottom: 5,
+      }}
+    >
+      <div style={{ display: display }}>
         <motion.a
           href="/home"
           className={
             activeTab === "home" ? "active rightbar-item" : "rightbar-item"
           }
+          style={{
+            margin: 0,
+            padding: "13px 16px",
+            textAlign: "left",
+            color: "var(--secondary)",
+          }}
           whileHover={{
             scale: 1.03,
           }}
@@ -49,6 +55,12 @@ const RightBar = ({ activeTab }) => {
           whileHover={{
             scale: 1.03,
           }}
+          style={{
+            margin: 0,
+            padding: "13px 16px",
+            textAlign: "left",
+            color: "var(--secondary)",
+          }}
         >
           <span>
             <img
@@ -65,6 +77,12 @@ const RightBar = ({ activeTab }) => {
           }
           whileHover={{
             scale: 1.03,
+          }}
+          style={{
+            margin: 0,
+            padding: "13px 16px",
+            textAlign: "left",
+            color: "var(--secondary)",
           }}
         >
           <span>
@@ -83,6 +101,12 @@ const RightBar = ({ activeTab }) => {
           whileHover={{
             scale: 1.03,
           }}
+          style={{
+            margin: 0,
+            padding: "13px 16px",
+            textAlign: "left",
+            color: "var(--secondary)",
+          }}
         >
           <span>
             <img
@@ -92,13 +116,51 @@ const RightBar = ({ activeTab }) => {
           </span>
           Tags
         </motion.a>
-      </div>
-      <div className="whiteContainer">
-        <h2 style={{ marginBottom: 20 }}>Frequently used tags</h2>
-        <Tags tags={tags} tagsOnly={false} />
+        <motion.a
+          href="/profile"
+          className={
+            activeTab === "profile" ? "active rightbar-item" : "rightbar-item"
+          }
+          whileHover={{
+            scale: 1.03,
+          }}
+          style={{
+            margin: 0,
+            padding: "13px 16px",
+            textAlign: "left",
+            color: "var(--secondary)",
+          }}
+        >
+          <span>
+            <img
+              className="navIcon"
+              src={activeTab === "profile" ? activeProfile : profile}
+            />
+          </span>
+          Profile
+        </motion.a>
+        <motion.a
+          href=""
+          className={"rightbar-item"}
+          onClick={onLogout}
+          whileHover={{
+            scale: 1.03,
+          }}
+          style={{
+            margin: 0,
+            padding: "13px 16px",
+            textAlign: "left",
+            color: "var(--secondary)",
+          }}
+        >
+          <span>
+            <img className="navIcon" src={logout} />
+          </span>
+          Logout
+        </motion.a>
       </div>
     </div>
   );
 };
 
-export default RightBar;
+export default MobileNav;

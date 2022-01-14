@@ -48,7 +48,8 @@ const ContextMenu = ({
       )}
       <div
         style={{
-          minWidth: reply != null && "120px",
+          minWidth: reply != null && "80px",
+          width: post != null && "190px",
           marginLeft: contextMenuStyling,
         }}
         className={"context-content" + (show ? " shown" : "")}
@@ -75,7 +76,7 @@ const ContextMenu = ({
                   {post.urgent == 1 ? "Unmark as Urgent" : "Mark as Urgent"}
                 </li>
               </motion.button>
-              <hr style={{ width: "75%", marginLeft: 22 }} />
+              <hr style={{ width: "90%", margin: "0 auto" }} />
               <motion.button
                 disabled={post.urgent == 1 && true}
                 className="nullBtn"
@@ -93,7 +94,7 @@ const ContextMenu = ({
                     : "Mark as Answered"}
                 </li>
               </motion.button>
-              <hr style={{ width: "75%", marginLeft: 22 }} />
+              <hr style={{ width: "90%", margin: "0 auto" }} />
             </div>
           )}
           <motion.button

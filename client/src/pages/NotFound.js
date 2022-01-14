@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import back from "../resources/backArrow.png";
 import "../glitch.css";
+import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
 
 const NotFound = () => {
-  let navigate = useNavigate();
+  const { width } = useWindowDimensions();
   const containerVariants = {
     hidden: {
       scale: 0.96,
@@ -30,38 +29,8 @@ const NotFound = () => {
       animate="visible"
       exit="exit"
     >
-      <div className={"container"}>
+      <div className={"container"} style={{ padding: "40px 0px" }}>
         <div className="container-div" style={{ display: "flex" }}>
-          <motion.div
-            className="container-div"
-            style={{ width: "0%" }}
-            whileHover={{
-              x: -5,
-            }}
-          >
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/home");
-              }}
-              className="btn"
-              style={{
-                marginTop: 0,
-                backgroundColor: "var(--white)",
-                padding: "5px 15px 10px 15px",
-                borderRadius: 10,
-              }}
-            >
-              <img
-                className="icon"
-                style={{
-                  height: "22px",
-                  marginTop: 10,
-                }}
-                src={back}
-              />
-            </button>
-          </motion.div>
           <h2 style={{ marginLeft: 30, marginTop: 13 }}>
             Oops! The page you visited was either not found or is
             <span className="glitch" data-text="glitched!">
@@ -69,7 +38,7 @@ const NotFound = () => {
               glitched!
             </span>
             <br />
-            <span style={{ fontSize: 14, float: "right" }}>
+            <span style={{ fontSize: 14, float: width > 900 && "right" }}>
               (Most probably the former)
             </span>
           </h2>

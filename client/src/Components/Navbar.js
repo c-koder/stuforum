@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import NavContext from "./NavContext";
 import { motion } from "framer-motion";
 import useWindowDimensions from "./dataHooks/useWindowDimensions";
+import MobileNav from "./MobileNav";
 
 const Navbar = ({ isLogged, onLogout }) => {
   const { width } = useWindowDimensions();
@@ -44,12 +45,19 @@ const Navbar = ({ isLogged, onLogout }) => {
     };
   }, [profileRef]);
 
+  const [display, setDisplay] = useState("none");
+  const showMenu = (e) => {
+    e.preventDefault();
+    display == "none" ? setDisplay("block") : setDisplay("none");
+  };
+
   return (
     <div className="topnav">
+      {width < 900 && <MobileNav onLogout={onLogout} display={display} />}
       <a
         style={{
-          margin: "27px 0px 30px 60px",
-          marginBottom: width < 900 && 70,
+          margin: "20px 0px 30px 60px",
+          marginBottom: width < 900 ? 70 : 35,
           cursor: "pointer",
         }}
         href={"/home"}
@@ -70,6 +78,28 @@ const Navbar = ({ isLogged, onLogout }) => {
       {isLogged && (
         <div>
           <div className="topnav-centered">
+            {width < 900 && (
+              <div
+                style={{
+                  display: "flex",
+                  position: "absolute",
+                  right: -20,
+                  marginTop: 12
+                }}
+              >
+                <motion.a
+                  href=""
+                  className="icon"
+                  onClick={showMenu}
+                  whileHover={{ cursor: "pointer" }}
+                >
+                  <i
+                    className="fa fa-bars"
+                    style={{ fontSize: 24, color: "var(--secondary)" }}
+                  ></i>
+                </motion.a>
+              </div>
+            )}
             <motion.input
               className="searchInput"
               type="text"
@@ -78,59 +108,60 @@ const Navbar = ({ isLogged, onLogout }) => {
               whileFocus={{ width: width < 900 ? "55%" : "44%" }}
             ></motion.input>
           </div>
-          {width > 900 && (
-            <div className="topnav-right">
-              <div ref={notifRef}>
-                <a
-                  href=""
-                  style={{ margin: "35px 0px 0px 0px" }}
-                  className="notification"
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
-                >
-                  <button
-                    className="nullBtn"
-                    onClick={() => setShow((oldState) => !oldState)}
-                  >
-                    <span>
-                      <img className="icon" src={notifications} />
-                    </span>
-                    {notificationCount > 0 && (
-                      <span
-                        className="badge"
-                        style={{ fontSize: 16, textAlign: "center" }}
-                      >
-                        {notificationCount}
-                      </span>
-                    )}
-                  </button>
-                </a>
-                <Notifications
-                  show={show}
-                  setNotificationCount={setNotificationCount}
-                  notificationCount={notificationCount}
-                />
-              </div>
-
+          <div
+            className="topnav-right"
+            style={{ display: width < 900 && "none" }}
+          >
+            <div ref={notifRef}>
               <a
                 href=""
-                style={{ margin: "-65px 60px 0px 110px" }}
+                style={{ margin: "35px 0px 0px 0px" }}
+                className="notification"
                 onClick={(e) => {
                   e.preventDefault();
                 }}
               >
                 <button
-                  ref={profileRef}
                   className="nullBtn"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setShowContext((oldState) => !oldState)}
+                  onClick={() => setShow((oldState) => !oldState)}
                 >
-                  <img className="avatar" src={avatar} alt="Profile" />
+                  <span>
+                    <img className="icon" src={notifications} />
+                  </span>
+                  {notificationCount > 0 && (
+                    <span
+                      className="badge"
+                      style={{ fontSize: 16, textAlign: "center" }}
+                    >
+                      {notificationCount}
+                    </span>
+                  )}
                 </button>
               </a>
+              <Notifications
+                show={show}
+                setNotificationCount={setNotificationCount}
+                notificationCount={notificationCount}
+              />
             </div>
-          )}
+
+            <a
+              href=""
+              style={{ margin: "-65px 60px 0px 110px" }}
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <button
+                ref={profileRef}
+                className="nullBtn"
+                style={{ cursor: "pointer" }}
+                onClick={() => setShowContext((oldState) => !oldState)}
+              >
+                <img className="avatar" src={avatar} alt="Profile" />
+              </button>
+            </a>
+          </div>
 
           <NavContext show={showContext} onLogout={onLogout} />
         </div>

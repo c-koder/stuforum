@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import UserProfile from "./pages/UserProfile";
 import Tags from "./pages/Tags";
-import Navbar from "./Components/Navbar";
+import NavBar from "./Components/NavBar";
 import ViewUser from "./pages/ViewUser";
 import { useState, useEffect } from "react";
 import { AuthContext } from "./helpers/AuthContext";
@@ -21,9 +21,10 @@ import moon from "./resources/moon.png";
 import { motion } from "framer-motion";
 import NotFound from "./pages/NotFound";
 import useWindowDimensions from "./Components/dataHooks/useWindowDimensions";
+import Footer from "./Components/Footer";
 
 const Routing = () => {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const [authState, setAuthState] = useState({
     nick_name: "",
     id: 0,
@@ -110,75 +111,80 @@ const Routing = () => {
 
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
-      <Navbar isLogged={authState.status} onLogout={onLogout} />
+      <NavBar isLogged={authState.status} onLogout={onLogout} />
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={!authState.status ? <LogReg /> : <Navigate to={"/home"} />}
+          />
+          {authState.status !== null && (
+            <>
+              <Route
+                path="/home"
+                element={authState.status ? <Home /> : <Navigate to={"/"} />}
+              />
 
-      <Routes>
-        <Route
-          path="/"
-          element={!authState.status ? <LogReg /> : <Navigate to={"/home"} />}
-        />
+              <Route
+                path="/myquestions"
+                element={
+                  authState.status ? <MyQuestions /> : <Navigate to={"/"} />
+                }
+              />
 
-        {authState.status !== null && (
-          <>
-            <Route
-              path="/home"
-              element={authState.status ? <Home /> : <Navigate to={"/"} />}
-            />
+              <Route
+                path="/myanswers"
+                element={
+                  authState.status ? <MyAnswers /> : <Navigate to={"/"} />
+                }
+              />
 
-            <Route
-              path="/myquestions"
-              element={
-                authState.status ? <MyQuestions /> : <Navigate to={"/"} />
-              }
-            />
+              <Route
+                path="/post/:id"
+                element={
+                  authState.status ? <SinglePost /> : <Navigate to={"/"} />
+                }
+              />
 
-            <Route
-              path="/myanswers"
-              element={authState.status ? <MyAnswers /> : <Navigate to={"/"} />}
-            />
+              <Route
+                path="/tagged/:name"
+                element={authState.status ? <Home /> : <Navigate to={"/"} />}
+              />
 
-            <Route
-              path="/post/:id"
-              element={
-                authState.status ? <SinglePost /> : <Navigate to={"/"} />
-              }
-            />
+              <Route
+                path="/myquestions"
+                element={
+                  authState.status ? <MyQuestions /> : <Navigate to={"/"} />
+                }
+              />
 
-            <Route
-              path="/tagged/:name"
-              element={authState.status ? <Home /> : <Navigate to={"/"} />}
-            />
+              <Route
+                path="/user/:name"
+                element={
+                  authState.status ? <ViewUser /> : <Navigate to={"/"} />
+                }
+              />
 
-            <Route
-              path="/myquestions"
-              element={
-                authState.status ? <MyQuestions /> : <Navigate to={"/"} />
-              }
-            />
+              <Route
+                path="/profile"
+                element={
+                  authState.status ? <UserProfile /> : <Navigate to={"/"} />
+                }
+              />
 
-            <Route
-              path="/user/:name"
-              element={authState.status ? <ViewUser /> : <Navigate to={"/"} />}
-            />
+              <Route
+                path="/tags"
+                element={authState.status ? <Tags /> : <Navigate to={"/"} />}
+              />
 
-            <Route
-              path="/profile"
-              element={
-                authState.status ? <UserProfile /> : <Navigate to={"/"} />
-              }
-            />
+              <Route path="*" element={<Navigate to={"/404"} />} />
 
-            <Route
-              path="/tags"
-              element={authState.status ? <Tags /> : <Navigate to={"/"} />}
-            />
-
-            <Route path="*" element={<Navigate to={"/404"} />} />
-
-            <Route path="/404" element={<NotFound />} />
-          </>
-        )}
-      </Routes>
+              <Route path="/404" element={<NotFound />} />
+            </>
+          )}
+        </Routes>
+      </Router>
+      {/* <Footer /> */}
       {width > 900 && (
         <motion.button
           className="themeToggleBtn"

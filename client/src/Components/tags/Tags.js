@@ -1,8 +1,10 @@
 import Tag from "./Tag";
 import ReactPaginate from "react-paginate";
 import { useState } from "react";
+import useWindowDimensions from "../dataHooks/useWindowDimensions";
 
 const Tags = ({ tags, tagOnly, display }) => {
+  const { width } = useWindowDimensions();
   const [pageNumber, setPageNumber] = useState(0);
 
   const tagsPerPage = 60;
@@ -22,7 +24,7 @@ const Tags = ({ tags, tagOnly, display }) => {
     .map((tag) => {
       return <Tag key={tag.id} tag={tag} tagOnly={tagOnly} display={display} />;
     });
-//
+  //
 
   const pageCount = Math.ceil(tags.length / tagsPerPage);
 
@@ -35,7 +37,11 @@ const Tags = ({ tags, tagOnly, display }) => {
       {tagOnly && display && (
         <div className="form-control">
           <input
-            style={{ width: "25%", paddingLeft: 40, marginLeft: 0 }}
+            style={{
+              width: width < 900 ? "70%" : "30%",
+              paddingLeft: 40,
+              marginLeft: 0,
+            }}
             className="searchInput"
             type="text"
             onChange={(e) => {
