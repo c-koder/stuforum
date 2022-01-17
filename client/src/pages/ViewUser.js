@@ -3,8 +3,8 @@ import RightBar from "../Components/RightBar";
 import UserDetails from "../Components/UserDetails";
 import { motion } from "framer-motion";
 import { useParams } from "react-router";
-import useUser from "../Components/dataHooks/useUser";
-import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
+import useUser from "../hooks/useUser";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const ViewUser = () => {
   const { width } = useWindowDimensions();

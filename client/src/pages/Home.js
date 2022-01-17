@@ -4,10 +4,10 @@ import RightBar from "../Components/RightBar";
 import LeftBar from "../Components/LeftBar";
 import { useParams } from "react-router";
 import { motion } from "framer-motion";
-import usePosts from "../Components/dataHooks/usePosts";
+import usePosts from "../hooks/usePosts";
 import FilterMenu from "../Components/FilterMenu";
 import { AuthContext } from "../helpers/AuthContext";
-import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 import AskAQuestion from "../Components/AskAQuestion";
 import Button from "../Components/Button";
 import axios from "axios";
@@ -39,7 +39,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/getuserpostcount", { user_id: authState.id })
+      .post("http://localhost:3001/user/getuserpostcount", { user_id: authState.id })
       .then((res) => {
         setUserQuestionCount(res.data[0].count);
       });
@@ -73,10 +73,6 @@ const Home = () => {
       transition: { ease: "easeIn" },
     },
   };
-
-  useEffect(() => {
-    document.title = "stuforum";
-  }, []);
 
   const [questionPopup, setQuestionPopup] = useState(false);
 

@@ -17,134 +17,13 @@ const db = mysql.createConnection({
 app.use(cors());
 app.use(express.json());
 
-//register
-
-app.post("/register", (req, res) => {
-  const {
-    full_name,
-    nick_name,
-    student_id,
-    student_email,
-    password,
-    join_date,
-  } = req.body;
-
-  let userExistsQuery =
-    "SELECT * FROM user WHERE nick_name = ? OR student_email = ? OR student_id = ?";
-  db.query(
-    userExistsQuery,
-    [nick_name, student_email, student_id],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      }
-      if (result.length > 0) {
-        res.send({ message: "user_exists" });
-      } else {
-        bcrypt.hash(password, 10, (hash_error, hash) => {
-          if (hash_error) {
-            console.log(hash_error);
-          }
-          let sql =
-            "INSERT INTO user(full_name, nick_name, student_id, student_email, password, join_date) VALUES (?, ?, ?, ?, ?, ?)";
-          db.query(
-            sql,
-            [full_name, nick_name, student_id, student_email, hash, join_date],
-            (err, result) => {
-              if (err) {
-                res.send({ err: err });
-              } else {
-                res.send({ message: "user_added" });
-              }
-            }
-          );
-        });
-      }
-    }
-  );
-});
-
-//login
-
-app.post("/login", (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  let usernameSql =
-    "SELECT * FROM user WHERE nick_name = ? OR student_id = ? OR student_email = ?";
-  db.query(usernameSql, [username, username, username], (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
-      bcrypt.compare(password, result[0].password, (error, response) => {
-        if (response) {
-          const accessToken = jwt.sign(
-            {
-              nick_name: result[0].nick_name,
-              id: result[0].id,
-            },
-            "murofuts"
-            // {
-            //   expiresIn: 60 * 60 * 6,
-            // }
-          );
-          res.send({
-            token: accessToken,
-            nick_name: result[0].nick_name,
-            id: result[0].id,
-          });
-        } else {
-          res.send({ message: "wrong_password" });
-        }
-      });
-    } else {
-      res.send({ message: "user_not_found" });
-    }
-  });
-});
+const user = require("./controllers/userController");
+app.use("/user", user);
 
 //authentication
 
 app.get("/auth", validateToken, (req, res) => {
   res.json(req.user);
-});
-
-//users
-
-app.post("/getuser", (req, res) => {
-  const nick_name = req.body.nick_name;
-  let sql =
-    "SELECT id, full_name, nick_name, student_email, description, avatar, join_date, likes FROM user WHERE nick_name = ?";
-  db.query(sql, nick_name, (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
-      res.send(result[0]);
-    }
-  });
-});
-
-app.post("/getsortedusers", (req, res) => {
-  let sql = "SELECT * FROM user WHERE likes > 0 ORDER BY likes DESC LIMIT 5";
-  db.query(sql, (err, result) => {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result.length > 0) {
-      res.send(result);
-    }
-  });
-});
-
-app.post("/getuserpostcount", (req, res) => {
-  const user_id = req.body.user_id;
-  let sql = "SELECT COUNT(*) AS count FROM post WHERE user_id = ?";
-  db.query(sql, user_id, (err, result) => {
-    if (!err) {
-      res.send(result);
-    }
-  });
 });
 
 //posts
@@ -594,10 +473,30 @@ app.post("/getanswers", (req, res) => {
     (err, postResults) => {
       if (!err) {
         db.query(
-          "SELECT r.* FROM reply r JOIN post p ON r.post_id = p.id WHERE r.user_id = ? AND NOT p.user_id = ? GROUP BY p.id ORDER BY p.id DESC",
+          "SELECT r.* FROM reply r JOIN post p ON r.post_id = p.id WHERE r.user_id = ? AND NOT p.user_id = ? ORDER BY r.id DESC LIMIT 1",
           [user_id, user_id],
           (err, replyResults) => {
-            if (!err) res.send({ posts: postResults, replies: replyResults });
+            db.query(
+              "SELECT * FROM tag INNER JOIN post_tag ON post_tag.tag_id = tag.id AND post_tag.post_id in(SELECT p.id FROM post p, user u WHERE u.id = p.user_id)",
+              (err, tagsResult) => {
+                if (!err) {
+                  db.query(
+                    "SELECT * FROM post_pref pp WHERE post_id in (SELECT p.id FROM post p, user u WHERE u.id = p.user_id) AND user_id = ?",
+                    user_id,
+                    (err, postPrefResult) => {
+                      if (!err) {
+                        res.send({
+                          posts: postResults,
+                          replies: replyResults,
+                          post_pref: postPrefResult,
+                          tags: tagsResult,
+                        });
+                      }
+                    }
+                  );
+                }
+              }
+            );
           }
         );
       }

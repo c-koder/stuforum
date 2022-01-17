@@ -3,6 +3,7 @@ import upArrowBlue from "../../resources/upArrow-blue.png";
 import downArrow from "../../resources/downArrow.png";
 import downArrowRed from "../../resources/downArrow-red.png";
 import answers from "../../resources/answers.png";
+import time from "../../resources/time.png";
 import settings from "../../resources/settings.png";
 import { useRef, useEffect, useState, useContext } from "react";
 import ReactTooltip from "react-tooltip";
@@ -14,7 +15,7 @@ import moment from "moment";
 import axios from "axios";
 import { Parser } from "html-to-react";
 import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
-import useWindowDimensions from "../dataHooks/useWindowDimensions";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const Post = ({
   post,
@@ -198,18 +199,10 @@ const Post = ({
         className="postsContainer"
         style={{ marginBottom: answerOnly && 20 }}
       >
-        <ContextMenu
-          post={post}
-          show={show}
-          singlePost={singlePost}
-          onDelete={onDelete}
-          onToggleUrgent={onToggleUrgent}
-          onToggleAnswered={onToggleAnswered}
-        />
         <div
           className="postsContainer-div"
           style={{
-            width: width > 900 ? "11%": "15%",
+            width: width > 900 ? "11%" : "15%",
             margin: "0 10px 0 0px",
             alignItems: "center",
             textAlign: "center",
@@ -223,9 +216,7 @@ const Post = ({
           >
             {abbreviateNumber(leads)}
             <br />
-            <span style={{ color: leadsColor, fontSize: 20 }}>
-            ●
-            </span>
+            <span style={{ color: leadsColor, fontSize: 20 }}>●</span>
           </h2>
         </div>
         <div className="postsContainer-div">
@@ -248,6 +239,14 @@ const Post = ({
                 src={settings}
                 variants={rotateVariant}
                 animate={show ? "rotate" : "stop"}
+              />
+              <ContextMenu
+                post={post}
+                show={show}
+                singlePost={singlePost}
+                onDelete={onDelete}
+                onToggleUrgent={onToggleUrgent}
+                onToggleAnswered={onToggleAnswered}
               />
             </button>
           )}
@@ -304,15 +303,17 @@ const Post = ({
           <div style={{ display: "flex", marginBottom: 20, width: "100%" }}>
             <span
               style={{
+                display: "flex",
                 float: "left",
                 color: "var(--secondary)",
                 fontWeight: 600,
-                marginTop: -5,
               }}
             >
+              <img className="navIcon" src={time} />
               <h4
                 style={{
-                  color: "var(--secondary)",
+                  color: "var(--primary)",
+                  marginTop: -1,
                 }}
                 data-tip={moment(post.posted_time).format(
                   "MMMM Do YYYY, h:mm:ss a"
@@ -330,7 +331,9 @@ const Post = ({
               }}
             >
               <img className="navIcon" src={answers} />
-              {commentCount == null ? abbreviateNumber(post.comments) : abbreviateNumber(commentCount)}
+              {commentCount == null
+                ? abbreviateNumber(post.comments)
+                : abbreviateNumber(commentCount)}
             </span>
             <span style={{ float: "right" }}>
               <button

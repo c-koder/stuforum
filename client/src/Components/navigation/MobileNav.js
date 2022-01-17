@@ -1,14 +1,14 @@
-import home from "../resources/home.png";
-import activeHome from "../resources/home-blue.png";
-import questions from "../resources/questions.png";
-import activeQuestions from "../resources/questions-blue.png";
-import answers from "../resources/answers.png";
-import activeAnswers from "../resources/answers-blue.png";
-import tag from "../resources/tag.png";
-import activeTag from "../resources/tag-blue.png";
-import profile from "../resources/profile.png";
-import activeProfile from "../resources/profile-blue.png";
-import logout from "../resources/logout.png";
+import home from "../../resources/home.png";
+import activeHome from "../../resources/home-blue.png";
+import questions from "../../resources/questions.png";
+import activeQuestions from "../../resources/questions-blue.png";
+import answers from "../../resources/answers.png";
+import activeAnswers from "../../resources/answers-blue.png";
+import tag from "../../resources/tag.png";
+import activeTag from "../../resources/tag-blue.png";
+import profile from "../../resources/profile.png";
+import activeProfile from "../../resources/profile-blue.png";
+import logout from "../../resources/logout.png";
 import { motion } from "framer-motion";
 
 const MobileNav = ({ activeTab, onLogout, display }) => {

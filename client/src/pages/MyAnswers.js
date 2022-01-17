@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import RightBar from "../Components/RightBar";
 import LeftBar from "../Components/LeftBar";
-import Answer from "../Components/Answer";
-import useAnswers from "../Components/dataHooks/useAnswers";
+import Answer from "../Components/Answers";
+import useAnswers from "../hooks/useAnswers";
 import { motion } from "framer-motion";
 import { AuthContext } from "../helpers/AuthContext";
-import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 import axios from "axios";
 
 const MyAnswers = () => {
@@ -28,12 +28,16 @@ const MyAnswers = () => {
 
   const [posts, setPosts] = useState([]);
   const [replies, setReplies] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [postPref, setPostPref] = useState([]);
   const { response } = useAnswers(authState.id);
 
   useEffect(() => {
     if (response !== null) {
       setPosts(response.posts);
       setReplies(response.replies);
+      setTags(response.tags);
+      setPostPref(response.post_pref);
     }
   }, [response]);
 
@@ -49,7 +53,7 @@ const MyAnswers = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/getuserpostcount", { user_id: authState.id })
+      .post("http://localhost:3001/user/getuserpostcount", { user_id: authState.id })
       .then((res) => {
         setUserQuestionCount(res.data[0].count);
       });
@@ -90,8 +94,10 @@ const MyAnswers = () => {
           {posts.length != 0 && replies.length != 0 && (
             <Answer
               posts={posts}
-              singlePost={false}
               replies={replies}
+              tags={tags}
+              postPref={postPref}
+              singlePost={false}
               onDelete={deleteReply}
             />
           )}

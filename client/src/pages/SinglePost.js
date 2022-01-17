@@ -6,12 +6,12 @@ import { useParams } from "react-router";
 import CommentBox from "../Components/CommentBox";
 import Replies from "../Components/replies/Replies";
 import { motion } from "framer-motion";
-import useSinglePost from "../Components/dataHooks/useSinglePost";
-import useReplies from "../Components/dataHooks/useReplies";
+import useSinglePost from "../hooks/useSinglePost";
+import useReplies from "../hooks/useReplies";
 import { AuthContext } from "../helpers/AuthContext";
 import axios from "axios";
 import FilterMenu from "../Components/FilterMenu";
-import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const SinglePost = () => {
   const { width } = useWindowDimensions();
@@ -196,36 +196,6 @@ const SinglePost = () => {
           margin: width < 900 && "20px 0px",
         }}
       >
-        {/* <motion.div
-          className="container-div"
-          style={{ width: "0%" }}
-          whileHover={{
-            x: -5,
-          }}
-        >
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              navigate(-1);
-            }}
-            className="btn"
-            style={{
-              marginTop: 0,
-              backgroundColor: "var(--white)",
-              padding: "5px 15px 10px 15px",
-              borderRadius: 10,
-            }}
-          >
-            <img
-              className="icon"
-              style={{
-                height: "22px",
-                marginTop: 10,
-              }}
-              src={back}
-            />
-          </button>
-        </motion.div> */}
         <div className="container-div" style={{ width: "347%" }}>
           <Post
             key={post.id}

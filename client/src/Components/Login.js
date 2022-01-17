@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
 
@@ -21,26 +21,25 @@ const Login = () => {
     } else if (password === "") {
       setError("Password is required");
     } else {
-      Axios.post("http://localhost:3001/login", {
-        username: username,
-        password: password,
-      }).then((response) => {
-        if (response.data.err) {
-          setError("Error : SFX0001");
-        } else if (response.data.message === "user_not_found")
-          setError("Account not found");
-        else if (response.data.message === "wrong_password")
-          setError("Invalid username/password");
-        else {
-          localStorage.setItem("accessToken", response.data.token);
-          setAuthState({
-            nick_name: response.data.nick_name,
-            id: response.data.id,
-            status: true,
-          });
-          navigate("/home");
-        }
-      });
+      axios
+        .post("http://localhost:3001/user/login", {
+          username: username,
+          password: password,
+        })
+        .then((response) => {
+          if (response.data.message != null) {
+            setError(response.data.message);
+          } else {
+            localStorage.setItem("accessToken", response.data.token);
+            setAuthState({
+              nick_name: response.data.nick_name,
+              id: response.data.id,
+              status: true,
+            });
+            navigate("/home");
+          }
+        })
+        .catch((err) => console.log(err));
       setPassword("");
     }
   };

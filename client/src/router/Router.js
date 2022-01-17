@@ -1,27 +1,27 @@
-import LogReg from "./pages/LogReg";
-import Home from "./pages/Home";
-import SinglePost from "./pages/SinglePost";
-import MyAnswers from "./pages/MyAnswers";
-import MyQuestions from "./pages/MyQuestions";
+import LoginAndRegister from "../pages/LoginAndRegister";
+import Home from "../pages/Home";
+import SinglePost from "../pages/SinglePost";
+import MyAnswers from "../pages/MyAnswers";
+import MyQuestions from "../pages/MyQuestions";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
 } from "react-router-dom";
-import UserProfile from "./pages/UserProfile";
-import Tags from "./pages/Tags";
-import NavBar from "./Components/NavBar";
-import ViewUser from "./pages/ViewUser";
+import UserProfile from "../pages/UserProfile";
+import Tags from "../pages/Tags";
+import NavBar from "../Components/navigation/NavBar";
+import ViewUser from "../pages/ViewUser";
 import { useState, useEffect } from "react";
-import { AuthContext } from "./helpers/AuthContext";
+import { AuthContext } from "../helpers/AuthContext";
 import axios from "axios";
-import sun from "./resources/sun.png";
-import moon from "./resources/moon.png";
+import sun from "../resources/sun.png";
+import moon from "../resources/moon.png";
 import { motion } from "framer-motion";
-import NotFound from "./pages/NotFound";
-import useWindowDimensions from "./Components/dataHooks/useWindowDimensions";
-import Footer from "./Components/Footer";
+import NotFound from "../pages/NotFound";
+import useWindowDimensions from "../hooks/useWindowDimensions";
+// import Footer from "../Components/Footer";
 
 const Routing = () => {
   const { width, height } = useWindowDimensions();
@@ -116,7 +116,13 @@ const Routing = () => {
         <Routes>
           <Route
             path="/"
-            element={!authState.status ? <LogReg /> : <Navigate to={"/home"} />}
+            element={
+              !authState.status ? (
+                <LoginAndRegister />
+              ) : (
+                <Navigate to={"/home"} />
+              )
+            }
           />
           {authState.status !== null && (
             <>

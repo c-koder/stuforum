@@ -8,7 +8,7 @@ import activeAnswers from "../resources/answers-blue.png";
 import tag from "../resources/tag.png";
 import activeTag from "../resources/tag-blue.png";
 import Tags from "./tags/Tags";
-import useSortedTags from "./dataHooks/useSortedTags";
+import useSortedTags from "../hooks//useSortedTags";
 import { motion } from "framer-motion";
 
 const RightBar = ({ activeTab }) => {

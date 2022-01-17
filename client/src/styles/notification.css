@@ -1,0 +1,36 @@
+.notification {
+  color: var(--white);
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.notification-item {
+  display: flex;
+  margin: 0px 0;
+  padding: 10px 5px;
+  border-radius: 10px;
+}
+
+.notification-item:hover {
+  background-color: var(--bg);
+}
+
+.notification-item.viewed {
+  border-right: "2px solid";
+  border-color: var(--white);
+}
+
+.badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: var(--primary);
+  color: var(--white);
+  padding: 3px;
+  border-radius: 28px;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+}

@@ -5,8 +5,8 @@ import LeftBar from "../Components/LeftBar";
 import { motion } from "framer-motion";
 import { AuthContext } from "../helpers/AuthContext";
 import axios from "axios";
-import usePosts from "../Components/dataHooks/usePosts";
-import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
+import usePosts from "../hooks/usePosts";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 import FilterMenu from "../Components/FilterMenu";
 
 const MyQuestions = () => {
@@ -99,7 +99,7 @@ const MyQuestions = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/getuserpostcount", { user_id: authState.id })
+      .post("http://localhost:3001/user/getuserpostcount", { user_id: authState.id })
       .then((res) => {
         setUserQuestionCount(res.data[0].count);
       });

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Axios from "axios";
+import axios from "axios";
 import moment from "moment";
-import { validEmail, validPassword, validStudentID } from "../Components/Regex";
-import PasswordStrengthMeter from "../Components/PasswordStrengthMeter";
+import { validEmail, validPassword, validStudentID } from "../constants/Regex";
+import PasswordStrengthMeter from "../utils/PasswordStrengthMeter";
 import Login from "../Components/Login";
 import { motion } from "framer-motion";
 
@@ -62,29 +62,29 @@ const LogReg = () => {
     } else if (confirmPassword !== password) {
       setError("Passwords don't match");
     } else {
-      Axios.post("http://localhost:3001/register", {
-        full_name: fullName,
-        nick_name: nickName,
-        student_id: studentId,
-        student_email: studentEmail,
-        password: password,
-        join_date: joinDate,
-      }).then((response) => {
-        if (response.data.err) {
-          setError(`Error : ${response.data.err}`);
-        } else if (response.data.message == "user_exists") {
-          setError("User with Nickname/Student ID/Email already exists.");
-        } else if (response.data.message == "user_added") {
-          setError("Registration Successful");
+      axios
+        .post("http://localhost:3001/user/register", {
+          full_name: fullName,
+          nick_name: nickName,
+          student_id: studentId,
+          student_email: studentEmail,
+          password: password,
+          join_date: joinDate,
+        })
+        .then((response) => {
+          if (response.data.message != null) {
+            setError(response.data.message);
+          } else {
+            setError("Registration Successful");
 
-          setFullName("");
-          setNickName("");
-          setStudentId("");
-          setStudentEmail("");
-          setPassword("");
-          setConfirmPassword("");
-        }
-      });
+            setFullName("");
+            setNickName("");
+            setStudentId("");
+            setStudentEmail("");
+            setPassword("");
+            setConfirmPassword("");
+          }
+        });
 
       setPassword("");
       setConfirmPassword("");

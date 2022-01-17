@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 const useSortedUsers = () => {
   const [sortedUserResponse, setResponse] = useState(null);
   const fetchData = () => {
-    axios.post("http://localhost:3001/getsortedusers").then((res) => {
+    axios.get("http://localhost:3001/user/getsortedusers").then((res) => {
       setResponse(res.data);
     });
   };

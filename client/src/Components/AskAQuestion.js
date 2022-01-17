@@ -9,7 +9,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
-import useWindowDimensions from "./dataHooks/useWindowDimensions";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 hljs.configure({
   languages: ["javascript", "java", "c", "c++", "python"],

@@ -4,11 +4,10 @@ import Button from "./Button";
 import TopUsers from "./TopUsers";
 import like from "../resources/like-blue.png";
 import { motion } from "framer-motion";
-import useSortedUsers from "./dataHooks/useSortedUsers";
+import useSortedUsers from "../hooks/useSortedUsers";
 import { Link } from "react-router-dom";
 import { abbreviateNumber } from "../helpers/AbbreviateNumber";
-import axios from "axios";
-import useUser from "../Components/dataHooks/useUser";
+import useUser from "../hooks/useUser";
 import { AuthContext } from "../helpers/AuthContext";
 
 const LeftBar = ({ userQuestionCount }) => {

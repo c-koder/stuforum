@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
+import "../styles/notification.css";
 import { AuthContext } from "../helpers/AuthContext";
-import useNotifications from "./dataHooks/useNotifications";
+import useNotifications from "../hooks/useNotifications";
 import Notification from "./Notification";
 
 const Notifications = ({ show, notificationCount, setNotificationCount }) => {
@@ -50,7 +51,13 @@ const Notifications = ({ show, notificationCount, setNotificationCount }) => {
 
   return (
     <>
-      <div className={"dropdown" + (show ? " shown" : "")}>
+      <div
+        className={"dropdown" + (show ? " shown" : "")}
+        style={{
+          marginLeft: -370,
+          width: "420px",
+        }}
+      >
         <div style={{ marginBottom: 10 }}>
           <h2 style={{ float: "left" }}>Notifications</h2>
           <div style={{ display: "flex", float: "right" }}>

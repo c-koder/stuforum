@@ -92,7 +92,6 @@ const Notification = ({ notification, changeViewed, onDelete }) => {
           )}
         </div>
       </div>
-
       <hr style={{ opacity: 0.3 }} />
     </>
   );

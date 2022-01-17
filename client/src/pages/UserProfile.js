@@ -3,8 +3,8 @@ import RightBar from "../Components/RightBar";
 import UserDetails from "../Components/UserDetails";
 import { motion } from "framer-motion";
 import { AuthContext } from "../helpers/AuthContext";
-import useUser from "../Components/dataHooks/useUser";
-import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
+import useUser from "../hooks/useUser";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const UserProfile = () => {
   const { width } = useWindowDimensions();

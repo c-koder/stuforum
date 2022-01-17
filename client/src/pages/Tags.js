@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import RightBar from "../Components/RightBar";
 import ShowTags from "../Components/tags/Tags";
 import { motion } from "framer-motion";
-import useAllTags from "../Components/dataHooks/useAllTags";
-import useWindowDimensions from "../Components/dataHooks/useWindowDimensions";
+import useAllTags from "../hooks/useAllTags";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const Tags = () => {
   const { width } = useWindowDimensions();

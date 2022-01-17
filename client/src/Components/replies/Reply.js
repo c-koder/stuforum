@@ -9,15 +9,16 @@ import Replies from "./Replies";
 import CommentBox from "../CommentBox";
 import { motion } from "framer-motion";
 import settings from "../../resources/settings.png";
+import time from "../../resources/time.png";
 import ContextMenu from "../ContextMenu";
 import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
 import axios from "axios";
-import useReplyData from "../dataHooks/useReplyData";
+import useReplyData from "../../hooks/useReplyData";
 import ReactTooltip from "react-tooltip";
 import { Parser } from "html-to-react";
 import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
-import useWindowDimensions from "../dataHooks/useWindowDimensions";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
   const { width } = useWindowDimensions();
@@ -200,13 +201,6 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
           marginBottom: answerOnly ? 40 : 20,
         }}
       >
-        <ContextMenu
-          reply={reply}
-          show={show}
-          onDelete={onDelete}
-          answerOnly={answerOnly}
-        />
-
         <div
           className="postsContainer-div"
           style={{
@@ -237,7 +231,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
               >
                 {reply.nick_name}{" "}
               </a>
-              <span style={{ color: "var(--secondary)", fontSize: 12 }}>●</span>{" "}
+              <img className="navIcon" src={time} style={{ marginTop: -2 }} />
               <span
                 style={{
                   color: "var(--secondary)",
@@ -267,12 +261,18 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
                 variants={rotateVariant}
                 animate={show ? "rotate" : "stop"}
               />
+              <ContextMenu
+                reply={reply}
+                show={show}
+                onDelete={onDelete}
+                answerOnly={answerOnly}
+              />
             </button>
           )}
 
           <div style={{ display: "flex" }}>
             <p style={{ color: "var(--gray)" }}>
-              {reply.replied_to !== null && (
+              {reply.replied_to != null && (
                 <a
                   href={`/user/${reply.replied_to}`}
                   style={{ marginRight: 5 }}

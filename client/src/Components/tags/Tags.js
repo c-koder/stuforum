@@ -1,7 +1,7 @@
 import Tag from "./Tag";
 import ReactPaginate from "react-paginate";
 import { useState } from "react";
-import useWindowDimensions from "../dataHooks/useWindowDimensions";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const Tags = ({ tags, tagOnly, display }) => {
   const { width } = useWindowDimensions();

@@ -1,6 +1,5 @@
 import like from "../resources/like-blue.png";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { abbreviateNumber } from "../helpers/AbbreviateNumber";
 
 const TopUser = ({ topUser }) => {
@@ -12,11 +11,11 @@ const TopUser = ({ topUser }) => {
           x: -1,
         }}
       >
-        <Link to={`/user/${topUser.nick_name}`}>
+        <a href={`/user/${topUser.nick_name}`}>
           <h3 style={{ color: "var(--primary)", fontSize: 22 }}>
             {topUser.nick_name}
           </h3>
-        </Link>
+        </a>
         <span style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
           <h3 style={{ color: "var(--secondary)", fontSize: 22 }}>
             {abbreviateNumber(topUser.likes)}
