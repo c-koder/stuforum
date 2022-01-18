@@ -15,15 +15,18 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const SinglePost = () => {
   const { width } = useWindowDimensions();
-  let navigate = useNavigate();
   const { authState } = useContext(AuthContext);
   const { id } = useParams();
 
+  const [loading, setLoading] = useState(true);
+
+  let navigate = useNavigate();
+
   useEffect(() => {
     axios
-      .post("http://localhost:3001/postexists", { post_id: id })
+      .post("http://localhost:3001/post/postexists", { post_id: id })
       .then((res) => {
-        res.data.message == null && navigate("/404");
+        res.data.message !== "exists" && navigate("/404");
       });
     {
     }
@@ -43,6 +46,7 @@ const SinglePost = () => {
   });
   const [tags, setTags] = useState([]);
   const [postPref, setPostPref] = useState([]);
+  const [commentCount, setCommentCount] = useState();
 
   const { response } = useSinglePost(id);
 
@@ -51,7 +55,9 @@ const SinglePost = () => {
       setPost(response.post);
       setTags(response.tags);
       setPostPref(response.post_pref);
+      setCommentCount(response.post.comments);
     }
+    setLoading(false);
   }, [response, post]);
 
   const { replyResponse } = useReplies(id);
@@ -124,25 +130,32 @@ const SinglePost = () => {
         })
       );
     }
-    setCommentUpdated(true);
+    setCommentCount(commentCount + 1);
   };
 
   const onDelete = (reply_id, parent_id) => {
     if (parent_id != null) {
       handleChildReplyDelete(reply_id);
+      setCommentCount(commentCount - 1);
     } else {
-      axios.post("http://localhost:3001/deletereply", {
+      axios.post("http://localhost:3001/reply/deletereply", {
         reply_id: reply_id,
         post_id: id,
         delete_child_only: false,
       });
+      let deleteCount = 1;
+      replies.map((reply) => {
+        if (reply.id == reply_id && reply.replies != null)
+          deleteCount += reply.replies.length;
+        return;
+      });
+      setCommentCount(commentCount - deleteCount);
       setReplies(replies.filter((reply) => reply.id !== reply_id));
     }
-    setCommentUpdated(true);
   };
 
   const handleChildReplyDelete = (reply_id) => {
-    axios.post("http://localhost:3001/deletereply", {
+    axios.post("http://localhost:3001/reply/deletereply", {
       reply_id: reply_id,
       post_id: id,
       delete_child_only: true,
@@ -158,22 +171,9 @@ const SinglePost = () => {
     );
   };
 
-  const [commentUpdated, setCommentUpdated] = useState(false);
-  const [commentCount, setCommentCount] = useState();
-
-  useEffect(() => {
-    if (commentUpdated) {
-      axios
-        .post("http://localhost:3001/getcommentcount", { post_id: id })
-        .then((res) => {
-          setCommentCount(res.data.comments);
-        });
-    }
-  });
-
   const deletePost = (id) => {
     axios
-      .post("http://localhost:3001/deletepost", {
+      .post("http://localhost:3001/post/deletepost", {
         post_id: id,
       })
       .then((res) => {
@@ -185,59 +185,61 @@ const SinglePost = () => {
 
   return (
     <>
-      <motion.div
-        className={"container"}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        style={{
-          padding: width < 900 && "20px 0px",
-          margin: width < 900 && "20px 0px",
-        }}
-      >
-        <div className="container-div" style={{ width: "347%" }}>
-          <Post
-            key={post.id}
-            post={post}
-            tags={tags}
-            postPref={postPref}
-            singlePost={true}
-            commentCount={commentCount}
-            onDelete={deletePost}
-          />
-          <CommentBox
-            addReply={addReply}
-            replyTo={null}
-            parent_id={null}
-            user_id={authState.id}
-            nick_name={authState.nick_name}
-            post_id={id}
-            answered={answered}
-          />
-
-          {replies.length > 0 && (
-            <div style={{ marginBottom: -20 }}>
-              <FilterMenu show={true} replies={true} sortData={sortReplies} />
-              <div className="sortLabel" style={{ width: "8%" }}>
-                Sort By
-              </div>
-            </div>
-          )}
-          <Replies
-            replies={replies}
-            onDelete={onDelete}
-            addReply={addReply}
-            answered={answered}
-          />
-        </div>
-        <div
-          className="container-div"
-          style={{ display: width < 900 && "none" }}
+      {!loading && (
+        <motion.div
+          className={"container"}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          style={{
+            padding: width < 900 && "20px 0px",
+            margin: width < 900 && "20px 0px",
+          }}
         >
-          <RightBar activeTab={""} />
-        </div>
-      </motion.div>
+          <div className="container-div" style={{ width: "347%" }}>
+            <Post
+              key={post.id}
+              post={post}
+              tags={tags}
+              postPref={postPref}
+              singlePost={true}
+              commentCount={commentCount}
+              onDelete={deletePost}
+            />
+            <CommentBox
+              addReply={addReply}
+              replyTo={null}
+              parent_id={null}
+              user_id={authState.id}
+              nick_name={authState.nick_name}
+              post_id={id}
+              answered={answered}
+            />
+
+            {replies.length > 0 && (
+              <div style={{ marginBottom: -20 }}>
+                <FilterMenu show={true} replies={true} sortData={sortReplies} />
+                <div className="sortLabel" style={{ width: "8%" }}>
+                  Sort By
+                </div>
+              </div>
+            )}
+            <Replies
+              replies={replies}
+              onDelete={onDelete}
+              addReply={addReply}
+              answered={answered}
+            />
+          </div>
+          <div
+            className="container-div"
+            style={{ display: width < 900 && "none" }}
+          >
+            <RightBar activeTab={""} />
+          </div>
+        </motion.div>
+      )}
     </>
   );
 };

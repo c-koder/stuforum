@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 const useSortedTags = () => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
-    axios.post("http://localhost:3001/getsortedtags").then((res) => {
+    axios.get("http://localhost:3001/tag/getsortedtags").then((res) => {
       setResponse(res.data);
     });
   };

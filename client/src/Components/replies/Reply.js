@@ -75,7 +75,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
 
   const updateReplyPref = (pref, previousPref) => {
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
-    axios.post("http://localhost:3001/updatereplypref", {
+    axios.post("http://localhost:3001/reply/updatereplypref", {
       id: prefId,
       reply_id: reply.id,
       parent_id: reply.parent_id,
@@ -245,12 +245,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
             </h4>
           </div>
           {authState.nick_name == reply.nick_name && (
-            <button
-              ref={ref}
-              style={{ float: "right", marginTop: "-32px" }}
-              className="nullBtn"
-              onClick={() => setShow((oldState) => !oldState)}
-            >
+            <div ref={ref} style={{ float: "right", marginTop: "-32px" }}>
               <motion.img
                 style={{
                   height: "25px",
@@ -260,6 +255,8 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
                 src={settings}
                 variants={rotateVariant}
                 animate={show ? "rotate" : "stop"}
+                onClick={() => setShow((oldState) => !oldState)}
+                whileHover={{ cursor: "pointer" }}
               />
               <ContextMenu
                 reply={reply}
@@ -267,7 +264,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
                 onDelete={onDelete}
                 answerOnly={answerOnly}
               />
-            </button>
+            </div>
           )}
 
           <div style={{ display: "flex" }}>

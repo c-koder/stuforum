@@ -6,7 +6,7 @@ const useReplies = (post_id) => {
 
   const fetchData = () => {
     axios
-      .post("http://localhost:3001/getreplies", { post_id: post_id })
+      .post("http://localhost:3001/reply/getreplies", { post_id: post_id })
       .then((res) => {
         setReplyResponse(res.data);
       });

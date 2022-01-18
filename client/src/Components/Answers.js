@@ -21,7 +21,7 @@ const Answers = ({ posts, replies, tags, postPref, onDelete }) => {
           />
           {replies.map(
             (reply) =>
-              reply.post_id === post.id && (
+              reply.post_id == post.id && (
                 <Reply
                   key={reply.id}
                   reply={reply}

@@ -105,7 +105,7 @@ const AskAQuestion = (props) => {
       const posted_time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
 
       axios
-        .post("http://localhost:3001/addpost", {
+        .post("http://localhost:3001/post/addpost", {
           question: question,
           description: description,
           tags: selectedTags,
@@ -206,14 +206,14 @@ const AskAQuestion = (props) => {
 
           <div style={{ display: "flex", width: "100%" }}>
             <div className="check-field" style={{ marginTop: 15 }}>
-              <input id="my-check" type="checkbox" />
-              <label
-                htmlFor="my-check"
-                style={{ fontSize: 18 }}
+              <input
+                id="my-check"
+                type="checkbox"
                 checked={urgent}
                 value={urgent}
                 onChange={(e) => setUrgent(e.currentTarget.checked)}
-              >
+              />
+              <label htmlFor="my-check" style={{ fontSize: 18 }}>
                 Mark as urgent
               </label>
             </div>

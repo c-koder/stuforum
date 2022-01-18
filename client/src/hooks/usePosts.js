@@ -5,7 +5,7 @@ const usePosts = (id, userPosts, tagged) => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
     axios
-      .post("http://localhost:3001/getposts", {
+      .post("http://localhost:3001/post/getposts", {
         user_id: id,
         user_posts: userPosts,
         tagged: tagged,

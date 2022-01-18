@@ -34,10 +34,20 @@ const getUserPostsCount = async (user_id) => {
   return userRepository.getUserPostsCount(user_id);
 };
 
+const getUserAnswers = async (user_id) => {
+  return userRepository.getUserAnswers(user_id);
+};
+
+const getUserNotifications = async (user_id) => {
+  return userRepository.getUserNotifications(user_id);
+};
+
 module.exports = {
   loginUser,
   registerUser,
   getUser,
   getTopUsers,
   getUserPostsCount,
+  getUserAnswers,
+  getUserNotifications,
 };

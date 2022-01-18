@@ -30,6 +30,9 @@ const MyAnswers = () => {
   const [replies, setReplies] = useState([]);
   const [tags, setTags] = useState([]);
   const [postPref, setPostPref] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
   const { response } = useAnswers(authState.id);
 
   useEffect(() => {
@@ -38,7 +41,9 @@ const MyAnswers = () => {
       setReplies(response.replies);
       setTags(response.tags);
       setPostPref(response.post_pref);
+      console.log(response);
     }
+    setLoading(false);
   }, [response]);
 
   const deleteReply = (id) => {
@@ -53,7 +58,9 @@ const MyAnswers = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/user/getuserpostcount", { user_id: authState.id })
+      .post("http://localhost:3001/user/getuserpostcount", {
+        user_id: authState.id,
+      })
       .then((res) => {
         setUserQuestionCount(res.data[0].count);
       });
@@ -86,20 +93,23 @@ const MyAnswers = () => {
             marginTop: width < 900 ? "-40px" : 0,
           }}
         >
-          {posts.length == 0 && replies.length == 0 && (
-            <div className="sortLabel" style={{ width: "300px" }}>
-              You haven't answered any yet
+          {!loading && (
+            <div>
+              {posts == null || replies == null ? (
+                <div className="sortLabel" style={{ width: "300px" }}>
+                  You haven't answered any yet
+                </div>
+              ) : (
+                <Answer
+                  posts={posts}
+                  replies={replies}
+                  tags={tags}
+                  postPref={postPref}
+                  singlePost={false}
+                  onDelete={deleteReply}
+                />
+              )}
             </div>
-          )}
-          {posts.length != 0 && replies.length != 0 && (
-            <Answer
-              posts={posts}
-              replies={replies}
-              tags={tags}
-              postPref={postPref}
-              singlePost={false}
-              onDelete={deleteReply}
-            />
           )}
         </div>
         <div

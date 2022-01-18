@@ -28,7 +28,7 @@ const MyQuestions = () => {
 
   const deletePost = (id) => {
     axios
-      .post("http://localhost:3001/deletepost", {
+      .post("http://localhost:3001/post/deletepost", {
         post_id: id,
       })
       .then((res) => {
@@ -38,7 +38,7 @@ const MyQuestions = () => {
   };
 
   const updateStatus = (id, status, new_status) => {
-    axios.post("http://localhost:3001/updatepoststatus", {
+    axios.post("http://localhost:3001/post/updatepoststatus", {
       post_id: id,
       status: status,
       new_status: new_status,

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 const useAllTags = () => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
-    axios.post("http://localhost:3001/getalltags").then((res) => {
+    axios.get("http://localhost:3001/tag/getalltags").then((res) => {
       setResponse(res.data);
     });
   };

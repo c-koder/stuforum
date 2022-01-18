@@ -1,19 +1,15 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import ConfirmPopup from "./ConfirmPopup";
-import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const ContextMenu = ({
   reply,
   post,
   show,
-  singlePost,
   onDelete,
   onToggleUrgent,
   onToggleAnswered,
-  answerOnly,
 }) => {
-  const { width } = useWindowDimensions();
   const [confirmationPopup, setConfirmationPopup] = useState(false);
 
   return (

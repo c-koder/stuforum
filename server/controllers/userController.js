@@ -80,4 +80,26 @@ router.post("/getuserpostcount", async (req, res) => {
     });
 });
 
+router.post("/getanswers", async (req, res) => {
+  userService
+    .getUserAnswers(req.body.user_id)
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((error) => {
+      res.send({ message: error });
+    });
+});
+
+router.post("/getnotifications", async (req, res) => {
+  userService
+    .getUserNotifications(req.body.user_id)
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((error) => {
+      res.send({ message: error });
+    });
+});
+
 module.exports = router;

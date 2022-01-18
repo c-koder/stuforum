@@ -10,10 +10,13 @@ const Tags = () => {
   const { response } = useAllTags();
   const [tags, setTags] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (response !== null) {
       setTags(response);
     }
+    setLoading(false);
   }, [response]);
 
   const containerVariants = {
@@ -50,18 +53,20 @@ const Tags = () => {
             marginTop: width < 900 ? "-40px" : 0,
           }}
         >
-          <div
-            className="whiteContainer"
-            style={{ marginTop: 0, padding: "40px" }}
-          >
-            <h2>Tags</h2>
-            <p style={{ margin: "10px 0 10px 0", width: "90%" }}>
-              A tag is a keyword or label that categorizes your question with
-              other, similar questions. Using the right tags makes it easier for
-              others to find and answer your question.
-            </p>
-            <ShowTags tags={tags} tagOnly={true} display={true} />
-          </div>
+          {!loading && (
+            <div
+              className="whiteContainer"
+              style={{ marginTop: 0, padding: "40px" }}
+            >
+              <h2>Tags</h2>
+              <p style={{ margin: "10px 0 10px 0", width: "90%" }}>
+                A tag is a keyword or label that categorizes your question with
+                other, similar questions. Using the right tags makes it easier
+                for others to find and answer your question.
+              </p>
+              <ShowTags tags={tags} tagOnly={true} display={true} />
+            </div>
+          )}
         </div>
         <div
           className="container-div"

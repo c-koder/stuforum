@@ -88,7 +88,7 @@ const Post = ({
     setDisabled(true);
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     axios
-      .post("http://localhost:3001/updateleadsprefs", {
+      .post("http://localhost:3001/post/updateleadsprefs", {
         id: prefId,
         post_id: post.id,
         leads: leads,
@@ -221,24 +221,22 @@ const Post = ({
         </div>
         <div className="postsContainer-div">
           {post.user_id == authState.id && (
-            <button
-              ref={ref}
-              style={{ float: "right" }}
-              className="nullBtn"
-              onClick={() => setShow((oldState) => !oldState)}
-            >
+            <div style={{ float: "right" }}>
               <motion.img
+                ref={ref}
                 style={{
                   height: "25px",
                   marginTop: 5,
                   marginLeft: 20,
                   display: viewingQuestions || singlePost ? "block" : "none",
                 }}
+                onClick={() => setShow((oldState) => !oldState)}
                 alt="Settings"
                 className="icon"
                 src={settings}
                 variants={rotateVariant}
                 animate={show ? "rotate" : "stop"}
+                whileHover={{ cursor: "pointer" }}
               />
               <ContextMenu
                 post={post}
@@ -248,7 +246,7 @@ const Post = ({
                 onToggleUrgent={onToggleUrgent}
                 onToggleAnswered={onToggleAnswered}
               />
-            </button>
+            </div>
           )}
           {(post.urgent == 1 || post.answered == 1) && (
             <span
@@ -312,7 +310,7 @@ const Post = ({
               <img className="navIcon" src={time} />
               <h4
                 style={{
-                  color: "var(--primary)",
+                  color: "var(--secondary)",
                   marginTop: -1,
                 }}
                 data-tip={moment(post.posted_time).format(
@@ -331,9 +329,7 @@ const Post = ({
               }}
             >
               <img className="navIcon" src={answers} />
-              {commentCount == null
-                ? abbreviateNumber(post.comments)
-                : abbreviateNumber(commentCount)}
+              {abbreviateNumber(commentCount || post.comments)}
             </span>
             <span style={{ float: "right" }}>
               <button

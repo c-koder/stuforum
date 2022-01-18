@@ -5,9 +5,9 @@ const useReplyData = (reply_id, user_id) => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
     axios
-      .post("http://localhost:3001/getreplydata", {
-        reply_id: reply_id,
+      .post("http://localhost:3001/reply/getreplypref", {
         user_id: user_id,
+        reply_id: reply_id,
       })
       .then((res) => {
         setResponse(res.data);

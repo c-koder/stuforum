@@ -53,7 +53,9 @@ const Navbar = ({ isLogged, onLogout }) => {
   };
 
   useEffect(() => {
-    document.title = `stuforum (${notificationCount})`;
+    let title = "stuforum";
+    notificationCount != 0 && (title += ` (${notificationCount})`);
+    document.title = title;
   }, [notificationCount]);
 
   return (

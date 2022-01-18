@@ -20,6 +20,9 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [tags, setTags] = useState([]);
   const [postPref, setPostPref] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
   const { response } = usePosts(authState.id, false, name);
 
   useEffect(() => {
@@ -28,6 +31,7 @@ const Home = () => {
       setTags(response.tags);
       setPostPref(response.post_pref);
     }
+    setLoading(false);
   }, [response]);
 
   const [sortedPosts, setSortedPosts] = useState([]);
@@ -39,7 +43,9 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/user/getuserpostcount", { user_id: authState.id })
+      .post("http://localhost:3001/user/getuserpostcount", {
+        user_id: authState.id,
+      })
       .then((res) => {
         setUserQuestionCount(res.data[0].count);
       });
@@ -81,6 +87,10 @@ const Home = () => {
     setQuestionPopup(true);
   };
 
+  useEffect(() => {
+    document.title = "stuforum";
+  }, []);
+
   return (
     <motion.div
       variants={containerVariants}
@@ -120,46 +130,49 @@ const Home = () => {
             marginTop: width < 900 ? "-80px" : 0,
           }}
         >
-          {posts.length > 0 && (
-            <FilterMenu show={true} posts={true} sortData={sortPosts} />
-          )}
-          {posts.length == 0 ? (
-            <div className="sortLabel" style={{ width: "200px" }}>
-              No questions yet
+          {!loading && (
+            <div>
+              {posts.length > 0 && (
+                <FilterMenu show={true} posts={true} sortData={sortPosts} />
+              )}
+              {posts.length == 0 ? (
+                <div className="sortLabel" style={{ width: "200px" }}>
+                  No questions yet
+                </div>
+              ) : (
+                <div className="sortLabel" style={{ width: "100px" }}>
+                  Sort By
+                </div>
+              )}
+              {name != null && (
+                <div
+                  style={{
+                    display: "flex",
+                    marginBottom: 20,
+                  }}
+                >
+                  <h3 style={{ color: "var(--secondary)", marginTop: 8 }}>
+                    Tagged
+                  </h3>
+                  <a
+                    href={{
+                      pathname: `/home/tagged/${name}`,
+                    }}
+                    style={{ marginLeft: 20 }}
+                    className="tag"
+                  >
+                    {name}
+                  </a>
+                </div>
+              )}
+              <Posts
+                posts={sortedPosts}
+                tags={tags}
+                postPref={postPref}
+                singlePost={false}
+              />
             </div>
-          ) : (
-            <div className="sortLabel" style={{ width: "100px" }}>
-              Sort By
-            </div>
           )}
-          {name != null && (
-            <div
-              style={{
-                display: "flex",
-                marginBottom: 20,
-              }}
-            >
-              <h3 style={{ color: "var(--secondary)", marginTop: 8 }}>
-                Tagged
-              </h3>
-              <a
-                href={{
-                  pathname: `/home/tagged/${name}`,
-                }}
-                style={{ marginLeft: 20 }}
-                className="tag"
-              >
-                {name}
-              </a>
-            </div>
-          )}
-
-          <Posts
-            posts={sortedPosts}
-            tags={tags}
-            postPref={postPref}
-            singlePost={false}
-          />
         </div>
         <div
           className="container-div"
