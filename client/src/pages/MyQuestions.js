@@ -9,7 +9,7 @@ import usePosts from "../hooks/usePosts";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import FilterMenu from "../Components/FilterMenu";
 
-const MyQuestions = () => {
+const MyQuestions = ({ socket }) => {
   const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
 
@@ -51,7 +51,6 @@ const MyQuestions = () => {
         post.id === id ? { ...post, urgent: post.urgent == 0 ? 1 : 0 } : post
       )
     );
-
     posts.map((post) => {
       if (post.id === id) {
         updateStatus(post.id, "urgent", post.urgent);
@@ -99,7 +98,9 @@ const MyQuestions = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/user/getuserpostcount", { user_id: authState.id })
+      .post("http://localhost:3001/user/getuserpostcount", {
+        user_id: authState.id,
+      })
       .then((res) => {
         setUserQuestionCount(res.data[0].count);
       });
@@ -165,6 +166,7 @@ const MyQuestions = () => {
             onToggleUrgent={toggleUrgent}
             onToggleAnswered={toggleAnswered}
             viewingQuestions={true}
+            socket={socket}
           />
         </div>
         <div

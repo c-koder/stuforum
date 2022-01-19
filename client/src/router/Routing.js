@@ -21,10 +21,15 @@ import moon from "../resources/moon.png";
 import { motion } from "framer-motion";
 import NotFound from "../pages/NotFound";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import moment from "moment";
+import io from "socket.io-client";
+import NotificationCards from "../Components/notifications/NotificationCards";
 // import Footer from "../Components/Footer";
 
+const socket = io.connect("http://localhost:3001");
+
 const Routing = () => {
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const [authState, setAuthState] = useState({
     nick_name: "",
     id: 0,
@@ -51,7 +56,20 @@ const Routing = () => {
       });
   }, []);
 
+  useEffect(() => {
+    authState.id != 0 && socket.emit("registerId", authState.id);
+  });
+
   const onLogout = () => {
+    const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
+
+    axios.post("http://localhost:3001/user/logout", {
+      user_id: authState.id,
+      time: time,
+    });
+
+    socket.emit("userLoggedOut", authState.id);
+
     localStorage.removeItem("accessToken");
     setAuthState({ ...authState, status: false });
   };
@@ -109,10 +127,44 @@ const Routing = () => {
     },
   };
 
+  const [notifs, setNotifs] = useState([]);
+
+  const [newNotification, setNewNotification] = useState();
+
+  useEffect(() => {
+    socket.on("receive_notification", (data) => {
+      setNewNotification(data);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    if (newNotification != null) {
+      !notifs.find((notif) => notif == newNotification) &&
+        setNotifs([...notifs, newNotification]);
+    }
+  }, [newNotification]);
+
+  const deleteNotif = (id) => {
+    setNotifs(notifs.filter((notif) => notif.id !== id));
+  };
+
+  const decayNotif = () => {
+    setNotifs((notifs) => notifs.slice(0, -1));
+  };
+
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
-      <NavBar isLogged={authState.status} onLogout={onLogout} />
       <Router>
+        <NotificationCards
+          notifs={notifs}
+          onDelete={deleteNotif}
+          decayNotif={decayNotif}
+        />
+        <NavBar
+          isLogged={authState.status}
+          onLogout={onLogout}
+          newNotification={newNotification}
+        />
         <Routes>
           <Route
             path="/"
@@ -128,39 +180,56 @@ const Routing = () => {
             <>
               <Route
                 path="/home"
-                element={authState.status ? <Home /> : <Navigate to={"/"} />}
+                element={
+                  authState.status ? (
+                    <Home socket={socket} />
+                  ) : (
+                    <Navigate to={"/"} />
+                  )
+                }
               />
 
               <Route
                 path="/myquestions"
                 element={
-                  authState.status ? <MyQuestions /> : <Navigate to={"/"} />
+                  authState.status ? (
+                    <MyQuestions socket={socket} />
+                  ) : (
+                    <Navigate to={"/"} />
+                  )
                 }
               />
 
               <Route
                 path="/myanswers"
                 element={
-                  authState.status ? <MyAnswers /> : <Navigate to={"/"} />
+                  authState.status ? (
+                    <MyAnswers socket={socket} />
+                  ) : (
+                    <Navigate to={"/"} />
+                  )
                 }
               />
 
               <Route
                 path="/post/:id"
                 element={
-                  authState.status ? <SinglePost /> : <Navigate to={"/"} />
+                  authState.status ? (
+                    <SinglePost socket={socket} />
+                  ) : (
+                    <Navigate to={"/"} />
+                  )
                 }
               />
 
               <Route
                 path="/tagged/:name"
-                element={authState.status ? <Home /> : <Navigate to={"/"} />}
-              />
-
-              <Route
-                path="/myquestions"
                 element={
-                  authState.status ? <MyQuestions /> : <Navigate to={"/"} />
+                  authState.status ? (
+                    <Home socket={socket} />
+                  ) : (
+                    <Navigate to={"/"} />
+                  )
                 }
               />
 
@@ -189,23 +258,23 @@ const Routing = () => {
             </>
           )}
         </Routes>
+        {/* <Footer /> */}
+        {width > 900 && (
+          <motion.button
+            className="themeToggleBtn"
+            onClick={toggleTheme}
+            whileHover={{ y: -5 }}
+          >
+            <motion.img
+              className="icon"
+              style={{ height: "22px" }}
+              src={img}
+              variants={rotateVariant}
+              animate={currentMode === "light" ? "rotate" : "stop"}
+            />
+          </motion.button>
+        )}
       </Router>
-      {/* <Footer /> */}
-      {width > 900 && (
-        <motion.button
-          className="themeToggleBtn"
-          onClick={toggleTheme}
-          whileHover={{ y: -5 }}
-        >
-          <motion.img
-            className="icon"
-            style={{ height: "22px" }}
-            src={img}
-            variants={rotateVariant}
-            animate={currentMode === "light" ? "rotate" : "stop"}
-          />
-        </motion.button>
-      )}
     </AuthContext.Provider>
   );
 };

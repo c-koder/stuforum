@@ -20,7 +20,7 @@ import { Parser } from "html-to-react";
 import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 
-const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
+const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
   const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
 
@@ -75,17 +75,22 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
 
   const updateReplyPref = (pref, previousPref) => {
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
-    axios.post("http://localhost:3001/reply/updatereplypref", {
-      id: prefId,
-      reply_id: reply.id,
-      parent_id: reply.parent_id,
-      user_id: authState.id,
-      post_id: reply.post_id,
-      pref: pref,
-      previous_pref: previousPref,
-      reply_posted_user_id: reply.user_id,
-      time: time,
-    });
+    axios
+      .post("http://localhost:3001/reply/updatereplypref", {
+        id: prefId,
+        reply_id: reply.id,
+        parent_id: reply.parent_id,
+        user_id: authState.id,
+        post_id: reply.post_id,
+        pref: pref,
+        previous_pref: previousPref,
+        reply_posted_user_id: reply.user_id,
+        time: time,
+      })
+      .then(async (response) => {
+        const notification = response.data.notif;
+        await socket.emit("send_notification", notification);
+      });
   };
 
   const [disabled, setDisabled] = useState(false);
@@ -379,6 +384,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
           user_id={authState.id}
           nick_name={authState.nick_name}
           post_id={reply.post_id}
+          socket={socket}
         />
       </div>
 
@@ -407,6 +413,7 @@ const Reply = ({ reply, onDelete, addReply, answerOnly, answered }) => {
               onDelete={onDelete}
               addReply={addReply}
               answered={answered}
+              socket={socket}
             />
           )}
         </div>

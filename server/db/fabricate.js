@@ -170,6 +170,25 @@ const createNotifications = async (db) => {
   });
 };
 
+const createLoggedUsers = async (db) => {
+  const sql = `CREATE TABLE IF NOT EXISTS logged_user (
+    id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    user_id int(11) NOT NULL,
+    logged_in varchar(1) DEFAULT 1,
+    time varchar(55) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`;
+
+  return new Promise(async (resolve, reject) => {
+    db.query(sql, (err, result) => {
+      if (!err) {
+        resolve();
+      } else {
+        reject("Couldn't create table");
+      }
+    });
+  });
+};
+
 const dropTable = async (db, table) => {
   const sql = `DROP TABLE ${table}`;
 
@@ -193,6 +212,7 @@ const create = async (db) => {
   createReplyPrefs(db);
   createUsers(db);
   createNotifications(db);
+  createLoggedUsers(db)
 };
 
 const drop = async (db) => {
@@ -204,6 +224,7 @@ const drop = async (db) => {
   dropTable(db, "reply_pref");
   dropTable(db, "user");
   dropTable(db, "notification");
+  dropTable(db, "logged_user");
 };
 
 module.exports = {

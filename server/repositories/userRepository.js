@@ -80,6 +80,20 @@ const getUserByNickname = async (nick_name) => {
   });
 };
 
+const userLogged = async (user_id, logged_in, time) => {
+  const sql = `INSERT INTO logged_user(user_id, logged_in, time) VALUES(?, ?, ?)`;
+
+  return new Promise(async (resolve, reject) => {
+    db.query(sql, [user_id, logged_in, time], async (err, result) => {
+      if (!err) {
+        resolve();
+      } else {
+        reject("Couldn't insert logged_user");
+      }
+    });
+  });
+};
+
 const getSortedTopUsers = async () => {
   const sql = `SELECT * FROM user WHERE likes > 0 ORDER BY likes DESC LIMIT 5`;
 
@@ -116,7 +130,7 @@ const getUserAnswers = async (user_id) => {
     db.query(sql, [user_id, user_id], (err, postResults) => {
       if (postResults.length > 0) {
         db.query(
-          "SELECT r.*, u.nick_name AS nick_name FROM reply r INNER JOIN (SELECT MAX(id) AS MaxId FROM reply GROUP BY post_id) AS tmp_table ON tmp_table.MaxId = r.id INNER JOIN post p ON r.post_id = p.id INNER JOIN user u ON u.id = r.user_id WHERE r.user_id = ? AND NOT p.user_id = ? AND r.parent_id IS NULL",
+          "SELECT r.*, u.nick_name AS nick_name FROM reply r, user u, post p  WHERE r.id IN (SELECT MAX(id) AS MaxId FROM reply WHERE parent_id IS NULL GROUP BY post_id) AND u.id = r.user_id AND r.user_id = ? AND NOT p.user_id = ?",
           [user_id, user_id],
           (err, replyResults) => {
             if (!err) {
@@ -173,4 +187,5 @@ module.exports = {
   getUserPostsCount,
   getUserAnswers,
   getUserNotifications,
+  userLogged,
 };

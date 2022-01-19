@@ -184,44 +184,50 @@ const updatePostStatus = (post_id, status, new_status) => {
 
 const updatePostPreference = (id, post_id, user_id, pref, leads, time) => {
   return new Promise(async (resolve, reject) => {
-    if (id != null) {
-      db.query("UPDATE post_pref SET preference = ? WHERE id = ?", [pref, id]);
-      resolve();
-    } else {
-      db.query(
-        "INSERT INTO post_pref(post_id, user_id, preference) VALUES(?, ?, ?)",
-        [post_id, user_id, pref],
-        (err, result) => {
-          if (!err) {
-            resolve({ id: result.insertId });
-          } else {
-            reject("An error occured when updating preference");
-          }
-        }
-      );
-    }
-
-    db.query("UPDATE post SET leads = leads + ? WHERE id = ?", [
-      leads,
-      post_id,
-    ]);
-
     db.query(
-      "SELECT user_id FROM post WHERE id = ?",
-      post_id,
+      "UPDATE post SET leads = leads + ? WHERE id = ?",
+      [leads, post_id],
       (err, result) => {
-        if (result[0].user_id != user_id && leads >= 1 && !err) {
-          const data = {
-            user_from_id: user_id,
-            user_to_id: result[0].user_id,
-            type: "UV",
-            post_id: post_id,
-            reply_id: null,
-            child_reply_id: null,
-            description: "up voted your question",
-            time: time,
-          };
-          notificationService.addNotification(data);
+        if (!err) {
+          if (id != null) {
+            db.query("UPDATE post_pref SET preference = ? WHERE id = ?", [
+              pref,
+              id,
+            ]);
+          } else {
+            db.query(
+              "INSERT INTO post_pref(post_id, user_id, preference) VALUES(?, ?, ?)",
+              [post_id, user_id, pref],
+              (err, insertResult) => {
+                if (!err) {
+                  db.query(
+                    "SELECT user_id FROM post WHERE id = ?",
+                    post_id,
+                    (err, result) => {
+                      let data;
+                      if (result[0].user_id != user_id && leads >= 1 && !err) {
+                        data = {
+                          user_from_id: user_id,
+                          user_to_id: result[0].user_id,
+                          type: "UV",
+                          post_id: post_id,
+                          reply_id: null,
+                          child_reply_id: null,
+                          description: "up voted your question",
+                          time: time,
+                        };
+                        // resolve({ notif: data });
+                        notificationService.addNotification(data);
+                      }
+                      resolve({ notif: data, id: insertResult.insertId });
+                    }
+                  );
+                } else {
+                  reject("An error occured when updating preference");
+                }
+              }
+            );
+          }
         }
       }
     );

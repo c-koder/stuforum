@@ -4,7 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useState } from "react";
 
-const Replies = ({ replies, onDelete, addReply, answered }) => {
+const Replies = ({ socket, replies, onDelete, addReply, answered }) => {
   const [scrollNumber, setScollNumber] = useState(0);
   const repliesPerPage = 8;
   const scrollsVisited = scrollNumber * repliesPerPage;
@@ -20,6 +20,7 @@ const Replies = ({ replies, onDelete, addReply, answered }) => {
           onDelete={onDelete}
           addReply={addReply}
           answered={answered}
+          socket={socket}
         />
       );
     });
@@ -35,40 +36,42 @@ const Replies = ({ replies, onDelete, addReply, answered }) => {
         }, 1000);
       }}
       loader={
-        <div className="postsContainer">
-          <div
-            className="postsContainer-div"
-            style={{
-              marginLeft: "2%",
-            }}
-          >
-            <Skeleton
-              circle
-              width="5.7%"
-              height="70%"
-              containerClassName="avatar-skeleton"
-            />
-          </div>
+        replies.length > 0 && (
+          <div className="postsContainer">
+            <div
+              className="postsContainer-div"
+              style={{
+                marginLeft: "2%",
+              }}
+            >
+              <Skeleton
+                circle
+                width="5.7%"
+                height="70%"
+                containerClassName="avatar-skeleton"
+              />
+            </div>
 
-          <div className="postsContainer-div" style={{ marginLeft: "-82%" }}>
-            <Skeleton
-              baseColor="var(--light-white)"
-              highlightColor="var(--white)"
-              height={25}
-              width={250}
-            />
-            <Skeleton
-              baseColor="var(--light-white)"
-              highlightColor="var(--white)"
-              height={25}
-            />
-            <Skeleton
-              baseColor="var(--light-white)"
-              highlightColor="var(--white)"
-              height={25}
-            />
+            <div className="postsContainer-div" style={{ marginLeft: "-82%" }}>
+              <Skeleton
+                baseColor="var(--light-white)"
+                highlightColor="var(--white)"
+                height={25}
+                width={250}
+              />
+              <Skeleton
+                baseColor="var(--light-white)"
+                highlightColor="var(--white)"
+                height={25}
+              />
+              <Skeleton
+                baseColor="var(--light-white)"
+                highlightColor="var(--white)"
+                height={25}
+              />
+            </div>
           </div>
-        </div>
+        )
       }
     >
       {displayPosts}

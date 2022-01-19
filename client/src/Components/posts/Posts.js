@@ -10,8 +10,10 @@ const Posts = ({
   postPref,
   onDelete,
   onToggleUrgent,
+  singlePost,
   onToggleAnswered,
   viewingQuestions,
+  socket,
 }) => {
   const [pageNumber, setPageNumber] = useState(0);
   const postsPerScroll = 6;
@@ -19,8 +21,8 @@ const Posts = ({
   const [hasMore, setHasMore] = useState(true);
 
   const getPref = (id) => {
-    return postPref.filter((pref) => {
-      return pref.post_id === id;
+    return postPref.find((pref) => {
+      return pref.post_id == id;
     });
   };
 
@@ -34,9 +36,11 @@ const Posts = ({
           tags={tags.filter((tag) => tag.post_id == post.id)}
           postPref={getPref(post.id)}
           onDelete={onDelete}
+          singlePost={singlePost}
           onToggleUrgent={onToggleUrgent}
           onToggleAnswered={onToggleAnswered}
           viewingQuestions={viewingQuestions}
+          socket={socket}
         />
       );
     });
@@ -53,7 +57,7 @@ const Posts = ({
           }, 1000);
         }}
         loader={
-          hasMore && (
+          posts.length > 1 && (
             <div
               className="postsContainer"
               style={{ marginTop: viewingQuestions ? 0 : 55, marginBottom: 55 }}

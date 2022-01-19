@@ -8,8 +8,8 @@ const useNotifications = (user_id) => {
       .post("http://localhost:3001/user/getnotifications", {
         user_id: user_id,
       })
-      .then((res) => {
-        setResponse(res.data);
+      .then(async (res) => {
+        await setResponse(res.data);
       });
   };
 

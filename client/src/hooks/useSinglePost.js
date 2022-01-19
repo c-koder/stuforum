@@ -11,8 +11,8 @@ const useSinglePost = (id) => {
       });
   };
 
-  useEffect(() => {
-    fetchData();
+  useEffect(async () => {
+    await fetchData();
   }, []);
 
   return { response };

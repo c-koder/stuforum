@@ -140,7 +140,6 @@ button:disabled {
   bottom: 0;
   margin: 70px 80px;
   background-color: var(--white);
-  box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
   border: none;
   border-radius: 10%;
   width: 50px;
@@ -182,7 +181,6 @@ button:disabled {
   padding: 20px;
   border: 1px solid var(--light-white);
   background-color: var(--white);
-  box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
   transition: all 200ms ease-in;
 }
 
@@ -193,7 +191,6 @@ button:disabled {
   border: 1px solid var(--light-white);
   transition: all 200ms ease-in;
   background-color: var(--white);
-  box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
 }
 
 .rightbar button {
@@ -294,7 +291,6 @@ button:disabled {
 
 .postsContainer {
   background-color: var(--white);
-  box-shadow: 0px 40px 80px rgba(0, 0, 0, 0.01);
   padding: 20px;
   border: 1px solid var(--light-white);
   margin-bottom: 40px;
@@ -326,7 +322,6 @@ button:disabled {
   margin: 7% auto;
   text-align: left;
   background-color: var(--white);
-  box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
   border-radius: 10px;
   width: 50vw;
   height: 70%;
@@ -341,7 +336,7 @@ button:disabled {
   border: 1px solid var(--light-white);
   border-top: 2px solid var(--light-white);
   background-color: var(--white);
-  box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
+  /* box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03); */
   border-radius: 10px;
   padding: 20px;
   overflow: scroll;

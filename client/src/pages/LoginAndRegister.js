@@ -6,7 +6,7 @@ import PasswordStrengthMeter from "../utils/PasswordStrengthMeter";
 import Login from "../Components/Login";
 import { motion } from "framer-motion";
 
-const LogReg = () => {
+const LoginAndRegister = () => {
   const [fullName, setFullName] = useState("");
   const [studentId, setStudentId] = useState("");
   const [nickName, setNickName] = useState("");
@@ -267,4 +267,4 @@ const LogReg = () => {
   );
 };
 
-export default LogReg;
+export default LoginAndRegister;

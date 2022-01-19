@@ -42,6 +42,10 @@ const getUserNotifications = async (user_id) => {
   return userRepository.getUserNotifications(user_id);
 };
 
+const userLogged = async (user_id, logged_in, time) => {
+  return userRepository.userLogged(user_id, logged_in, time);
+};
+
 module.exports = {
   loginUser,
   registerUser,
@@ -50,4 +54,5 @@ module.exports = {
   getUserPostsCount,
   getUserAnswers,
   getUserNotifications,
+  userLogged,
 };

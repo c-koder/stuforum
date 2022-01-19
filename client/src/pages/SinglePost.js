@@ -13,7 +13,7 @@ import axios from "axios";
 import FilterMenu from "../Components/FilterMenu";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 
-const SinglePost = () => {
+const SinglePost = ({ socket }) => {
   const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
   const { id } = useParams();
@@ -32,21 +32,11 @@ const SinglePost = () => {
     }
   }, []);
 
-  const [post, setPost] = useState({
-    id: 0,
-    question: "",
-    description: "",
-    user_id: 0,
-    nick_name: "",
-    comments: 0,
-    leads: 0,
-    posted_time: "",
-    urgent: 0,
-    answered: 0,
-  });
+  const [post, setPost] = useState();
   const [tags, setTags] = useState([]);
   const [postPref, setPostPref] = useState([]);
   const [commentCount, setCommentCount] = useState();
+  const [answered, setAnswered] = useState(false);
 
   const { response } = useSinglePost(id);
 
@@ -56,6 +46,7 @@ const SinglePost = () => {
       setTags(response.tags);
       setPostPref(response.post_pref);
       setCommentCount(response.post.comments);
+      setAnswered(response.post.answered == 1 ? true : false);
     }
     setLoading(false);
   }, [response, post]);
@@ -95,10 +86,6 @@ const SinglePost = () => {
 
     setReplies(obj);
   };
-
-  useEffect(() => {
-    document.title = post.question;
-  });
 
   const containerVariants = {
     hidden: {
@@ -181,11 +168,31 @@ const SinglePost = () => {
       });
   };
 
-  const answered = post.answered == 1 ? true : false;
+  const updateStatus = (id, status, new_status) => {
+    axios.post("http://localhost:3001/post/updatepoststatus", {
+      post_id: id,
+      status: status,
+      new_status: new_status,
+    });
+  };
+
+  const toggleUrgent = (id) => {
+    updateStatus(post.id, "urgent", post.urgent);
+    window.location.reload();
+  };
+
+  const toggleAnswered = (id) => {
+    updateStatus(post.id, "answered", post.answered);
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    if (post) document.title = post.question;
+  });
 
   return (
     <>
-      {!loading && (
+      {!loading && post && (
         <motion.div
           className={"container"}
           variants={containerVariants}
@@ -199,13 +206,15 @@ const SinglePost = () => {
         >
           <div className="container-div" style={{ width: "347%" }}>
             <Post
-              key={post.id}
               post={post}
               tags={tags}
-              postPref={postPref}
+              postPref={postPref[0]}
               singlePost={true}
               commentCount={commentCount}
+              onToggleUrgent={toggleUrgent}
+              onToggleAnswered={toggleAnswered}
               onDelete={deletePost}
+              socket={socket}
             />
             <CommentBox
               addReply={addReply}
@@ -215,6 +224,7 @@ const SinglePost = () => {
               nick_name={authState.nick_name}
               post_id={id}
               answered={answered}
+              socket={socket}
             />
 
             {replies.length > 0 && (
@@ -230,6 +240,7 @@ const SinglePost = () => {
               onDelete={onDelete}
               addReply={addReply}
               answered={answered}
+              socket={socket}
             />
           </div>
           <div

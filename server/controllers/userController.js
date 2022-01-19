@@ -18,6 +18,9 @@ router.post("/login", async (req, res) => {
           expiresIn: 60 * 60 * 72,
         }
       );
+      userService.userLogged(user.id, 1, req.body.time).catch((error) => {
+        res.send({ message: error });
+      });
       res.send({
         token: accessToken,
         nick_name: user.nick_name,
@@ -27,6 +30,12 @@ router.post("/login", async (req, res) => {
     .catch((error) => {
       res.send({ message: error });
     });
+});
+
+router.post("/logout", async (req, res) => {
+  userService.userLogged(req.body.user_id, 0, req.body.time).catch((error) => {
+    res.send({ message: error });
+  });
 });
 
 router.post("/register", async (req, res) => {

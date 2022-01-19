@@ -42,6 +42,22 @@ const addNotification = (data) => {
   });
 };
 
+const getNotification = (user_from_id, user_to_id, time) => {
+  const sql =
+    "SELECT n.*, u.nick_name AS user_from FROM notification n, user u WHERE user_from_id = ? AND user_to_id = ? AND time = ? AND n.user_from_id = u.id";
+
+  return new Promise(async (resolve, reject) => {
+    db.query(sql, [user_from_id, user_to_id, time], (err, result) => {
+      if (!err) {
+        resolve(result[0]);
+      } else {
+        reject("Couldn't fetch notification");
+      }
+    });
+  });
+};
+
 module.exports = {
   addNotification,
+  getNotification,
 };

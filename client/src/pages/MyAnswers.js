@@ -8,7 +8,7 @@ import { AuthContext } from "../helpers/AuthContext";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import axios from "axios";
 
-const MyAnswers = () => {
+const MyAnswers = ({ socket }) => {
   const { width } = useWindowDimensions();
 
   const containerVariants = {
@@ -102,6 +102,7 @@ const MyAnswers = () => {
               ) : (
                 <Answer
                   posts={posts}
+                  socket={socket}
                   replies={replies}
                   tags={tags}
                   postPref={postPref}

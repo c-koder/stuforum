@@ -66,7 +66,7 @@ const CommentBox = (props) => {
           replied_time: replied_time,
           description: description,
         })
-        .then((response) => {
+        .then(async (response) => {
           const data = {
             id: response.data.id,
             parent_id: parent_id,
@@ -83,6 +83,11 @@ const CommentBox = (props) => {
           setDisabled(true);
           setDescription("");
           props.addReply(data);
+
+          if (response.data.notif != null) {
+            const notification = response.data.notif;
+            await props.socket.emit("send_notification", notification);
+          }
         });
     }
   };

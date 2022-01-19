@@ -2,8 +2,9 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
+import moment from "moment";
 
-const Login = () => {
+const Login = ({ socket }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { setAuthState } = useContext(AuthContext);
@@ -21,10 +22,12 @@ const Login = () => {
     } else if (password === "") {
       setError("Password is required");
     } else {
+      const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
       axios
         .post("http://localhost:3001/user/login", {
           username: username,
           password: password,
+          time: time,
         })
         .then((response) => {
           if (response.data.message != null) {
@@ -36,6 +39,7 @@ const Login = () => {
               id: response.data.id,
               status: true,
             });
+
             navigate("/home");
           }
         })

@@ -1,8 +1,8 @@
-import close from "../resources/close.png";
-import avatar from "../resources/img_avatar.png";
-import liked from "../resources/round/liked.png";
-import upVoted from "../resources/round/upvoted.png";
-import commented from "../resources/round/commented.png";
+import close from "../../resources/close.png";
+import avatar from "../../resources/img_avatar.png";
+import liked from "../../resources/round/liked.png";
+import upVoted from "../../resources/round/upvoted.png";
+import commented from "../../resources/round/commented.png";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";

@@ -3,7 +3,6 @@
   padding: 10px 0;
   overflow: hidden;
   background-color: var(--white);
-  box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03);
   border: 1px solid var(--light-white);
   border-radius: 0px 0px 10px 10px;
   transition: all 200ms ease-in;

@@ -12,7 +12,7 @@ import AskAQuestion from "../Components/AskAQuestion";
 import Button from "../Components/Button";
 import axios from "axios";
 
-const Home = () => {
+const Home = ({ socket }) => {
   const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
   const { name } = useParams();
@@ -170,6 +170,7 @@ const Home = () => {
                 tags={tags}
                 postPref={postPref}
                 singlePost={false}
+                socket={socket}
               />
             </div>
           )}

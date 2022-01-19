@@ -28,6 +28,7 @@ const Post = ({
   onToggleAnswered,
   viewingQuestions,
   answerOnly,
+  socket,
 }) => {
   const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
@@ -41,13 +42,13 @@ const Post = ({
   const [prefId, setPrefId] = useState(null);
 
   useEffect(() => {
-    if (postPref[0] != null) {
-      setPrefId(postPref[0].id);
-      if (postPref[0].preference == "1") {
+    if (postPref != null) {
+      setPrefId(postPref.id);
+      if (postPref.preference == "1") {
         setUserVoted("useful");
         setUpVoted(true);
         setDownVoted(false);
-      } else if (postPref[0].preference == "0") {
+      } else if (postPref.preference == "0") {
         setUserVoted("useless");
         setUpVoted(false);
         setDownVoted(true);
@@ -96,8 +97,10 @@ const Post = ({
         pref: pref,
         time: time,
       })
-      .then((res) => {
+      .then(async (res) => {
         setPrefId(res.data.id);
+        const notification = res.data.notif;
+        await socket.emit("send_notification", notification);
       });
   };
 
@@ -241,7 +244,6 @@ const Post = ({
               <ContextMenu
                 post={post}
                 show={show}
-                singlePost={singlePost}
                 onDelete={onDelete}
                 onToggleUrgent={onToggleUrgent}
                 onToggleAnswered={onToggleAnswered}

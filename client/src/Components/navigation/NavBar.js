@@ -1,6 +1,6 @@
 import notifications from "../../resources/notifications.png";
 import avatar from "../../resources/img_avatar.png";
-import Notifications from "../Notifications";
+import Notifications from "../notifications/Notifications";
 // import logo from "../../logo.png";
 import "../../styles/navigation.css";
 import { useEffect, useRef, useState } from "react";
@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import MobileNav from "./MobileNav";
 
-const Navbar = ({ isLogged, onLogout }) => {
+const Navbar = ({ isLogged, onLogout, newNotification }) => {
   const { width } = useWindowDimensions();
 
   const [notificationCount, setNotificationCount] = useState(0);
@@ -54,7 +54,7 @@ const Navbar = ({ isLogged, onLogout }) => {
 
   useEffect(() => {
     let title = "stuforum";
-    notificationCount != 0 && (title += ` (${notificationCount})`);
+    notificationCount != 0 && (title = ` (${notificationCount}) stuforum`);
     document.title = title;
   }, [notificationCount]);
 
@@ -124,6 +124,7 @@ const Navbar = ({ isLogged, onLogout }) => {
                 show={show}
                 setNotificationCount={setNotificationCount}
                 notificationCount={notificationCount}
+                newNotification={newNotification}
               />
               <motion.a
                 href=""
@@ -140,9 +141,9 @@ const Navbar = ({ isLogged, onLogout }) => {
                 {notificationCount > 0 && (
                   <span
                     className="badge"
-                    style={{ fontSize: 16, textAlign: "center" }}
+                    style={{ fontSize: 14, textAlign: "center" }}
                   >
-                    {notificationCount}
+                    {notificationCount > 99 ? "99+" : notificationCount}
                   </span>
                 )}
               </motion.a>

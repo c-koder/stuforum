@@ -55,11 +55,14 @@ const addReply = (
             post_id,
             (err, userIdResult) => {
               let user_to_id = replied_to != user_id ? replied_to : null;
+              let data;
+
               if (userIdResult[0].user_id != user_id && !err) {
                 user_to_id = userIdResult[0].user_id;
               }
+
               if (user_to_id != null) {
-                const data = {
+                data = {
                   user_from_id: user_id,
                   user_to_id: user_to_id,
                   type: "CM",
@@ -67,31 +70,34 @@ const addReply = (
                   reply_id: result.insertId,
                   description:
                     parent_id != null
-                      ? "sub-answered on your question"
+                      ? `sub-answered on your ${
+                          replied_to == user_id ? "question" : "answer"
+                        } `
                       : "answered on your question",
                   time: replied_time,
                 };
                 notificationService.addNotification(data);
               }
-            }
-          );
-          if (replied_to != null) {
-            db.query(
-              "SELECT u.nick_name FROM user u, reply r WHERE u.id = ? AND r.id = ?",
-              [replied_to, result.insertId],
-              (err, repliedToResult) => {
+              if (replied_to != null) {
+                db.query(
+                  "SELECT u.nick_name FROM user u, reply r WHERE u.id = ? AND r.id = ?",
+                  [replied_to, result.insertId],
+                  (err, repliedToResult) => {
+                    resolve({
+                      notif: data,
+                      id: result.insertId,
+                      replied_to: repliedToResult[0].nick_name,
+                    });
+                  }
+                );
+              } else {
                 resolve({
+                  notif: data,
                   id: result.insertId,
-                  replied_to: repliedToResult[0].nick_name,
                 });
               }
-            );
-          } else {
-            resolve({
-              id: result.insertId,
-              replied_to: null,
-            });
-          }
+            }
+          );
         } else {
           reject("Couldnt insert reply");
         }
@@ -146,13 +152,11 @@ const updateReplyPreference = (
   return new Promise(async (resolve, reject) => {
     if (id != null) {
       db.query("UPDATE reply_pref SET preference = ? WHERE id = ?", [pref, id]);
-      resolve();
     } else {
       db.query(
         "INSERT INTO reply_pref(reply_id, user_id, preference) VALUES(?, ?, ?)",
         [reply_id, user_id, pref]
       );
-      resolve();
     }
 
     if (pref == "1") {
@@ -200,6 +204,7 @@ const updateReplyPreference = (
             time: time,
           };
           notificationService.addNotification(data);
+          resolve({ notif: data });
         }
       }
     );
