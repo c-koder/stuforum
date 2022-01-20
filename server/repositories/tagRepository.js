@@ -1,6 +1,6 @@
 const db = require("../db/db-config");
 
-const getAllTags = () => {
+const getAllTags = async () => {
   const sql = `SELECT * FROM tag ORDER BY name`;
 
   return new Promise(async (resolve, reject) => {
@@ -14,7 +14,7 @@ const getAllTags = () => {
   });
 };
 
-const getFrequentlyUsedTags = () => {
+const getFrequentlyUsedTags = async () => {
   const sql = `SELECT * FROM tag WHERE frequency > 0 ORDER BY frequency DESC LIMIT 3`;
 
   return new Promise(async (resolve, reject) => {

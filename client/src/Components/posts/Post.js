@@ -205,7 +205,7 @@ const Post = ({
         <div
           className="postsContainer-div"
           style={{
-            width: width > 900 ? "11%" : "15%",
+            width: width > 900 ? "10%" : "15%",
             margin: "0 10px 0 0px",
             alignItems: "center",
             textAlign: "center",

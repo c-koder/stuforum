@@ -34,6 +34,14 @@ const getSinglePost = async (post_id) => {
   return postRepository.getSinglePost(post_id);
 };
 
+const getMiniPosts = async (count) => {
+  return postRepository.getMiniPosts(count);
+};
+
+const searchForPosts = async (arg) => {
+  return postRepository.searchForPosts(arg);
+};
+
 const updatePostStatus = async (post_id, status, new_status) => {
   return postRepository.updatePostStatus(post_id, status, new_status);
 };
@@ -62,6 +70,8 @@ module.exports = {
   deletePost,
   getAllPosts,
   getSinglePost,
+  getMiniPosts,
+  searchForPosts,
   updatePostStatus,
   updatePostPreference,
 };

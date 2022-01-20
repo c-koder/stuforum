@@ -1,13 +1,15 @@
 import notifications from "../../resources/notifications.png";
 import avatar from "../../resources/img_avatar.png";
 import Notifications from "../notifications/Notifications";
-// import logo from "../../logo.png";
 import "../../styles/navigation.css";
 import { useEffect, useRef, useState } from "react";
 import NavContext from "./NavContext";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import MobileNav from "./MobileNav";
+import MiniPosts from "../posts/MiniPosts";
+import useMiniPosts from "../../hooks/useMiniPosts";
+import axios from "axios";
 
 const Navbar = ({ isLogged, onLogout, newNotification }) => {
   const { width } = useWindowDimensions();
@@ -15,6 +17,20 @@ const Navbar = ({ isLogged, onLogout, newNotification }) => {
   const [notificationCount, setNotificationCount] = useState(0);
   const [show, setShow] = useState(false);
   const [showContext, setShowContext] = useState(false);
+
+  const [searchText, setSearchText] = useState("");
+
+  const [miniPosts, setMiniPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const { response } = useMiniPosts(4);
+
+  useEffect(() => {
+    if (response !== null) {
+      setMiniPosts(response);
+    }
+    setLoading(false);
+  }, [response]);
 
   const notifRef = useRef(null);
 
@@ -46,6 +62,38 @@ const Navbar = ({ isLogged, onLogout, newNotification }) => {
     };
   }, [profileRef]);
 
+  const searchRef = useRef(null);
+
+  onkeydown = (e) => {
+    if (e.key === "Enter" && searchText != "") {
+      axios
+        .post("http://localhost:3001/post/searchpost", { arg: searchText })
+        .then((res) => {
+          setMiniPosts(res.data);
+        });
+    }
+  };
+
+  const [remove, setRemove] = useState(false);
+  const [showRecentPostsColumn, setShowRecentPostsColumn] = useState(false);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setRemove(true);
+        setTimeout(() => {
+          setShowRecentPostsColumn(false);
+          setRemove(false);
+        }, 200);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [searchRef]);
+
   const [display, setDisplay] = useState("none");
   const showMenu = (e) => {
     e.preventDefault();
@@ -57,6 +105,26 @@ const Navbar = ({ isLogged, onLogout, newNotification }) => {
     notificationCount != 0 && (title = ` (${notificationCount}) stuforum`);
     document.title = title;
   }, [notificationCount]);
+
+  const scrollableTarget = "scrollableTarget";
+
+  const containerVariants = {
+    hidden: {
+      width: "40%",
+      height: 0,
+      opacity: 0,
+      transition: { duration: 0.02, delay: 0 },
+    },
+    visible: {
+      width: width < 900 ? "54%" : "44%",
+      height: 100,
+      opacity: 1,
+      transition: { duration: 0.02, delay: 0 },
+    },
+    exit: {
+      transition: { ease: "easeIn" },
+    },
+  };
 
   return (
     <div className="topnav">
@@ -84,7 +152,7 @@ const Navbar = ({ isLogged, onLogout, newNotification }) => {
 
       {isLogged && (
         <div>
-          <div className="topnav-centered">
+          <div ref={searchRef} className="topnav-centered">
             {width < 900 && (
               <div
                 style={{
@@ -113,7 +181,43 @@ const Navbar = ({ isLogged, onLogout, newNotification }) => {
               placeholder="Search"
               style={{ width: width < 900 && "50%" }}
               whileFocus={{ width: width < 900 ? "55%" : "44%" }}
+              value={searchText}
+              onChange={(e) => {
+                setSearchText(e.target.value);
+              }}
+              onFocus={() => setShowRecentPostsColumn((oldState) => !oldState)}
             ></motion.input>
+            {showRecentPostsColumn && (
+              <AnimatePresence>
+                <motion.div
+                  id={scrollableTarget}
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate={remove ? "hidden" : "visible"}
+                  exit="exit"
+                  className="postsContainer"
+                  style={{
+                    position: "absolute",
+                    width: "44%",
+                    transform: "translate(-50%, 0%)",
+                    top: "110px",
+                    overflow: "auto",
+                    left: "50%",
+                    minHeight: "220px",
+                    borderRadius: "5px",
+                    zIndex: 997,
+                  }}
+                >
+                  {!loading && (
+                    <MiniPosts
+                      miniPosts={miniPosts}
+                      searchText={searchText}
+                      scrollableTarget={scrollableTarget}
+                    />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            )}
           </div>
           <div
             className="topnav-right"

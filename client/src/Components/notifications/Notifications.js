@@ -4,6 +4,7 @@ import { AuthContext } from "../../helpers/AuthContext";
 import useNotifications from "../../hooks/useNotifications";
 import Notification from "./Notification";
 import InfiniteScoll from "react-infinite-scroll-component";
+import axios from "axios";
 
 const Notifications = ({
   show,
@@ -53,10 +54,18 @@ const Notifications = ({
 
     const exists = notifications.filter((item) => item.viewed == 0);
     setNotificationCount(exists.length);
+
+    axios.post("http://localhost:3001/user/notificationviewed", {
+      id: id,
+    });
   };
 
   const deleteNotif = (id) => {
     setNotifications(notifications.filter((notif) => notif.id !== id));
+
+    axios.post("http://localhost:3001/user/deletenotification", {
+      id: id,
+    });
   };
 
   const markAsSeen = () => {
@@ -65,6 +74,9 @@ const Notifications = ({
         (notification) => notification && { ...notification, viewed: 1 }
       )
     );
+    axios.post("http://localhost:3001/user/allnotificationsviewed", {
+      user_id: authState.id,
+    });
   };
 
   const [scrollNumber, setScollNumber] = useState(0);

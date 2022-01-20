@@ -2,7 +2,7 @@ const db = require("../db/db-config");
 
 const notificationService = require("../services/notificationService");
 
-const getPosts = (user_id, user_posts, tagged) => {
+const getPosts = async (user_id, user_posts, tagged) => {
   let params = user_id;
 
   let sql = user_posts
@@ -44,7 +44,7 @@ const getPosts = (user_id, user_posts, tagged) => {
   });
 };
 
-const postExists = (post_id) => {
+const postExists = async (post_id) => {
   const sql = `SELECT EXISTS(SELECT id FROM post WHERE id = ? LIMIT 1) AS count`;
 
   return new Promise(async (resolve, reject) => {
@@ -58,7 +58,14 @@ const postExists = (post_id) => {
   });
 };
 
-const addPost = (question, description, tags, user_id, posted_time, urgent) => {
+const addPost = async (
+  question,
+  description,
+  tags,
+  user_id,
+  posted_time,
+  urgent
+) => {
   const sql = `INSERT INTO post(question, description, user_id, posted_time, urgent) VALUES(?, ?, ?, ?, ?)`;
 
   return new Promise(async (resolve, reject) => {
@@ -104,7 +111,7 @@ const addPost = (question, description, tags, user_id, posted_time, urgent) => {
   });
 };
 
-const deletePost = (post_id) => {
+const deletePost = async (post_id) => {
   const sql = `DELETE p.*, r.* FROM post p LEFT JOIN reply r ON r.post_id = p.id WHERE p.id = ?`;
 
   return new Promise(async (resolve, reject) => {
@@ -118,7 +125,7 @@ const deletePost = (post_id) => {
   });
 };
 
-const getSinglePost = (post_id) => {
+const getSinglePost = async (post_id) => {
   const sql = `SELECT p.*, u.nick_name AS nick_name FROM post p INNER JOIN user u ON u.id = p.user_id WHERE p.id = ?`;
 
   return new Promise(async (resolve, reject) => {
@@ -156,7 +163,37 @@ const getSinglePost = (post_id) => {
   });
 };
 
-const updatePostStatus = (post_id, status, new_status) => {
+const getMiniPosts = async (count) => {
+  const sql =
+    "SELECT p.id, p.question, p.user_id, p.comments, p.posted_time, u.nick_name AS nick_name FROM post p INNER JOIN user u ON u.id = p.user_id ORDER BY p.id DESC LIMIT ?";
+
+  return new Promise(async (resolve, reject) => {
+    db.query(sql, count, (err, result) => {
+      if (!err) {
+        resolve(result);
+      } else {
+        reject("Couldn't fetch mini posts");
+      }
+    });
+  });
+};
+
+const searchForPosts = async (arg) => {
+  const sql = `SELECT p.id, p.question, p.user_id, p.comments, p.posted_time, u.nick_name AS nick_name FROM post p INNER JOIN user u ON u.id = p.user_id WHERE p.question LIKE ? ORDER BY p.id DESC`;
+
+  return new Promise(async (resolve, reject) => {
+    db.query(sql, `%${arg}%`, (err, result) => {
+      if (!err) {
+        resolve(result);
+      } else {
+        console.log(err);
+        reject("Couldn't search for questions");
+      }
+    });
+  });
+};
+
+const updatePostStatus = async (post_id, status, new_status) => {
   let sql = "UPDATE post SET ";
   if (status == "urgent") {
     sql += "urgent = ?";
@@ -182,7 +219,14 @@ const updatePostStatus = (post_id, status, new_status) => {
  * when preference is 0, leads decrease
  */
 
-const updatePostPreference = (id, post_id, user_id, pref, leads, time) => {
+const updatePostPreference = async (
+  id,
+  post_id,
+  user_id,
+  pref,
+  leads,
+  time
+) => {
   return new Promise(async (resolve, reject) => {
     db.query(
       "UPDATE post SET leads = leads + ? WHERE id = ?",
@@ -240,6 +284,8 @@ module.exports = {
   deletePost,
   getPosts,
   getSinglePost,
+  getMiniPosts,
+  searchForPosts,
   updatePostStatus,
   updatePostPreference,
 };

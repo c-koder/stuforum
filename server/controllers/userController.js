@@ -3,6 +3,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const userService = require("../services/userService");
+const notificationService = require("../services/notificationService");
 
 router.post("/login", async (req, res) => {
   userService
@@ -103,6 +104,39 @@ router.post("/getanswers", async (req, res) => {
 router.post("/getnotifications", async (req, res) => {
   userService
     .getUserNotifications(req.body.user_id)
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((error) => {
+      res.send({ message: error });
+    });
+});
+
+router.post("/notificationviewed", async (req, res) => {
+  notificationService
+    .updateNotificationViewed(req.body.id)
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((error) => {
+      res.send({ message: error });
+    });
+});
+
+router.post("/allnotificationsviewed", async (req, res) => {
+  notificationService
+    .updateAllNotificationsViewed(req.body.user_id)
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((error) => {
+      res.send({ message: error });
+    });
+});
+
+router.post("/deletenotification", async (req, res) => {
+  notificationService
+    .removeNotification(req.body.id)
     .then((response) => {
       res.send(response);
     })

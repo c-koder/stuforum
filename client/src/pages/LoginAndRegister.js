@@ -30,6 +30,7 @@ const LoginAndRegister = () => {
       register();
     }
   };
+  
   const register = () => {
     const joinDate = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     if (

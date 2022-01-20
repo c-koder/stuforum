@@ -6,7 +6,7 @@ const db = require("../db/db-config");
  * CM - commented
  */
 
-const addNotification = (data) => {
+const addNotification = async (data) => {
   let sql =
     "INSERT INTO notification(user_from_id, user_to_id, type, post_id, reply_id, description, time) SELECT ?, ?, ?, ?, ?, ?, ? FROM DUAL WHERE NOT EXISTS (SELECT id FROM notification WHERE user_from_id = ? AND user_to_id = ? AND type = ? ";
 
@@ -42,7 +42,7 @@ const addNotification = (data) => {
   });
 };
 
-const getNotification = (user_from_id, user_to_id, time) => {
+const getNotification = async (user_from_id, user_to_id, time) => {
   const sql =
     "SELECT n.*, u.nick_name AS user_from FROM notification n, user u WHERE user_from_id = ? AND user_to_id = ? AND time = ? AND n.user_from_id = u.id";
 
@@ -57,7 +57,52 @@ const getNotification = (user_from_id, user_to_id, time) => {
   });
 };
 
+const updateNotificationViewed = async (id) => {
+  const sql = "UPDATE notification SET viewed = 1 WHERE id = ?";
+
+  return new Promise(async (resolve, reject) => {
+    db.query(sql, id, (err, result) => {
+      if (!err) {
+        resolve();
+      } else {
+        reject("Couldn't update notification");
+      }
+    });
+  });
+};
+
+const updateAllNotificationsViewed = async (user_id) => {
+  const sql = "UPDATE notification SET viewed = 1 WHERE user_to_id = ?";
+
+  return new Promise(async (resolve, reject) => {
+    db.query(sql, user_id, (err, result) => {
+      if (!err) {
+        resolve();
+      } else {
+        reject("Couldn't update notifications");
+      }
+    });
+  });
+};
+
+const removeNotification = async (id) => {
+  const sql = "DELETE FROM notification WHERE id = ?";
+
+  return new Promise(async (resolve, reject) => {
+    db.query(sql, id, (err, result) => {
+      if (!err) {
+        resolve();
+      } else {
+        reject("Couldn't delete notification");
+      }
+    });
+  });
+};
+
 module.exports = {
   addNotification,
   getNotification,
+  updateNotificationViewed,
+  updateAllNotificationsViewed,
+  removeNotification,
 };

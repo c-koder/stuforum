@@ -50,20 +50,23 @@ const Notification = ({ notification, changeViewed, onDelete }) => {
                     style={{ all: "unset" }}
                     href={`/user/${notification.user_from}`}
                     whileHover={{ cursor: "pointer" }}
-                    onClick={() => {
-                      changeViewed(notification.id);
-                    }}
                   >
                     {notification.user_from}
                   </motion.a>
                 </span>{" "}
-                <motion.a
-                  style={{ all: "unset" }}
-                  href={`/post/${notification.post_id}`}
-                  whileHover={{ cursor: "pointer" }}
+                <span
+                  onClick={() => {
+                    changeViewed(notification.id);
+                  }}
                 >
-                  {notification.description}{" "}
-                </motion.a>
+                  <motion.a
+                    style={{ all: "unset" }}
+                    href={`/post/${notification.post_id}`}
+                    whileHover={{ cursor: "pointer" }}
+                  >
+                    {notification.description}{" "}
+                  </motion.a>
+                </span>
               </h4>
             </span>
             <span

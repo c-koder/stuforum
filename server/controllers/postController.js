@@ -69,6 +69,28 @@ router.post("/getsinglepost", async (req, res) => {
     });
 });
 
+router.post("/getminiposts", async (req, res) => {
+  postService
+    .getMiniPosts(req.body.count)
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((error) => {
+      res.send({ message: error });
+    });
+});
+
+router.post("/searchpost", async (req, res) => {
+  postService
+    .searchForPosts(req.body.arg)
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((error) => {
+      res.send({ message: error });
+    });
+});
+
 router.post("/updatepoststatus", async (req, res) => {
   const new_status = req.body.new_status == 0 ? 1 : 0;
 

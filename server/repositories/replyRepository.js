@@ -2,7 +2,7 @@ const db = require("../db/db-config");
 
 const notificationService = require("../services/notificationService");
 
-const getReplies = (post_id) => {
+const getReplies = async (post_id) => {
   const sql = `SELECT r.*, u.nick_name AS nick_name, u2.nick_name AS replied_to FROM reply r LEFT JOIN user u ON u.id = r.user_id LEFT JOIN user u2 ON u2.id = r.replied_to_id WHERE r.post_id = ? ORDER BY r.id DESC`;
 
   return new Promise(async (resolve, reject) => {
@@ -16,7 +16,7 @@ const getReplies = (post_id) => {
   });
 };
 
-const getReplyPreference = (user_id, reply_id) => {
+const getReplyPreference = async (user_id, reply_id) => {
   const sql = `SELECT * FROM reply_pref WHERE user_id = ? AND reply_id = ?`;
 
   return new Promise(async (resolve, reject) => {
@@ -30,7 +30,7 @@ const getReplyPreference = (user_id, reply_id) => {
   });
 };
 
-const addReply = (
+const addReply = async (
   parent_id,
   user_id,
   replied_to,
@@ -106,7 +106,7 @@ const addReply = (
   });
 };
 
-const deleteReply = (post_id, reply_id, delete_child_only) => {
+const deleteReply = async (post_id, reply_id, delete_child_only) => {
   let sql = "DELETE FROM reply WHERE id = ?";
   let sql1 = "UPDATE post SET comments = comments - ";
 
@@ -135,7 +135,7 @@ const deleteReply = (post_id, reply_id, delete_child_only) => {
   });
 };
 
-const updateReplyPreference = (
+const updateReplyPreference = async (
   id,
   reply_id,
   parent_id,
