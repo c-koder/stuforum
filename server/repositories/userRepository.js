@@ -125,7 +125,6 @@ const getUserPostsCount = async (user_id) => {
 const getUserAnswers = async (user_id) => {
   const sql = `SELECT p.*, u.nick_name AS nick_name FROM post p JOIN reply r ON r.post_id = p.id AND r.user_id = ? INNER JOIN user u ON u.id = p.user_id WHERE NOT p.user_id = ? GROUP BY p.id ORDER BY p.id DESC`;
 
-  //in-complete!
   return new Promise(async (resolve, reject) => {
     db.query(sql, [user_id, user_id], (err, postResults) => {
       if (postResults.length > 0) {

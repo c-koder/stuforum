@@ -154,17 +154,17 @@ const Routing = () => {
 
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
+      <NotificationCards
+        notifs={notifs}
+        onDelete={deleteNotif}
+        decayNotif={decayNotif}
+      />
+      <NavBar
+        isLogged={authState.status}
+        onLogout={onLogout}
+        newNotification={newNotification}
+      />{" "}
       <Router>
-        <NotificationCards
-          notifs={notifs}
-          onDelete={deleteNotif}
-          decayNotif={decayNotif}
-        />
-        <NavBar
-          isLogged={authState.status}
-          onLogout={onLogout}
-          newNotification={newNotification}
-        />
         <Routes>
           <Route
             path="/"
@@ -259,22 +259,22 @@ const Routing = () => {
           )}
         </Routes>
         {/* <Footer /> */}
-        {width > 900 && (
-          <motion.button
-            className="themeToggleBtn"
-            onClick={toggleTheme}
-            whileHover={{ y: -5 }}
-          >
-            <motion.img
-              className="icon"
-              style={{ height: "22px" }}
-              src={img}
-              variants={rotateVariant}
-              animate={currentMode === "light" ? "rotate" : "stop"}
-            />
-          </motion.button>
-        )}
       </Router>
+      {width > 900 && (
+        <motion.button
+          className="themeToggleBtn"
+          onClick={toggleTheme}
+          whileHover={{ y: -5 }}
+        >
+          <motion.img
+            className="icon"
+            style={{ height: "22px" }}
+            src={img}
+            variants={rotateVariant}
+            animate={currentMode === "light" ? "rotate" : "stop"}
+          />
+        </motion.button>
+      )}
     </AuthContext.Provider>
   );
 };

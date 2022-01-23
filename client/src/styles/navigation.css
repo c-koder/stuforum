@@ -26,7 +26,7 @@
 .topnav-centered input[type="text"] {
   width: 42%;
   background-color: transparent;
-  padding: 13px 36px;
+  padding: 13px 43px;
   border-color: var(--gray);
   border-width: 1px;
   border-radius: 6px;
@@ -39,7 +39,9 @@
 }
 
 .searchInput {
-  background: url(../resources/search.png) no-repeat scroll 12px 17px;
+  background-image: url(../resources/search.png);
+  background-position: 15px 17px;
+  background-repeat: no-repeat;
 }
 
 .topnav-right {

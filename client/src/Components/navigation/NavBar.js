@@ -1,5 +1,6 @@
 import notifications from "../../resources/notifications.png";
 import avatar from "../../resources/img_avatar.png";
+import search from "../../resources/search-bg.png";
 import Notifications from "../notifications/Notifications";
 import "../../styles/navigation.css";
 import { useEffect, useRef, useState } from "react";
@@ -175,18 +176,28 @@ const Navbar = ({ isLogged, onLogout, newNotification }) => {
                 </motion.a>
               </div>
             )}
-            <motion.input
-              className="searchInput"
-              type="text"
-              placeholder="Search"
-              style={{ width: width < 900 && "50%" }}
-              whileFocus={{ width: width < 900 ? "55%" : "44%" }}
-              value={searchText}
-              onChange={(e) => {
-                setSearchText(e.target.value);
-              }}
-              onFocus={() => setShowRecentPostsColumn((oldState) => !oldState)}
-            ></motion.input>
+            <div>
+              {/* <span style={{ margin: "30px 0px 0px 340px" }}>
+                <img className="navIcon" src={search} style={{ height: 40 }} />
+              </span> */}
+              <motion.input
+                className="searchInput"
+                type="text"
+                placeholder="Search"
+                style={{
+                  width: width < 900 && "50%",
+                  zIndex: showRecentPostsColumn && 998,
+                }}
+                whileFocus={{ width: width < 900 ? "55%" : "44%" }}
+                value={searchText}
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                }}
+                onFocus={() =>
+                  setShowRecentPostsColumn((oldState) => !oldState)
+                }
+              />
+            </div>
             {showRecentPostsColumn && (
               <AnimatePresence>
                 <motion.div
@@ -203,9 +214,10 @@ const Navbar = ({ isLogged, onLogout, newNotification }) => {
                     top: "110px",
                     overflow: "auto",
                     left: "50%",
-                    minHeight: "220px",
+                    minHeight: "315px",
                     borderRadius: "5px",
                     zIndex: 997,
+                    boxShadow: "0px 50px 50px rgba(0, 0, 0, 0.07)",
                   }}
                 >
                   {!loading && (
@@ -219,6 +231,10 @@ const Navbar = ({ isLogged, onLogout, newNotification }) => {
               </AnimatePresence>
             )}
           </div>
+          {/* <div
+            className={showRecentPostsColumn ? "overlay" : ""}
+            style={{ zIndex: 996 }}
+          ></div> */}
           <div
             className="topnav-right"
             style={{ display: width < 900 && "none" }}
