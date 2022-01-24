@@ -5,7 +5,9 @@ const useSinglePost = (id) => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
     axios
-      .post("http://localhost:3001/post/getsinglepost", { post_id: id })
+      .post("https://stuforum.herokuapp.com/api/post/getsinglepost", {
+        post_id: id,
+      })
       .then((res) => {
         setResponse(res.data);
       });

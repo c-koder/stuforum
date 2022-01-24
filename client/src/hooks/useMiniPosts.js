@@ -5,7 +5,9 @@ const useMiniPosts = (count) => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
     axios
-      .post("http://localhost:3001/post/getminiposts", { count: count })
+      .post("https://stuforum.herokuapp.com/api/post/getminiposts", {
+        count: count,
+      })
       .then((res) => {
         setResponse(res.data);
       });

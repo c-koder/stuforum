@@ -76,7 +76,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
   const updateReplyPref = (pref, previousPref) => {
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     axios
-      .post("http://localhost:3001/reply/updatereplypref", {
+      .post("https://stuforum.herokuapp.com/api/reply/updatereplypref", {
         id: prefId,
         reply_id: reply.id,
         parent_id: reply.parent_id,

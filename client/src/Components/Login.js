@@ -24,7 +24,7 @@ const Login = ({ socket }) => {
     } else {
       const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
       axios
-        .post("http://localhost:3001/user/login", {
+        .post("https://stuforum.herokuapp.com/api/user/login", {
           username: username,
           password: password,
           time: time,

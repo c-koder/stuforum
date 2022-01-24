@@ -58,7 +58,7 @@ const CommentBox = (props) => {
       setError("Please add a comment");
     } else {
       axios
-        .post("http://localhost:3001/reply/addreply", {
+        .post("https://stuforum.herokuapp.com/api/reply/addreply", {
           parent_id: parent_id,
           user_id: user_id,
           replied_to: replyTo,

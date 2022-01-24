@@ -6,7 +6,9 @@ const useReplies = (post_id) => {
 
   const fetchData = () => {
     axios
-      .post("http://localhost:3001/reply/getreplies", { post_id: post_id })
+      .post("https://stuforum.herokuapp.com/api/reply/getreplies", {
+        post_id: post_id,
+      })
       .then((res) => {
         setReplyResponse(res.data);
       });

@@ -26,7 +26,9 @@ import io from "socket.io-client";
 import NotificationCards from "../Components/notifications/NotificationCards";
 // import Footer from "../Components/Footer";
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://stuforum.herokuapp.com", {
+  withCredentials: true,
+});
 
 const Routing = () => {
   const { width } = useWindowDimensions();
@@ -38,7 +40,7 @@ const Routing = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/auth", {
+      .get("https://stuforum.herokuapp.com/api/auth", {
         headers: {
           accessToken: localStorage.getItem("accessToken"),
         },
@@ -63,7 +65,7 @@ const Routing = () => {
   const onLogout = () => {
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
 
-    axios.post("http://localhost:3001/user/logout", {
+    axios.post("https://stuforum.herokuapp.com/api/user/logout", {
       user_id: authState.id,
       time: time,
     });

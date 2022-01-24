@@ -68,7 +68,9 @@ const Navbar = ({ isLogged, onLogout, newNotification }) => {
   onkeydown = (e) => {
     if (e.key === "Enter" && searchText != "") {
       axios
-        .post("http://localhost:3001/post/searchpost", { arg: searchText })
+        .post("https://stuforum.herokuapp.com/api/post/searchpost", {
+          arg: searchText,
+        })
         .then((res) => {
           setMiniPosts(res.data);
         });

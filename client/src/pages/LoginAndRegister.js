@@ -30,7 +30,7 @@ const LoginAndRegister = () => {
       register();
     }
   };
-  
+
   const register = () => {
     const joinDate = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     if (
@@ -64,7 +64,7 @@ const LoginAndRegister = () => {
       setError("Passwords don't match");
     } else {
       axios
-        .post("http://localhost:3001/user/register", {
+        .post("https://stuforum.herokuapp.com/api/user/register", {
           full_name: fullName,
           nick_name: nickName,
           student_id: studentId,

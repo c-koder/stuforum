@@ -43,7 +43,7 @@ const Home = ({ socket }) => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/user/getuserpostcount", {
+      .post("https://stuforum.herokuapp.com/api/user/getuserpostcount", {
         user_id: authState.id,
       })
       .then((res) => {

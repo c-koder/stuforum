@@ -105,7 +105,7 @@ const AskAQuestion = (props) => {
       const posted_time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
 
       axios
-        .post("http://localhost:3001/post/addpost", {
+        .post("https://stuforum.herokuapp.com/api/post/addpost", {
           question: question,
           description: description,
           tags: selectedTags,

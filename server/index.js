@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
+require("dotenv").config();
 
 const user = require("./controllers/userController");
 const post = require("./controllers/postController");
@@ -15,18 +16,30 @@ const notificationService = require("./services/notificationService");
 app.use(cors());
 app.use(express.json());
 
-app.use("/user", user);
-app.use("/post", post);
-app.use("/tag", tag);
-app.use("/reply", reply);
-app.use("/auth", auth);
+app.use("/api/user", user);
+app.use("/api/post", post);
+app.use("/api/tag", tag);
+app.use("/api/reply", reply);
+app.use("/api/auth", auth);
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://stuforum.netlify.app",
     methods: ["GET", "POST"],
+    credentials: true,
+    allowedHeaders: [
+      "X-ACCESS_TOKEN",
+      "Access-Control-Allow-Origin",
+      "Authorization",
+      "Origin",
+      "x-requested-with",
+      "Content-Type",
+      "Content-Range",
+      "Content-Disposition",
+      "Content-Description",
+    ],
   },
 });
 
@@ -57,6 +70,8 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3001, () => {
-  console.log("Server Running on Port: 3001");
+const PORT = process.env.PORT || 3000;
+
+server.listen(PORT, () => {
+  console.log(`Server Running on Port: ${PORT}`);
 });

@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 const useAllTags = () => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
-    axios.get("http://localhost:3001/tag/getalltags").then((res) => {
-      setResponse(res.data);
-    });
+    axios
+      .get("https://stuforum.herokuapp.com/api/tag/getalltags")
+      .then((res) => {
+        setResponse(res.data);
+      });
   };
 
   useEffect(() => {

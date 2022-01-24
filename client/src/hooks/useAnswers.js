@@ -5,7 +5,7 @@ const useAnswers = (user_id) => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
     axios
-      .post("http://localhost:3001/user/getanswers", {
+      .post("https://stuforum.herokuapp.com/api/user/getanswers", {
         user_id: user_id,
       })
       .then((res) => {

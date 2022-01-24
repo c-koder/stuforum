@@ -24,7 +24,9 @@ const SinglePost = ({ socket }) => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/post/postexists", { post_id: id })
+      .post("https://stuforum.herokuapp.com/api/post/postexists", {
+        post_id: id,
+      })
       .then((res) => {
         res.data.message !== "exists" && navigate("/404");
       });
@@ -125,7 +127,7 @@ const SinglePost = ({ socket }) => {
       handleChildReplyDelete(reply_id);
       setCommentCount(commentCount - 1);
     } else {
-      axios.post("http://localhost:3001/reply/deletereply", {
+      axios.post("https://stuforum.herokuapp.com/api/reply/deletereply", {
         reply_id: reply_id,
         post_id: id,
         delete_child_only: false,
@@ -142,7 +144,7 @@ const SinglePost = ({ socket }) => {
   };
 
   const handleChildReplyDelete = (reply_id) => {
-    axios.post("http://localhost:3001/reply/deletereply", {
+    axios.post("https://stuforum.herokuapp.com/api/reply/deletereply", {
       reply_id: reply_id,
       post_id: id,
       delete_child_only: true,
@@ -160,7 +162,7 @@ const SinglePost = ({ socket }) => {
 
   const deletePost = (id) => {
     axios
-      .post("http://localhost:3001/post/deletepost", {
+      .post("https://stuforum.herokuapp.com/api/post/deletepost", {
         post_id: id,
       })
       .then((res) => {
@@ -169,7 +171,7 @@ const SinglePost = ({ socket }) => {
   };
 
   const updateStatus = (id, status, new_status) => {
-    axios.post("http://localhost:3001/post/updatepoststatus", {
+    axios.post("https://stuforum.herokuapp.com/api/post/updatepoststatus", {
       post_id: id,
       status: status,
       new_status: new_status,

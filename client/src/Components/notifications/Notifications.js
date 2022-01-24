@@ -55,7 +55,7 @@ const Notifications = ({
     const exists = notifications.filter((item) => item.viewed == 0);
     setNotificationCount(exists.length);
 
-    axios.post("http://localhost:3001/user/notificationviewed", {
+    axios.post("https://stuforum.herokuapp.com/api/user/notificationviewed", {
       id: id,
     });
   };
@@ -63,7 +63,7 @@ const Notifications = ({
   const deleteNotif = (id) => {
     setNotifications(notifications.filter((notif) => notif.id !== id));
 
-    axios.post("http://localhost:3001/user/deletenotification", {
+    axios.post("https://stuforum.herokuapp.com/api/user/deletenotification", {
       id: id,
     });
   };
@@ -74,9 +74,12 @@ const Notifications = ({
         (notification) => notification && { ...notification, viewed: 1 }
       )
     );
-    axios.post("http://localhost:3001/user/allnotificationsviewed", {
-      user_id: authState.id,
-    });
+    axios.post(
+      "https://stuforum.herokuapp.com/api/user/allnotificationsviewed",
+      {
+        user_id: authState.id,
+      }
+    );
   };
 
   const [scrollNumber, setScollNumber] = useState(0);

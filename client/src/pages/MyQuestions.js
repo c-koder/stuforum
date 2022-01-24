@@ -28,7 +28,7 @@ const MyQuestions = ({ socket }) => {
 
   const deletePost = (id) => {
     axios
-      .post("http://localhost:3001/post/deletepost", {
+      .post("https://stuforum.herokuapp.com/api/post/deletepost", {
         post_id: id,
       })
       .then((res) => {
@@ -38,7 +38,7 @@ const MyQuestions = ({ socket }) => {
   };
 
   const updateStatus = (id, status, new_status) => {
-    axios.post("http://localhost:3001/post/updatepoststatus", {
+    axios.post("https://stuforum.herokuapp.com/api/post/updatepoststatus", {
       post_id: id,
       status: status,
       new_status: new_status,
@@ -98,7 +98,7 @@ const MyQuestions = ({ socket }) => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/user/getuserpostcount", {
+      .post("https://stuforum.herokuapp.com/api/user/getuserpostcount", {
         user_id: authState.id,
       })
       .then((res) => {

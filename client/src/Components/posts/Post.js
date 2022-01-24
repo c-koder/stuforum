@@ -89,7 +89,7 @@ const Post = ({
     setDisabled(true);
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     axios
-      .post("http://localhost:3001/post/updateleadsprefs", {
+      .post("https://stuforum.herokuapp.com/api/post/updateleadsprefs", {
         id: prefId,
         post_id: post.id,
         leads: leads,
