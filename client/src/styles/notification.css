@@ -1,5 +1,5 @@
 .notification {
-  color: var(--white);
+  color: var(--light);
   text-decoration: none;
   position: relative;
   display: inline-block;
@@ -19,7 +19,7 @@
 
 .notification-item.viewed {
   border-right: 2px solid;
-  border-color: var(--white);
+  border-color: var(--light);
 }
 
 .badge {
@@ -27,7 +27,7 @@
   top: -2px;
   right: -3px;
   background: var(--primary);
-  color: var(--white);
+  color: var(--light);
   padding: 5px 3px;
   border-radius: 30px;
   width: 30px;

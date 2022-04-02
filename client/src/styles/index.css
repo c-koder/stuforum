@@ -2,14 +2,19 @@
 
 :root {
   --primary: #3d5af1;
+  --primary-light: #e8ebfb;
+
   --secondary: #b4b4b4;
-  --dark: #444444;
-  --blue: #e8ebfb;
-  --red: #dd2541;
-  --green: #33be2f;
+
+  --warning: #dd2541;
+  --success: #33be2f;
+
   --bg: #f6f6f6;
-  --white: #ffffff;
+
+  --dark: #444444;
+  --light: #ffffff;
   --light-white: #ececec;
+
   --main-font-size: 18px;
 }
 
@@ -32,7 +37,7 @@ body {
 }
 
 input {
-  background: var(--white) !important;
+  background: var(--light) !important;
   color: var(--dark) !important;
 }
 
@@ -103,14 +108,14 @@ p {
 
 .btn {
   background: var(--primary);
-  color: var(--white);
+  color: var(--light);
   cursor: pointer;
   font-size: var(--main-font-size);
   transition: 0.1s ease;
 }
 
 .btn:hover {
-  color: var(--white);
+  color: var(--light);
   transform: scale(1.01);
   transition: 0.1s ease;
 }
@@ -142,7 +147,7 @@ button:disabled {
   right: 0;
   bottom: 0;
   margin: 70px 80px;
-  background-color: var(--white);
+  background-color: var(--light);
   border: none;
   border-radius: 10%;
   width: 50px;
@@ -168,7 +173,7 @@ button:disabled {
   border-radius: 10px;
   padding: 20px;
   border: 1px solid var(--light-white);
-  background-color: var(--white);
+  background-color: var(--light);
   transition: all 200ms ease-in;
 }
 
@@ -178,7 +183,7 @@ button:disabled {
   padding: 40px;
   border: 1px solid var(--light-white);
   transition: all 200ms ease-in;
-  background-color: var(--white);
+  background-color: var(--light);
 }
 
 .rightbar button {
@@ -214,7 +219,7 @@ button:disabled {
 }
 
 .rightbar .active {
-  background-color: var(--blue);
+  background-color: var(--primary-light);
   color: var(--primary);
 }
 
@@ -243,7 +248,7 @@ button:disabled {
   text-align: center;
   align-items: center;
   justify-content: center;
-  padding: 8px 10px;
+  padding: 4px 8px;
   font-size: 15px;
   list-style: none;
   border: none;
@@ -251,7 +256,7 @@ button:disabled {
   font-weight: 600;
   margin: 0px 8px 8px 0;
   color: var(--primary);
-  background-color: var(--blue);
+  background-color: var(--primary-light);
 }
 
 .tag-title {
@@ -268,7 +273,7 @@ button:disabled {
   margin-left: 8px;
   color: var(--primary);
   border-radius: 50%;
-  background: var(--white);
+  background: var(--light);
   cursor: pointer;
 }
 
@@ -278,7 +283,7 @@ button:disabled {
 }
 
 .posts-container {
-  background-color: var(--white);
+  background-color: var(--light);
   padding: 20px;
   border: 1px solid var(--light-white);
   margin-bottom: 25px;
@@ -288,7 +293,7 @@ button:disabled {
 }
 
 .miniPostsContainer {
-  background-color: var(--white);
+  background-color: var(--light);
   padding: 10px;
   border: 1px solid var(--light-white);
   margin-bottom: 10px;
@@ -319,7 +324,7 @@ button:disabled {
   overflow: scroll;
   margin: 7% auto;
   text-align: left;
-  background-color: var(--white);
+  background-color: var(--light);
   border-radius: 10px;
   width: 50vw;
   height: 70%;
@@ -333,7 +338,7 @@ button:disabled {
   z-index: 999;
   border: 1px solid var(--light-white);
   border-top: 2px solid var(--light-white);
-  background-color: var(--white);
+  background-color: var(--light);
   border-radius: 10px;
   padding: 20px;
   overflow: scroll;
@@ -344,7 +349,7 @@ button:disabled {
 
 .dropdown-context {
   margin-top: 10px !important;
-  background-color: var(--white);
+  background-color: var(--light);
   border: 1px solid var(--light-white);
   border-radius: 5px;
 }
@@ -373,7 +378,7 @@ button:disabled {
   color: var(--secondary);
   margin-bottom: 40px;
   min-width: 100px;
-  background-color: var(--white);
+  background-color: var(--light);
   transition: all 200ms ease-in;
   padding: 12px 12px;
   border-radius: 5px;
@@ -447,7 +452,7 @@ button:disabled {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: var(--white);
+  color: var(--light);
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
 }
@@ -455,7 +460,7 @@ button:disabled {
 .profilepic__text {
   text-transform: uppercase;
   font-size: 12px;
-  color: var(--white);
+  color: var(--light);
   width: 50%;
   text-align: center;
 }
@@ -516,7 +521,7 @@ a {
 }
 
 .error {
-  color: var(--white);
+  color: var(--light);
   border: none;
   padding: 13px 20px;
   margin-bottom: 5px 0px;
@@ -532,14 +537,14 @@ a {
 }
 
 .error.active {
-  background: var(--red);
+  background: var(--warning);
   transition: all 0.2s ease-in;
   opacity: 100;
   visibility: visible;
 }
 
 .error.success {
-  background-color: var(--green);
+  background-color: var(--success);
   transition: all 0.2s ease-in;
   opacity: 100;
   visibility: visible;
@@ -574,7 +579,7 @@ a {
   padding: 10px 15px 10px 15px;
   margin: 0px 15px 0px 0px;
   border-radius: 5px;
-  background-color: var(--blue);
+  background-color: var(--primary-light);
   font-weight: bold;
   color: var(--primary);
   cursor: pointer;
@@ -584,12 +589,12 @@ a {
 .paginationBtns a:hover {
   transition: all 150ms ease-in;
   background-color: var(--primary);
-  color: var(--white);
+  color: var(--light);
 }
 
 .paginationActive a {
   background-color: var(--primary);
-  color: var(--white);
+  color: var(--light);
 }
 
 .paginationDisabled a {
@@ -612,7 +617,7 @@ a {
   margin-left: 65px;
   padding: 10px 15px;
   border-radius: 5px;
-  background-color: var(--white);
+  background-color: var(--light);
 }
 
 .showmorelink:hover {
@@ -622,7 +627,8 @@ a {
 
 .tooltip {
   color: var(--dark) !important;
-  background-color: var(--secondary) !important;
+  background-color: var(--light) !important;
+  border: 1px solid rgba(68, 68, 68, 0.25) !important;
   padding: 10px !important;
   font-weight: bold !important;
 }

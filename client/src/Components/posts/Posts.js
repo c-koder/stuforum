@@ -65,28 +65,28 @@ const Posts = ({
               <div className="posts-container-div">
                 <Skeleton
                   baseColor="var(--light-white)"
-                  highlightColor="var(--white)"
+                  highlightColor="var(--light)"
                   height={30}
                 />
                 <Skeleton
                   baseColor="var(--light-white)"
-                  highlightColor="var(--white)"
+                  highlightColor="var(--light)"
                   height={30}
                   width={200}
                 />
                 <Skeleton
                   baseColor="var(--light-white)"
-                  highlightColor="var(--white)"
+                  highlightColor="var(--light)"
                   height={30}
                 />
                 <Skeleton
                   baseColor="var(--light-white)"
-                  highlightColor="var(--white)"
+                  highlightColor="var(--light)"
                   height={160}
                 />
                 <Skeleton
                   baseColor="var(--light-white)"
-                  highlightColor="var(--white)"
+                  highlightColor="var(--light)"
                   height={30}
                 />
               </div>

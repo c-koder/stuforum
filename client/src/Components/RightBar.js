@@ -93,8 +93,13 @@ const RightBar = ({ activeTab }) => {
           Tags
         </motion.a>
       </div>
-      <div className="content-container" style={{ marginTop: 30 }}>
-        <h2 style={{ marginBottom: 20 }}>Frequently used tags</h2>
+      <div
+        className="content-container"
+        style={{ marginTop: 25, paddingBottom: 0 }}
+      >
+        <h5 style={{ marginBottom: 20, fontWeight: 600 }}>
+          Frequently used tags
+        </h5>
         <Tags tags={tags} tagsOnly={false} />
       </div>
     </div>

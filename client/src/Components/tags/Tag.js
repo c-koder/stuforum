@@ -1,29 +1,29 @@
 const Tag = ({ tag, tagOnly }) => {
   return (
-    <>
-      <span
-        style={{
-          display: "flex",
-          float: tagOnly && "left",
-          marginBottom: tagOnly ? 0 : 0,
-          marginTop: 10,
-          marginRight: tagOnly && 10,
-        }}
+    <div
+      className="hstack"
+      style={{
+        display: "flex",
+        float: tagOnly && "left",
+        marginTop: tagOnly ? 10 : 5,
+        marginRight: tagOnly && 5,
+      }}
+    >
+      <a
+        href={`/tagged/${tag.name}`}
+        className="tag"
+        style={{ fontSize: tagOnly && 13 }}
       >
-        <a
-          href={`/tagged/${tag.name}`}
-          className="tag"
-          style={{ fontSize: tagOnly && 14 }}
+        {tag.name}
+      </a>
+      {!tagOnly && (
+        <h5
+          style={{ color: "var(--secondary)", marginLeft: 5, fontWeight: 600 }}
         >
-          {tag.name}
-        </a>
-        {!tagOnly && (
-          <h3 style={{ color: "var(--secondary)", marginLeft: 15 }}>
-            {tag.frequency}
-          </h3>
-        )}
-      </span>
-    </>
+          {tag.frequency}
+        </h5>
+      )}
+    </div>
   );
 };
 

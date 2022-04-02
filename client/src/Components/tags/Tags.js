@@ -33,7 +33,7 @@ const Tags = ({ tags, tagOnly, display }) => {
   };
 
   return (
-    <>
+    <div>
       {tagOnly && display && (
         <div className="form-control">
           <input
@@ -67,7 +67,7 @@ const Tags = ({ tags, tagOnly, display }) => {
           activeClassName={"paginationActive"}
         />
       )}
-    </>
+    </div>
   );
 };
 

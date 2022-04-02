@@ -66,10 +66,10 @@ const Post = ({
   let labelColor;
 
   if (post.urgent == 1) {
-    labelColor = "var(--red)";
+    labelColor = "var(--warning)";
   }
   if (post.answered == 1) {
-    labelColor = "var(--green)";
+    labelColor = "var(--success)";
   }
 
   let leadsColor;
@@ -80,7 +80,7 @@ const Post = ({
       leadsColor = "var(--secondary)";
     }
   } else if (userVoted === "useless") {
-    leadsColor = "var(--red)";
+    leadsColor = "var(--warning)";
   } else {
     leadsColor = "var(--secondary)";
   }
@@ -223,7 +223,7 @@ const Post = ({
             </div>
             <div className="col">
               <a href={`/post/${post.id}`}>
-                <h4>{post.question}</h4>
+                <h5>{post.question}</h5>
               </a>
 
               {(post.urgent == 1 || post.answered == 1) && (
@@ -375,7 +375,7 @@ const Post = ({
                     fontSize: 36,
                     color:
                       userVoted === "useless"
-                        ? "var(--red)"
+                        ? "var(--warning)"
                         : "var(--secondary)",
                   }}
                 ></i>

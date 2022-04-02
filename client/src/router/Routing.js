@@ -78,18 +78,18 @@ const Routing = () => {
   const lightTheme = {
     "--secondary": "#b4b4b4",
     "--dark": "#444444",
-    "--blue": "#e8ebfb",
+    "--primary-light": "#e8ebfb",
     "--bg": "#f8f8f8",
-    "--white": "#ffffff",
+    "--light": "#ffffff",
     "--light-white": "#ececec",
   };
 
   const darkTheme = {
     "--secondary": "#a4a4a4",
     "--dark": "#f0f0f0",
-    "--blue": "#333333",
+    "--primary-light": "#333333",
     "--bg": "#121212",
-    "--white": "#202020",
+    "--light": "#202020",
     "--light-white": "#333333",
   };
 

@@ -60,7 +60,7 @@ const ConfirmPopup = (props) => {
               <h2>Confirm Delete?</h2>
               <h3 style={{ margin: "10px 0 10px 0" }}>
                 It will be{" "}
-                <span style={{ color: "var(--red)" }}>permanently</span>{" "}
+                <span style={{ color: "var(--warning)" }}>permanently</span>{" "}
                 removed.
               </h3>
               <h4

@@ -163,7 +163,10 @@ const AskAQuestion = (props) => {
 
           <div
             className="content-container"
-            style={{ backgroundColor: "var(--blue)", marginBottom: 20 }}
+            style={{
+              backgroundColor: "var(--primary-light)",
+              marginBottom: 20,
+            }}
           >
             <p style={{ color: "var(--primary)", lineHeight: 1.5 }}>
               <span style={{ fontWeight: 600, color: "var(--primary)" }}>

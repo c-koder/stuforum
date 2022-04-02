@@ -70,11 +70,13 @@ const Home = ({ socket }) => {
 
   const containerVariants = {
     hidden: {
-      scale: 0.96,
+      opacity: 0,
+      y: -25,
     },
     visible: {
-      scale: 1,
-      transition: { duration: 0.5 },
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4 },
     },
     exit: {
       transition: { ease: "easeIn" },

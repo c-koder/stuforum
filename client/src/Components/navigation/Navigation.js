@@ -123,7 +123,7 @@ const Navigation = ({ isLogged, onLogout, newNotification }) => {
                 <div className="input-group-prepend">
                   <span
                     className="input-group-text"
-                    style={{ background: "var(--white)" }}
+                    style={{ background: "var(--light)" }}
                     id="basic-addon1"
                   >
                     <i className="bi bi-search"></i>

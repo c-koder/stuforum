@@ -55,18 +55,18 @@ const Replies = ({ socket, replies, onDelete, addReply, answered }) => {
             <div className="posts-container-div" style={{ marginLeft: "-82%" }}>
               <Skeleton
                 baseColor="var(--light-white)"
-                highlightColor="var(--white)"
+                highlightColor="var(--light)"
                 height={25}
                 width={250}
               />
               <Skeleton
                 baseColor="var(--light-white)"
-                highlightColor="var(--white)"
+                highlightColor="var(--light)"
                 height={25}
               />
               <Skeleton
                 baseColor="var(--light-white)"
-                highlightColor="var(--white)"
+                highlightColor="var(--light)"
                 height={25}
               />
             </div>

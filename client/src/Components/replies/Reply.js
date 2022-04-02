@@ -65,7 +65,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
     }
   } else if (userLiked === "disliked") {
     if (reply.dislikes >= 0) {
-      dislikesColor = "var(--red)";
+      dislikesColor = "var(--warning)";
     } else {
       dislikesColor = "var(--secondary)";
     }

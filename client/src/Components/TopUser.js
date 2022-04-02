@@ -1,33 +1,25 @@
-import like from "../resources/like-blue.png";
-import { motion } from "framer-motion";
 import { abbreviateNumber } from "../helpers/AbbreviateNumber";
 
 const TopUser = ({ topUser }) => {
   return (
-    <>
-      <motion.span
-        style={{ display: "flex", marginBottom: 20, marginTop: 20 }}
-        whileHover={{
-          x: -1,
-        }}
-      >
-        <a href={`/user/${topUser.nick_name}`}>
-          <h3 style={{ color: "var(--primary)", fontSize: 22 }}>
-            {topUser.nick_name}
-          </h3>
-        </a>
-        <span style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
-          <h3 style={{ color: "var(--secondary)", fontSize: 22 }}>
-            {abbreviateNumber(topUser.likes)}
-          </h3>
-          <img
-            style={{ marginLeft: 10, height: 25, marginTop: 3 }}
-            className="icon"
-            src={like}
-          />
-        </span>
-      </motion.span>
-    </>
+    <div className="hstack">
+      <a href={`/user/${topUser.nick_name}`}>
+        <h5 style={{ color: "var(--primary)" }}>{topUser.nick_name}</h5>
+      </a>
+      <span style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
+        <h5 style={{ color: "var(--secondary)" }}>
+          {abbreviateNumber(topUser.likes)}
+        </h5>
+        <i
+          class="bi bi-hand-thumbs-up-fill"
+          style={{
+            marginLeft: 5,
+            color: "var(--primary)",
+            fontSize: 22,
+          }}
+        ></i>
+      </span>
+    </div>
   );
 };
 

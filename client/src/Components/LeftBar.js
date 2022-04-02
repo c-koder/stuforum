@@ -2,8 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import AskAQuestion from "./AskAQuestion";
 import Button from "./Button";
 import TopUsers from "./TopUsers";
-import like from "../resources/like-blue.png";
-import { motion } from "framer-motion";
 import useSortedUsers from "../hooks/useSortedUsers";
 import { Link } from "react-router-dom";
 import { abbreviateNumber } from "../helpers/AbbreviateNumber";
@@ -47,36 +45,33 @@ const LeftBar = ({ userQuestionCount }) => {
         />
       )}
       <Button onClick={askQuestion} text={"Ask a Question"} />
-      <div className="content-container" style={{ marginTop: 30 }}>
-        <h2 style={{ marginBottom: 20 }}>Top Users</h2>
+      <div className="content-container" style={{ marginTop: 25 }}>
+        <h5 style={{ marginBottom: 20, fontWeight: 600 }}>Top Users</h5>
         <TopUsers topUsers={topUsers} />
         <hr />
-
-        <motion.span
-          style={{ display: "flex", marginBottom: 20, marginTop: 20 }}
-          whileHover={{
-            x: -1,
-          }}
-        >
+        <div className="hstack">
           <Link to="/profile">
-            <h3 style={{ color: "var(--primary)", fontSize: 22 }}>
+            <h5 style={{ color: "var(--primary)", fontWeight: 600 }}>
               You{" "}
               <span style={{ color: "var(--secondary)" }}>
                 ({abbreviateNumber(userQuestionCount)})
               </span>
-            </h3>
+            </h5>
           </Link>
-          <span style={{ marginLeft: "auto", marginRight: 0, display: "flex" }}>
-            <h3 style={{ color: "var(--secondary)", fontSize: 22 }}>
+          <span style={{ marginLeft: "auto", display: "flex" }}>
+            <h5 style={{ color: "var(--secondary)", fontWeight: 600 }}>
               {abbreviateNumber(user != null && user.likes)}
-            </h3>
-            <img
-              style={{ marginLeft: 10, height: 25, marginTop: 3 }}
-              className="icon"
-              src={like}
-            />
+            </h5>
+            <i
+              class="bi bi-hand-thumbs-up-fill"
+              style={{
+                marginLeft: 5,
+                color: "var(--primary)",
+                fontSize: 22,
+              }}
+            ></i>
           </span>
-        </motion.span>
+        </div>
       </div>
     </div>
   );
