@@ -55,7 +55,7 @@ const Tags = () => {
         >
           {!loading && (
             <div
-              className="whiteContainer"
+              className="content-container"
               style={{ marginTop: 0, padding: "40px" }}
             >
               <h2>Tags</h2>

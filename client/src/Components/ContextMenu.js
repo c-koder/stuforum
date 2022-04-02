@@ -1,11 +1,9 @@
-import { motion } from "framer-motion";
 import { useState } from "react";
 import ConfirmPopup from "./ConfirmPopup";
 
 const ContextMenu = ({
   reply,
   post,
-  show,
   onDelete,
   onToggleUrgent,
   onToggleAnswered,
@@ -13,7 +11,10 @@ const ContextMenu = ({
   const [confirmationPopup, setConfirmationPopup] = useState(false);
 
   return (
-    <div>
+    <ul
+      className="dropdown-menu dropdown-menu-end dropdown-context"
+      aria-labelledby="post-context"
+    >
       {confirmationPopup && (
         <ConfirmPopup
           confirmationPopup={confirmationPopup}
@@ -23,62 +24,42 @@ const ContextMenu = ({
           reply={reply}
         />
       )}
-      <div
-        style={{
-          minWidth: reply != null && "80px",
-          width: post != null && "200px",
-          marginLeft: reply != null ? "-55px" : "-155px",
-        }}
-        className={"context-content" + (show ? " shown" : "")}
-      >
-        <ul
-          style={{
-            listStyleType: "none",
-          }}
-        >
-          {post != null && (
-            <div>
-              <motion.li
-                disabled={post.answered == 1 && true}
-                onClick={() => {
-                  onToggleUrgent(post.id);
-                }}
-                whileHover={{
-                  x: -3,
-                }}
-                style={{ color: post.answered == 1 && "var(--secondary)" }}
-              >
-                {post.urgent == 1 ? "Unmark as Urgent" : "Mark as Urgent"}
-              </motion.li>
-              <hr style={{ width: "90%", margin: "0 auto" }} />
-              <motion.li
-                disabled={post.urgent == 1 && true}
-                className="nullBtn"
-                onClick={() => {
-                  onToggleAnswered(post.id);
-                }}
-                style={{ color: post.urgent == 1 && "var(--secondary)" }}
-              >
-                {post.answered == 1 ? "Unmark as Answered" : "Mark as Answered"}
-              </motion.li>
-              <hr style={{ width: "90%", margin: "0 auto" }} />
-            </div>
-          )}
-          <motion.li
-            onClick={() => setConfirmationPopup(true)}
-            style={{
-              width: "100%",
-              textAlign: reply != null ? "center" : "right",
+
+      {post != null && (
+        <div>
+          <li
+            className="dropdown-item"
+            disabled={post.answered == 1 && true}
+            onClick={() => {
+              onToggleUrgent(post.id);
             }}
-            whileHover={{
-              x: -3,
-            }}
+            style={{ color: post.answered == 1 && "var(--secondary)" }}
           >
-            Delete
-          </motion.li>
-        </ul>
-      </div>
-    </div>
+            <i class="bi bi-check-all"></i>
+            <span>
+              {post.urgent == 1 ? "Unmark as Urgent" : "Mark as Urgent"}
+            </span>
+          </li>
+          <li
+            disabled={post.urgent == 1 && true}
+            className="dropdown-item"
+            onClick={() => {
+              onToggleAnswered(post.id);
+            }}
+            style={{ color: post.urgent == 1 && "var(--secondary)" }}
+          >
+            <i class="bi bi-exclamation"></i>
+            <span>
+              {post.answered == 1 ? "Unmark as Answered" : "Mark as Answered"}
+            </span>
+          </li>
+        </div>
+      )}
+      <li onClick={() => setConfirmationPopup(true)} className="dropdown-item">
+        <i class="bi bi-x"></i>
+        <span>Delete</span>
+      </li>
+    </ul>
   );
 };
 

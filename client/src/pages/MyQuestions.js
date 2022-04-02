@@ -8,6 +8,7 @@ import axios from "axios";
 import usePosts from "../hooks/usePosts";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import FilterMenu from "../Components/FilterMenu";
+import { PORT } from "../constants/Port";
 
 const MyQuestions = ({ socket }) => {
   const { width } = useWindowDimensions();
@@ -28,7 +29,7 @@ const MyQuestions = ({ socket }) => {
 
   const deletePost = (id) => {
     axios
-      .post("https://stuforum.herokuapp.com/api/post/deletepost", {
+      .post(`${PORT}post/deletepost`, {
         post_id: id,
       })
       .then((res) => {
@@ -38,7 +39,7 @@ const MyQuestions = ({ socket }) => {
   };
 
   const updateStatus = (id, status, new_status) => {
-    axios.post("https://stuforum.herokuapp.com/api/post/updatepoststatus", {
+    axios.post(`${PORT}post/updatepoststatus`, {
       post_id: id,
       status: status,
       new_status: new_status,
@@ -98,7 +99,7 @@ const MyQuestions = ({ socket }) => {
 
   useEffect(() => {
     axios
-      .post("https://stuforum.herokuapp.com/api/user/getuserpostcount", {
+      .post(`${PORT}user/getuserpostcount`, {
         user_id: authState.id,
       })
       .then((res) => {

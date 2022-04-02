@@ -1,60 +1,21 @@
-import { motion } from "framer-motion";
-
-const NavContext = ({ show, onLogout }) => {
+const NavContext = ({ onLogout }) => {
   return (
-    <div
-      className={"context-content" + (show ? " shown" : "")}
-      style={{
-        minWidth: "120px",
-        marginLeft: "-70px",
-      }}
+    <ul
+      className="dropdown-menu dropdown-menu-end dropdown-context"
+      aria-labelledby="nav-context"
     >
-      <ul
-        style={{
-          listStyleType: "none",
-        }}
+      <li
+        className="dropdown-item"
+        onClick={() => (window.location.href = "/profile")}
       >
-        <a
-          href={`/profile`}
-          style={{
-            float: "right",
-            cursor: "pointer",
-            width: "100%",
-            margin: 0,
-            padding: 0,
-          }}
-        >
-          <motion.li
-            style={{
-              color: "var(--gray)",
-              textAlign: "right",
-              marginBottom: -5,
-            }}
-            whileHover={{
-              x: -3,
-            }}
-          >
-            Profile
-          </motion.li>
-        </a>
-        <hr
-          style={{
-            width: "83%",
-            margin: "0 auto",
-            borderColor: "var(--secondary)",
-          }}
-        />
-        <motion.li
-          whileHover={{
-            x: -3,
-          }}
-          onClick={onLogout}
-          style={{ color: "var(--gray)" }}
-        >
-          Logout
-        </motion.li>
-      </ul>
-    </div>
+        <i className="bi bi-person-fill"></i>
+        <span>Profile</span>
+      </li>
+      <li className="dropdown-item" onClick={onLogout}>
+        <i className="bi bi-box-arrow-in-left"></i>
+        <span>Logout</span>
+      </li>
+    </ul>
   );
 };
 

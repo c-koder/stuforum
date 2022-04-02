@@ -26,20 +26,8 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://stuforum.netlify.app",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
-    credentials: true,
-    allowedHeaders: [
-      "X-ACCESS_TOKEN",
-      "Access-Control-Allow-Origin",
-      "Authorization",
-      "Origin",
-      "x-requested-with",
-      "Content-Type",
-      "Content-Range",
-      "Content-Disposition",
-      "Content-Description",
-    ],
   },
 });
 
@@ -70,7 +58,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, () => {
   console.log(`Server Running on Port: ${PORT}`);

@@ -12,6 +12,7 @@ import { AuthContext } from "../helpers/AuthContext";
 import axios from "axios";
 import FilterMenu from "../Components/FilterMenu";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import { PORT } from "../constants/Port";
 
 const SinglePost = ({ socket }) => {
   const { width } = useWindowDimensions();
@@ -24,7 +25,7 @@ const SinglePost = ({ socket }) => {
 
   useEffect(() => {
     axios
-      .post("https://stuforum.herokuapp.com/api/post/postexists", {
+      .post("${PORT}post/postexists", {
         post_id: id,
       })
       .then((res) => {
@@ -127,7 +128,7 @@ const SinglePost = ({ socket }) => {
       handleChildReplyDelete(reply_id);
       setCommentCount(commentCount - 1);
     } else {
-      axios.post("https://stuforum.herokuapp.com/api/reply/deletereply", {
+      axios.post(`${PORT}reply/deletereply`, {
         reply_id: reply_id,
         post_id: id,
         delete_child_only: false,
@@ -144,7 +145,7 @@ const SinglePost = ({ socket }) => {
   };
 
   const handleChildReplyDelete = (reply_id) => {
-    axios.post("https://stuforum.herokuapp.com/api/reply/deletereply", {
+    axios.post(`${PORT}reply/deletereply`, {
       reply_id: reply_id,
       post_id: id,
       delete_child_only: true,
@@ -162,7 +163,7 @@ const SinglePost = ({ socket }) => {
 
   const deletePost = (id) => {
     axios
-      .post("https://stuforum.herokuapp.com/api/post/deletepost", {
+      .post("${PORT}post/deletepost", {
         post_id: id,
       })
       .then((res) => {
@@ -171,7 +172,7 @@ const SinglePost = ({ socket }) => {
   };
 
   const updateStatus = (id, status, new_status) => {
-    axios.post("https://stuforum.herokuapp.com/api/post/updatepoststatus", {
+    axios.post(`${PORT}post/updatepoststatus`, {
       post_id: id,
       status: status,
       new_status: new_status,

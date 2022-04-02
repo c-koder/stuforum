@@ -23,7 +23,7 @@ const RightBar = ({ activeTab }) => {
 
   return (
     <div>
-      <div className="rightbar whiteContainer" style={{ marginTop: 0 }}>
+      <div className="rightbar content-container">
         <motion.a
           href="/home"
           className={
@@ -93,7 +93,7 @@ const RightBar = ({ activeTab }) => {
           Tags
         </motion.a>
       </div>
-      <div className="whiteContainer">
+      <div className="content-container" style={{ marginTop: 30 }}>
         <h2 style={{ marginBottom: 20 }}>Frequently used tags</h2>
         <Tags tags={tags} tagsOnly={false} />
       </div>

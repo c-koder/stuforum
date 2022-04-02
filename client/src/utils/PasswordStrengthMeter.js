@@ -21,24 +21,14 @@ const PasswordStrengthMeter = ({ password }) => {
   };
 
   return (
-    <div
-      className="password-strength-meter"
-      style={{ marginLeft: 5, marginTop: -10, color: "var(--gray)" }}
-    >
+    <div className="password-strength-meter" style={{ color: "var(--dark)" }}>
       <progress
         className={`password-strength-meter-progress strength-${createPasswordLabel(
           testedResult
         )}`}
-        style={{ marginBottom: 10 }}
         value={testedResult.score}
         max="4"
       />
-      <label className="password-strength-meter-label">
-        <>
-          <strong>Password strength:</strong>{" "}
-          {password && createPasswordLabel(testedResult)}
-        </>
-      </label>
     </div>
   );
 };

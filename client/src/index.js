@@ -1,7 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+
 import "./styles/index.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 import reportWebVitals from "./reportWebVitals";
+
 import Routing from "./router/Routing";
 
 ReactDOM.render(

@@ -59,10 +59,10 @@ const Posts = ({
         loader={
           posts.length > 1 && (
             <div
-              className="postsContainer"
+              className="posts-container"
               style={{ marginTop: viewingQuestions ? 0 : 55, marginBottom: 55 }}
             >
-              <div className="postsContainer-div">
+              <div className="posts-container-div">
                 <Skeleton
                   baseColor="var(--light-white)"
                   highlightColor="var(--white)"

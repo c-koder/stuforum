@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { PORT } from "../constants/Port";
 
 const useMiniPosts = (count) => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
     axios
-      .post("https://stuforum.herokuapp.com/api/post/getminiposts", {
+      .post(`${PORT}post/getminiposts`, {
         count: count,
       })
       .then((res) => {

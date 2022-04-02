@@ -14,7 +14,7 @@ const LeftBar = ({ userQuestionCount }) => {
   const { authState } = useContext(AuthContext);
 
   const [questionPopup, setQuestionPopup] = useState(false);
-  
+
   const [user, setUser] = useState([]);
   const { userResponse } = useUser(authState.nick_name);
 
@@ -37,7 +37,7 @@ const LeftBar = ({ userQuestionCount }) => {
     e.preventDefault();
     setQuestionPopup(true);
   };
-  
+
   return (
     <div>
       {questionPopup && (
@@ -47,7 +47,7 @@ const LeftBar = ({ userQuestionCount }) => {
         />
       )}
       <Button onClick={askQuestion} text={"Ask a Question"} />
-      <div className="whiteContainer">
+      <div className="content-container" style={{ marginTop: 30 }}>
         <h2 style={{ marginBottom: 20 }}>Top Users</h2>
         <TopUsers topUsers={topUsers} />
         <hr />

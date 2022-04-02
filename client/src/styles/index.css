@@ -1,10 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans");
-@import url("https://fonts.googleapis.com/css?family=Overpass");
+@import url("https://fonts.googleapis.com/css2?family=Inter");
 
 :root {
   --primary: #3d5af1;
   --secondary: #b4b4b4;
-  --gray: #444444;
+  --dark: #444444;
   --blue: #e8ebfb;
   --red: #dd2541;
   --green: #33be2f;
@@ -22,14 +21,23 @@ img {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "DM Sans", sans-serif;
-  color: var(--gray);
+  font-family: "Inter", sans-serif;
+  color: var(--dark);
   outline-width: 0;
 }
 
 body {
   background-color: var(--bg);
   transition: background-color 200ms ease-in;
+}
+
+input {
+  background: var(--white) !important;
+  color: var(--dark) !important;
+}
+
+input::placeholder {
+  opacity: 0.6 !important;
 }
 
 .icon {
@@ -41,6 +49,11 @@ body {
   margin-right: 10px;
   margin-left: 5px;
   vertical-align: middle;
+}
+
+.navbar {
+  background: var(--bg);
+  border-bottom: 1px solid var(--light-white);
 }
 
 .avatar {
@@ -76,7 +89,6 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: left;
 }
 
 .centered h1,
@@ -90,36 +102,27 @@ p {
 }
 
 .btn {
-  display: inline-block;
   background: var(--primary);
   color: var(--white);
-  border: none;
-  padding: 13px 20px;
-  margin-top: 5px;
-  border-radius: 5px;
   cursor: pointer;
-  text-decoration: none;
   font-size: var(--main-font-size);
-  font-family: inherit;
-  transition: all 200ms ease-out;
-}
-
-.btn:focus {
-  outline: none;
+  transition: 0.1s ease;
 }
 
 .btn:hover {
-  transform: scale(1.02);
-  transition: all 200ms ease-in;
+  color: var(--white);
+  transform: scale(1.01);
+  transition: 0.1s ease;
 }
 
 button:disabled {
-  background-color: var(--gray);
+  cursor: not-allowed !important;
+  background-color: var(--dark);
 }
 
 .btn-block {
   display: block;
-  width: 120%;
+  width: 100%;
 }
 
 .nullBtn {
@@ -161,22 +164,7 @@ button:disabled {
   height: 45%;
 }
 
-.container {
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 80px 40px;
-  height: 100%;
-}
-.container-div {
-  width: 100%;
-  margin: 0px 40px;
-  height: 100%;
-}
-
-.whiteContainer {
-  margin-top: 40px;
+.content-container {
   border-radius: 10px;
   padding: 20px;
   border: 1px solid var(--light-white);
@@ -236,7 +224,7 @@ button:disabled {
   flex-wrap: wrap;
   width: 100%;
   padding: 0px;
-  border: 1px solid var(--gray);
+  border: 1px solid var(--dark);
   border-radius: 6px;
 }
 
@@ -289,18 +277,13 @@ button:disabled {
   transition: all 150ms ease-in;
 }
 
-.postsContainer {
+.posts-container {
   background-color: var(--white);
   padding: 20px;
   border: 1px solid var(--light-white);
-  margin-bottom: 40px;
+  margin-bottom: 25px;
   border-radius: 10px;
-  display: flex;
   transition: all 200ms ease-in;
-  width: 100%;
-}
-
-.postsContainer-div {
   width: 100%;
 }
 
@@ -344,64 +327,44 @@ button:disabled {
   position: relative;
 }
 
-.dropdown {
+.notifications-menu {
   position: absolute;
   margin-top: 90px;
   z-index: 999;
   border: 1px solid var(--light-white);
   border-top: 2px solid var(--light-white);
   background-color: var(--white);
-  /* box-shadow: 0px 50px 50px rgba(0, 0, 0, 0.03); */
   border-radius: 10px;
   padding: 20px;
   overflow: scroll;
-  visibility: hidden;
-  height: 0;
-  opacity: 0;
-  transition: all 200ms ease-out;
-}
-
-.dropdown.shown {
   visibility: visible;
-  height: 45%;
   opacity: 100;
-  transition: all 200ms ease-in;
+  transition: 0.2s ease;
 }
 
-.context-content {
-  visibility: hidden;
-  position: absolute;
+.dropdown-context {
+  margin-top: 10px !important;
   background-color: var(--white);
-  margin-top: 12px;
   border: 1px solid var(--light-white);
-  z-index: 99;
-  transition: all 200ms ease-in;
-  opacity: 0;
   border-radius: 5px;
 }
 
-.context-content.shown {
-  visibility: visible;
-  opacity: 100;
-  transition: all 200ms ease-in;
-}
-
-.context-content li {
-  color: var(--gray);
-  text-decoration: none;
-  display: block;
-  padding: 10px;
-  text-align: right;
+.dropdown-context li {
+  color: var(--dark);
   font-size: var(--main-font-size);
   cursor: pointer;
 }
 
-.context-content .button {
-  color: var(--secondary);
-  display: flex;
-  padding: 10px 15px;
-  margin-top: 4px;
-  font-size: var(--main-font-size);
+.dropdown-context li:hover {
+  background: var(--light-white);
+}
+
+.dropdown-context li span {
+  margin-left: 8px;
+}
+
+.dropdown-context li .bi {
+  font-size: 22px;
 }
 
 .sortLabel {
@@ -435,7 +398,7 @@ button:disabled {
 .questionForm input[type="text"] {
   background-color: transparent;
   width: 100%;
-  border-color: var(--gray);
+  border-color: var(--dark);
   border-width: 1px;
   border-radius: 5px;
   font-size: var(--main-font-size);
@@ -453,7 +416,7 @@ button:disabled {
   height: 150px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: var(--gray);
+  background-color: var(--dark);
 }
 
 .profilepic:hover {
@@ -499,29 +462,6 @@ button:disabled {
 
 a {
   text-decoration: none;
-}
-
-.form-control {
-  margin: 20px 0;
-}
-
-.form-control label {
-  display: block;
-}
-
-.form-control input {
-  background-color: transparent;
-  width: 120%;
-  border-color: var(--gray);
-  border-width: 1px;
-  border-radius: 5px;
-  font-size: var(--main-font-size);
-  margin: 5px;
-  padding: 13px 9px;
-}
-
-.form-control input:disabled {
-  opacity: 0.6;
 }
 
 .check-field [type="checkbox"] {
@@ -605,29 +545,21 @@ a {
   visibility: visible;
 }
 
-.password-strength-meter {
-  text-align: left;
-}
-
 .password-strength-meter-progress {
   -webkit-appearance: none;
   appearance: none;
-  width: 122%;
-  height: 10px;
+  width: 100%;
+  height: 15px;
 }
 
 .password-strength-meter-progress::-webkit-progress-bar {
   background-color: var(--light-white);
-  border-radius: 10px;
-}
-
-.password-strength-meter-label {
-  font-size: 16px;
+  border-radius: 0px 0px 5px 5px !important;
+  margin-top: -2.5px;
 }
 
 .password-strength-meter-progress::-webkit-progress-value {
-  border-radius: 10px;
-  background-size: 35px 20px, 100% 100%, 100% 100%;
+  border-radius: 0px 0px 5px 5px !important;
 }
 
 .paginationBtns {
@@ -689,7 +621,7 @@ a {
 }
 
 .tooltip {
-  color: var(--gray) !important;
+  color: var(--dark) !important;
   background-color: var(--secondary) !important;
   padding: 10px !important;
   font-weight: bold !important;
@@ -712,11 +644,11 @@ a {
   border-bottom-right-radius: 0.5em;
   background: transparent;
   border: 1px;
-  border-color: var(--gray) !important;
+  border-color: var(--dark) !important;
 }
 
 .quill .ql-snow.ql-toolbar {
-  border: 1px solid var(--gray);
+  border: 1px solid var(--dark);
   display: block;
   background: #ececec;
   border-top-left-radius: 0.5em;
@@ -725,7 +657,7 @@ a {
 
 .ql-syntax {
   background-color: var(--bg);
-  color: var(--gray);
+  color: var(--dark);
   overflow: scroll;
   max-height: 600px;
   word-wrap: break-word;
@@ -738,7 +670,7 @@ a {
 
 .quill .ql-snow .ql-editor pre.ql-syntax {
   background-color: var(--bg);
-  color: var(--gray);
+  color: var(--dark);
   overflow: scroll;
   max-height: 600px;
 }
@@ -794,7 +726,7 @@ a {
   padding: 30px 0;
   text-align: center;
   background-color: white;
-  color: var(--gray);
+  color: var(--dark);
   overflow: auto;
   position: absolute;
   margin-top: 100vh;

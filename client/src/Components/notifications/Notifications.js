@@ -5,6 +5,7 @@ import useNotifications from "../../hooks/useNotifications";
 import Notification from "./Notification";
 import InfiniteScoll from "react-infinite-scroll-component";
 import axios from "axios";
+import { PORT } from "../../constants/Port";
 
 const Notifications = ({
   show,
@@ -55,7 +56,7 @@ const Notifications = ({
     const exists = notifications.filter((item) => item.viewed == 0);
     setNotificationCount(exists.length);
 
-    axios.post("https://stuforum.herokuapp.com/api/user/notificationviewed", {
+    axios.post(`${PORT}user/notificationviewed`, {
       id: id,
     });
   };
@@ -63,7 +64,7 @@ const Notifications = ({
   const deleteNotif = (id) => {
     setNotifications(notifications.filter((notif) => notif.id !== id));
 
-    axios.post("https://stuforum.herokuapp.com/api/user/deletenotification", {
+    axios.post(`${PORT}user/deletenotification`, {
       id: id,
     });
   };
@@ -74,12 +75,9 @@ const Notifications = ({
         (notification) => notification && { ...notification, viewed: 1 }
       )
     );
-    axios.post(
-      "https://stuforum.herokuapp.com/api/user/allnotificationsviewed",
-      {
-        user_id: authState.id,
-      }
-    );
+    axios.post(`${PORT}user/allnotificationsviewed`, {
+      user_id: authState.id,
+    });
   };
 
   const [scrollNumber, setScollNumber] = useState(0);
@@ -101,57 +99,54 @@ const Notifications = ({
     });
 
   return (
-    <>
-      <div
-        className={"dropdown" + (show ? " shown" : "")}
-        style={{
-          marginLeft: -370,
-          width: "420px",
-        }}
-        id="scrollableDiv"
-      >
-        <div style={{ marginBottom: 10 }}>
-          <h2 style={{ float: "left" }}>Notifications</h2>
-          <div style={{ display: "flex", float: "right" }}>
-            <button
-              className="btn btn-block"
-              style={{
-                width: "100%",
-                padding: "5px 20px",
-                fontSize: 16,
-              }}
-              onClick={markAsSeen}
-              disabled={notificationCount == 0 ? true : false}
-            >
-              Mark all seen
-            </button>
-          </div>
-        </div>
-        <br />
-        <hr style={{ marginTop: 20, opacity: 0.3 }} />
-        <div>
-          <InfiniteScoll
-            dataLength={scrollsVisited}
-            hasMore={hasMore}
-            scrollableTarget="scrollableDiv"
-            next={() => {
-              setHasMore(notifications[scrollsVisited] != null);
-              setTimeout(() => {
-                setScollNumber(scrollNumber + 1);
-              }, 500);
+    <div
+      className="dropdown-menu dropdown-menu-end notifications-menu"
+      aria-labelledby="notifications-menu"
+      style={{
+        width: "420px",
+      }}
+      id="scrollableDiv"
+    >
+      <div className="hstack">
+        <h4>Notifications</h4>
+        <div className="ms-auto">
+          <button
+            className="btn btn-block ms-auto"
+            style={{
+              width: "100%",
+              padding: "5px 20px",
+              fontSize: 16,
             }}
+            onClick={markAsSeen}
+            disabled={notificationCount == 0 ? true : false}
           >
-            {displayNotifications}
-          </InfiniteScoll>
-
-          {notifications.length === 0 && (
-            <center>
-              <h4 style={{ marginTop: 20 }}>No new notifications.</h4>
-            </center>
-          )}
+            Mark all seen
+          </button>
         </div>
       </div>
-    </>
+      <hr style={{ opacity: 0.3 }} />
+      <div>
+        <InfiniteScoll
+          dataLength={scrollsVisited}
+          hasMore={hasMore}
+          scrollableTarget="scrollableDiv"
+          next={() => {
+            setHasMore(notifications[scrollsVisited] != null);
+            setTimeout(() => {
+              setScollNumber(scrollNumber + 1);
+            }, 500);
+          }}
+        >
+          {displayNotifications}
+        </InfiniteScoll>
+
+        {notifications.length === 0 && (
+          <center>
+            <h4 style={{ marginTop: 20 }}>No new notifications.</h4>
+          </center>
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -56,7 +56,7 @@ const UserDetails = ({ user }) => {
   return (
     <>
       <div
-        className="whiteContainer"
+        className="content-container"
         style={{
           marginTop: 0,
         }}
@@ -86,9 +86,15 @@ const UserDetails = ({ user }) => {
               </div>
             </div>
 
-            <h2 style={{ marginTop: 20 }}>{user.full_name}<br/><span style={{ fontSize: 16 }}>- {user.nick_name} -</span></h2>
+            <h2 style={{ marginTop: 20 }}>
+              {user.full_name}
+              <br />
+              <span style={{ fontSize: 16 }}>- {user.nick_name} -</span>
+            </h2>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <h3 style={{ color: "var(--secondary)" }}>{abbreviateNumber(user.likes)}</h3>
+              <h3 style={{ color: "var(--secondary)" }}>
+                {abbreviateNumber(user.likes)}
+              </h3>
               <img
                 style={{ marginLeft: 10, height: 20, marginTop: 4 }}
                 className="icon"
@@ -96,11 +102,11 @@ const UserDetails = ({ user }) => {
               />
             </div>
             <div
-              className="whiteContainer"
+              className="content-container"
               style={{
                 marginTop: -10,
                 boxShadow: "none",
-                border: "none"
+                border: "none",
               }}
             >
               <span style={{ textAlign: "center", fontSize: 18 }}>
@@ -116,7 +122,9 @@ const UserDetails = ({ user }) => {
               >
                 Joined {formatDate()}
               </h4>
-              {authState.nick_name === user.nick_name && <Button text={"Edit Details"} />}
+              {authState.nick_name === user.nick_name && (
+                <Button text={"Edit Details"} />
+              )}
             </div>
           </div>
         </center>

@@ -37,9 +37,9 @@ const Replies = ({ socket, replies, onDelete, addReply, answered }) => {
       }}
       loader={
         replies.length > 0 && (
-          <div className="postsContainer">
+          <div className="posts-container">
             <div
-              className="postsContainer-div"
+              className="posts-container-div"
               style={{
                 marginLeft: "2%",
               }}
@@ -52,7 +52,7 @@ const Replies = ({ socket, replies, onDelete, addReply, answered }) => {
               />
             </div>
 
-            <div className="postsContainer-div" style={{ marginLeft: "-82%" }}>
+            <div className="posts-container-div" style={{ marginLeft: "-82%" }}>
               <Skeleton
                 baseColor="var(--light-white)"
                 highlightColor="var(--white)"

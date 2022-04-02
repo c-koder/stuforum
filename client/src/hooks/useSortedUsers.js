@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { PORT } from "../constants/Port";
 
 const useSortedUsers = () => {
   const [sortedUserResponse, setResponse] = useState(null);
   const fetchData = () => {
     axios
-      .get("https://stuforum.herokuapp.com/api/user/getsortedusers")
+      .get(`${PORT}user/getsortedusers`)
       .then((res) => {
         setResponse(res.data);
       });

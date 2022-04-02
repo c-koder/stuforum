@@ -11,6 +11,7 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import AskAQuestion from "../Components/AskAQuestion";
 import Button from "../Components/Button";
 import axios from "axios";
+import { PORT } from "../constants/Port";
 
 const Home = ({ socket }) => {
   const { width } = useWindowDimensions();
@@ -43,7 +44,7 @@ const Home = ({ socket }) => {
 
   useEffect(() => {
     axios
-      .post("https://stuforum.herokuapp.com/api/user/getuserpostcount", {
+      .post(`${PORT}user/getuserpostcount`, {
         user_id: authState.id,
       })
       .then((res) => {
@@ -93,14 +94,12 @@ const Home = ({ socket }) => {
 
   return (
     <motion.div
+      className="container"
+      style={{ marginTop: 140 }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
-      style={{
-        padding: width < 900 && "0px 0px",
-        margin: width < 900 && "0px 0px",
-      }}
     >
       {questionPopup && (
         <AskAQuestion
@@ -108,31 +107,21 @@ const Home = ({ socket }) => {
           setQuestionPopup={setQuestionPopup}
         />
       )}
-      {width < 900 && (
-        <div style={{ margin: "40px" }}>
-          <Button onClick={askQuestion} text={"Ask a Question"} />
-        </div>
-      )}
 
-      <div className={"container"}>
-        <div
-          className="container-div"
-          style={{ display: width < 900 && "none" }}
-        >
+      <div className="row justify-content-center">
+        <div className="col-3" style={{ display: width < 900 && "none" }}>
+          {width < 900 && (
+            <div style={{ margin: "40px" }}>
+              <Button onClick={askQuestion} text={"Ask a Question"} />
+            </div>
+          )}
           <LeftBar userQuestionCount={userQuestionCount} />
         </div>
 
-        <div
-          className="container-div"
-          style={{
-            width: "225%",
-            margin: width < 900 && "-80px 0px 0px 0px",
-            marginTop: width < 900 ? "-80px" : 0,
-          }}
-        >
+        <div className={`col${width > 992 ? "-6" : ""}`}>
           {!loading && (
             <div>
-              {posts.length > 0 && (
+              {/* {posts.length > 0 && (
                 <FilterMenu show={true} posts={true} sortData={sortPosts} />
               )}
               {posts.length == 0 ? (
@@ -143,7 +132,7 @@ const Home = ({ socket }) => {
                 <div className="sortLabel" style={{ width: "100px" }}>
                   Sort By
                 </div>
-              )}
+              )} */}
               {name != null && (
                 <div
                   style={{
@@ -175,10 +164,7 @@ const Home = ({ socket }) => {
             </div>
           )}
         </div>
-        <div
-          className="container-div"
-          style={{ display: width < 900 && "none" }}
-        >
+        <div className="col-3" style={{ display: width < 900 && "none" }}>
           <RightBar activeTab={"home"} />
         </div>
       </div>

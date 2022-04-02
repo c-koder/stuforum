@@ -7,6 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import { PORT } from "../constants/Port";
 
 hljs.configure({
   languages: ["javascript", "java", "c", "c++", "python"],
@@ -58,7 +59,7 @@ const CommentBox = (props) => {
       setError("Please add a comment");
     } else {
       axios
-        .post("https://stuforum.herokuapp.com/api/reply/addreply", {
+        .post(`${PORT}reply/addreply`, {
           parent_id: parent_id,
           user_id: user_id,
           replied_to: replyTo,
@@ -112,9 +113,9 @@ const CommentBox = (props) => {
   return (
     <>
       {!props.answered && (
-        <div className="postsContainer" style={{ marginBottom: 20 }}>
+        <div className="posts-container" style={{ marginBottom: 20 }}>
           <div
-            className="postsContainer-div"
+            className="posts-container-div"
             style={{
               width: width > 900 ? "10%" : "25%",
               margin: width > 900 ? "0 10px 0 0px" : "0 5px 0px -10px",
@@ -129,7 +130,7 @@ const CommentBox = (props) => {
               alt="Profile"
             />
           </div>
-          <div className="postsContainer-div">
+          <div className="posts-container-div">
             <span style={{ width: "100%" }}>
               <div className="form-control" style={{ marginBottom: 30 }}>
                 <ReactQuill

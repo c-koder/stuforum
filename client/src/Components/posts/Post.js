@@ -16,6 +16,7 @@ import axios from "axios";
 import { Parser } from "html-to-react";
 import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import { PORT } from "../../constants/Port";
 
 const Post = ({
   post,
@@ -89,7 +90,7 @@ const Post = ({
     setDisabled(true);
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     axios
-      .post("https://stuforum.herokuapp.com/api/post/updateleadsprefs", {
+      .post(`${PORT}post/updateleadsprefs`, {
         id: prefId,
         post_id: post.id,
         leads: leads,
@@ -174,7 +175,7 @@ const Post = ({
 
   const description =
     post.description.length > 600 && !singlePost
-      ? post.description.substring(0, 600) + " . . ."
+      ? post.description.substring(0, 500) + " . . ."
       : post.description;
 
   const [postedTime, setPostedTime] = useState(
@@ -198,152 +199,169 @@ const Post = ({
         arrowColor={"var(--secondary)"}
         delayShow={500}
       />
-      <div
-        className="postsContainer"
-        style={{ marginBottom: answerOnly && 20 }}
-      >
-        <div
-          className="postsContainer-div"
-          style={{
-            width: width > 900 ? "10%" : "15%",
-            margin: "0 10px 0 0px",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-          <h2
-            data-tip="Accumulated leads so far"
-            style={{
-              color: leadsColor,
-            }}
-          >
-            {abbreviateNumber(leads)}
-            <br />
-            <span style={{ color: leadsColor, fontSize: 20 }}>●</span>
-          </h2>
-        </div>
-        <div className="postsContainer-div">
-          {post.user_id == authState.id && (
-            <div style={{ float: "right" }}>
-              <motion.img
-                ref={ref}
+      <div className="posts-container">
+        <div className="row">
+          <div className="row">
+            <div className="col-1">
+              <h2
+                data-tip="Accumulated leads so far"
                 style={{
-                  height: "25px",
-                  marginTop: 5,
-                  marginLeft: 20,
-                  display: viewingQuestions || singlePost ? "block" : "none",
+                  color: leadsColor,
+                  textAlign: "center",
+                  lineHeight: "30px",
                 }}
-                onClick={() => setShow((oldState) => !oldState)}
-                alt="Settings"
-                className="icon"
-                src={settings}
-                variants={rotateVariant}
-                animate={show ? "rotate" : "stop"}
-                whileHover={{ cursor: "pointer" }}
-              />
-              <ContextMenu
-                post={post}
-                show={show}
-                onDelete={onDelete}
-                onToggleUrgent={onToggleUrgent}
-                onToggleAnswered={onToggleAnswered}
-              />
+              >
+                {abbreviateNumber(leads)}{" "}
+                <i
+                  class="bi bi-lightning-charge-fill"
+                  style={{
+                    fontSize: 16,
+                    color: leadsColor,
+                  }}
+                ></i>
+              </h2>
             </div>
-          )}
-          {(post.urgent == 1 || post.answered == 1) && (
-            <span
-              className="label"
-              style={{
-                float: "right",
-                backgroundColor: labelColor,
-                marginTop: 2,
-                margin: "0 auto",
-              }}
-            >
-              {post.urgent == 1
-                ? "Urgent"
-                : post.answered == 1
-                ? "Answered"
-                : ""}
-            </span>
-          )}
+            <div className="col">
+              <a href={`/post/${post.id}`}>
+                <h4>{post.question}</h4>
+              </a>
 
-          <a href={`/post/${post.id}`} style={{ display: "flex" }}>
-            <h2 style={{ float: "left" }}>{post.question}</h2>
-          </a>
+              {(post.urgent == 1 || post.answered == 1) && (
+                <span
+                  className="label"
+                  style={{
+                    background: labelColor,
+                    marginTop: 2,
+                    margin: "0 auto",
+                  }}
+                >
+                  {post.urgent == 1
+                    ? "Urgent"
+                    : post.answered == 1
+                    ? "Answered"
+                    : ""}
+                </span>
+              )}
 
-          <span
-            style={{
-              float: "left",
-              minWidth: "30%",
-              color: "var(--secondary)",
-              fontWeight: 600,
-            }}
-          >
-            Posted by{" "}
-            <a
-              href={
-                authState.nick_name == post.nick_name
-                  ? "/profile"
-                  : `/user/${post.nick_name}`
-              }
-            >
-              <span style={{ color: "var(--primary)", fontWeight: 600 }}>
-                {post.nick_name}
-              </span>
-            </a>
-          </span>
-          <br />
-          {tags != null ? <Tags tags={tags} tagOnly={true} /> : <br />}
-
-          <div>{Parser().parse(description)}</div>
-
-          <hr style={{ margin: "15px 0 15px 0" }} />
-
-          <div style={{ display: "flex", marginBottom: 20, width: "100%" }}>
-            <span
-              style={{
-                display: "flex",
-                float: "left",
-                color: "var(--secondary)",
-                fontWeight: 600,
-              }}
-            >
-              <img className="navIcon" src={time} />
-              <h4
+              <div
                 style={{
                   color: "var(--secondary)",
-                  marginTop: -1,
+                  fontWeight: 600,
+                }}
+              >
+                Posted by{" "}
+                <a
+                  href={
+                    authState.nick_name == post.nick_name
+                      ? "/profile"
+                      : `/user/${post.nick_name}`
+                  }
+                >
+                  <span style={{ color: "var(--primary)", fontWeight: 600 }}>
+                    {post.nick_name}
+                  </span>
+                </a>
+              </div>
+              {tags != null ? <Tags tags={tags} tagOnly={true} /> : <br />}
+            </div>
+            <div className="col-1" style={{ marginRight: width > 992 && -15 }}>
+              {post.user_id == authState.id && (
+                <div>
+                  <a
+                    role="button"
+                    id="post-context"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    variants={rotateVariant}
+                    // style={{
+                    //   display: viewingQuestions || singlePost ? "block" : "none",
+                    // }}
+                  >
+                    <i
+                      class="bi bi-gear-fill"
+                      style={{ color: "var(--secondary)", fontSize: 22 }}
+                    ></i>
+                  </a>
+                  <ContextMenu
+                    post={post}
+                    onDelete={onDelete}
+                    onToggleUrgent={onToggleUrgent}
+                    onToggleAnswered={onToggleAnswered}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div
+            className="row"
+            style={{ margin: "0 auto", textAlign: "justify" }}
+          >
+            {Parser().parse(description)}
+          </div>
+
+          <hr style={{ margin: "0px 0 15px 0" }} />
+
+          <div className="hstack" style={{ margin: "-10px 0px -10px 0px" }}>
+            <div
+              style={{
+                display: "flex",
+                color: "var(--secondary)",
+              }}
+            >
+              <i
+                class="bi bi-clock-fill"
+                style={{
+                  fontSize: 20,
+                  color: "var(--secondary)",
+                }}
+              ></i>
+              <span
+                style={{
+                  color: "var(--secondary)",
+                  marginLeft: 5,
+                  marginTop: 2,
                 }}
                 data-tip={moment(post.posted_time).format(
                   "MMMM Do YYYY, h:mm:ss a"
                 )}
               >
                 {postedTime}
-              </h4>
-            </span>
+              </span>
+            </div>
 
-            <span
-              style={{
-                margin: "0 auto",
-                color: "var(--primary)",
-                fontWeight: 600,
-              }}
-            >
-              <img className="navIcon" src={answers} />
-              {abbreviateNumber(commentCount || post.comments)}
-            </span>
-            <span style={{ float: "right" }}>
+            <div className="ms-auto" style={{ display: "flex", marginTop: 5 }}>
+              <i
+                class="bi bi-chat-left-fill"
+                style={{ fontSize: 20, color: "var(--secondary)" }}
+              ></i>
+              <span
+                style={{
+                  color: "var(--secondary)",
+                  marginLeft: 10,
+                }}
+              >
+                {abbreviateNumber(commentCount || post.comments)}
+              </span>
+            </div>
+
+            <div className="ms-auto">
               <button
                 className="nullBtn"
                 onClick={upVote}
                 data-tip="Vote as useful"
                 disabled={disabled}
               >
-                <img
-                  className="navIcon"
-                  src={userVoted === "useful" ? upArrowBlue : upArrow}
-                />
+                <i
+                  class="bi bi-arrow-up-short"
+                  style={{
+                    fontSize: 36,
+                    color:
+                      userVoted === "useful"
+                        ? "var(--primary)"
+                        : "var(--secondary)",
+                  }}
+                ></i>
               </button>
               <button
                 className="nullBtn"
@@ -351,12 +369,18 @@ const Post = ({
                 data-tip="Vote as not useful"
                 disabled={disabled}
               >
-                <img
-                  className="navIcon"
-                  src={userVoted === "useless" ? downArrowRed : downArrow}
-                />
+                <i
+                  class="bi bi-arrow-down-short"
+                  style={{
+                    fontSize: 36,
+                    color:
+                      userVoted === "useless"
+                        ? "var(--red)"
+                        : "var(--secondary)",
+                  }}
+                ></i>
               </button>
-            </span>
+            </div>
           </div>
         </div>
       </div>

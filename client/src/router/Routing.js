@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import UserProfile from "../pages/UserProfile";
 import Tags from "../pages/Tags";
-import NavBar from "../Components/navigation/NavBar";
+import Navigation from "../Components/navigation/Navigation";
 import ViewUser from "../pages/ViewUser";
 import { useState, useEffect } from "react";
 import { AuthContext } from "../helpers/AuthContext";
@@ -24,11 +24,10 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import moment from "moment";
 import io from "socket.io-client";
 import NotificationCards from "../Components/notifications/NotificationCards";
+import { PORT } from "../constants/Port";
 // import Footer from "../Components/Footer";
 
-const socket = io.connect("https://stuforum.herokuapp.com", {
-  withCredentials: true,
-});
+const socket = io.connect(`http://localhost:3001`);
 
 const Routing = () => {
   const { width } = useWindowDimensions();
@@ -40,7 +39,7 @@ const Routing = () => {
 
   useEffect(() => {
     axios
-      .get("https://stuforum.herokuapp.com/api/auth", {
+      .get(`${PORT}auth`, {
         headers: {
           accessToken: localStorage.getItem("accessToken"),
         },
@@ -65,7 +64,7 @@ const Routing = () => {
   const onLogout = () => {
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
 
-    axios.post("https://stuforum.herokuapp.com/api/user/logout", {
+    axios.post(`${PORT}user/logout`, {
       user_id: authState.id,
       time: time,
     });
@@ -78,7 +77,7 @@ const Routing = () => {
 
   const lightTheme = {
     "--secondary": "#b4b4b4",
-    "--gray": "#444444",
+    "--dark": "#444444",
     "--blue": "#e8ebfb",
     "--bg": "#f8f8f8",
     "--white": "#ffffff",
@@ -87,7 +86,7 @@ const Routing = () => {
 
   const darkTheme = {
     "--secondary": "#a4a4a4",
-    "--gray": "#f0f0f0",
+    "--dark": "#f0f0f0",
     "--blue": "#333333",
     "--bg": "#121212",
     "--white": "#202020",
@@ -161,11 +160,11 @@ const Routing = () => {
         onDelete={deleteNotif}
         decayNotif={decayNotif}
       />
-      <NavBar
+      <Navigation
         isLogged={authState.status}
         onLogout={onLogout}
         newNotification={newNotification}
-      />{" "}
+      />
       <Router>
         <Routes>
           <Route

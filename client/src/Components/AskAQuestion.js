@@ -10,6 +10,7 @@ import "react-quill/dist/quill.snow.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import { PORT } from "../constants/Port";
 
 hljs.configure({
   languages: ["javascript", "java", "c", "c++", "python"],
@@ -105,7 +106,7 @@ const AskAQuestion = (props) => {
       const posted_time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
 
       axios
-        .post("https://stuforum.herokuapp.com/api/post/addpost", {
+        .post(`${PORT}post/addpost`, {
           question: question,
           description: description,
           tags: selectedTags,
@@ -161,7 +162,7 @@ const AskAQuestion = (props) => {
           </div>
 
           <div
-            className="whiteContainer"
+            className="content-container"
             style={{ backgroundColor: "var(--blue)", marginBottom: 20 }}
           >
             <p style={{ color: "var(--primary)", lineHeight: 1.5 }}>

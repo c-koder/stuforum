@@ -3,10 +3,14 @@ import axios from "axios";
 import moment from "moment";
 import { validEmail, validPassword, validStudentID } from "../constants/Regex";
 import PasswordStrengthMeter from "../utils/PasswordStrengthMeter";
-import Login from "../Components/Login";
+import Login from "./Login";
 import { motion } from "framer-motion";
+import { PORT } from "../constants/Port";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const LoginAndRegister = () => {
+  const { width } = useWindowDimensions();
+
   const [fullName, setFullName] = useState("");
   const [studentId, setStudentId] = useState("");
   const [nickName, setNickName] = useState("");
@@ -64,7 +68,7 @@ const LoginAndRegister = () => {
       setError("Passwords don't match");
     } else {
       axios
-        .post("https://stuforum.herokuapp.com/api/user/register", {
+        .post(`${PORT}user/register`, {
           full_name: fullName,
           nick_name: nickName,
           student_id: studentId,
@@ -113,154 +117,176 @@ const LoginAndRegister = () => {
 
   const containerVariants = {
     hidden: {
-      scale: 0.96,
+      opacity: 0,
     },
     visible: {
-      scale: 1,
-      transition: { duration: 0.5 },
-    },
-    exit: {
-      transition: { ease: "easeIn" },
+      opacity: 1,
+      transition: { duration: 0.4 },
     },
   };
 
   return (
     <motion.div
-      className="center"
+      className="container"
+      style={{ marginTop: 120 }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      exit="exit"
-      style={{ position: "relative" }}
     >
-      <div
-        className={"container"}
-        style={{
-          margin: "0",
-          width: "60%",
-          padding: "0",
-        }}
-      >
-        <div
-          className="container-div"
-          style={{
-            width: "25%",
-            margin: 0,
-            padding: 0,
-            marginRight: 80,
-          }}
-        >
-          <Login />
-        </div>
+      <div className={width > 992 && "centered"}>
+        <div className="row justify-content-center">
+          <div className={`col${width < 992 ? "-md-auto" : ""}`}>
+            <Login />
+          </div>
+          {width > 992 ? (
+            <div
+              className="vr"
+              style={{ color: "var(--dark)", padding: 1, margin: "0px 10px" }}
+            />
+          ) : (
+            <hr />
+          )}
 
-        <div
-          style={{
-            borderLeft: "2px solid",
-            borderColor: "var(--secondary)",
-            borderRadius: 25,
-            height: "410px",
-            marginLeft: 25,
-          }}
-        ></div>
+          <div className={`col${width < 992 ? "-md-auto" : ""}`}>
+            <div>
+              <h3>Register</h3>
+              <p>Not a user yet? Sign up now!</p>
+            </div>
 
-        <div
-          className="container-div"
-          style={{
-            width: "25%",
-            marginRight: 80,
-          }}
-        >
-          <h3>Register</h3>
-          <p>Not a user yet? Sign up now!</p>
+            <div className="form-group my-3">
+              <label htmlFor="name" className="form-label">
+                Full Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                className="form-control shadow-none"
+                value={fullName}
+                onChange={(e) => {
+                  let value = e.target.value;
+                  value = value.replace(/[^A-Za-z ]/gi, "");
+                  setFullName(value);
+                }}
+              />
+            </div>
 
-          <div className="form-control">
-            <label>Full Name</label>
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={fullName}
-              onChange={(e) => {
-                let value = e.target.value;
-                value = value.replace(/[^A-Za-z ]/gi, "");
-                setFullName(value);
-              }}
-            />
+            <div className="form-group my-3">
+              <label htmlFor="std_id" className="form-label">
+                Student ID
+              </label>
+              <input
+                type="text"
+                name="std_id"
+                placeholder="Student ID (XXABCXXXX)"
+                className="form-control shadow-none"
+                value={studentId}
+                onChange={(e) => {
+                  setStudentId(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="form-group my-3">
+              <label htmlFor="nickname" className="form-label">
+                Nickname
+              </label>
+              <input
+                type="text"
+                name="nickname"
+                placeholder="Nickname"
+                className="form-control shadow-none"
+                value={nickName}
+                onChange={(e) => {
+                  setNickName(e.target.value);
+                }}
+              />
+            </div>
+            {width > 992 && (
+              <div>
+                <button
+                  type="button"
+                  className="btn btn-block shadow-sm"
+                  onClick={register}
+                >
+                  Register
+                </button>
+                <p className={`alert alert-success my-3`}>{error}</p>
+              </div>
+            )}
           </div>
-          <div className="form-control">
-            <label>Student ID</label>
-            <input
-              type="text"
-              placeholder="Student ID (XXABCXXXX)"
-              value={studentId}
-              onChange={(e) => {
-                setStudentId(e.target.value);
-              }}
-            />
-          </div>
-          <input
-            type="button"
-            style={{ marginLeft: 5 }}
-            value="Register"
-            className="btn btn-block"
-            onClick={register}
-          />
-          <div
-            id="error"
-            className={errorStyling()}
-            style={{
-              marginLeft: 5,
-            }}
-          >
-            {error}
-          </div>
-        </div>
-        <div className="container-div" style={{ width: "25%", marginTop: 52 }}>
-          <div className="form-control">
-            <label>Nickname</label>
-            <input
-              type="text"
-              placeholder="Nickname"
-              value={nickName}
-              onChange={(e) => {
-                setNickName(e.target.value);
-              }}
-            />
-          </div>
-          <div className="form-control">
-            <label>Student Email</label>
-            <input
-              type="text"
-              placeholder="Student Email"
-              value={studentEmail}
-              onChange={(e) => {
-                setStudentEmail(e.target.value);
-              }}
-            />
-          </div>
-          <div className="form-control">
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-          </div>
-          <PasswordStrengthMeter password={password} />
-          <div className="form-control">
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              onFocus={() => setFocused((oldState) => !oldState)}
-              placeholder="Confirm Password"
-              disabled={password === ""}
-              value={confirmPassword}
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-              }}
-            />
+          <div className={`col${width < 992 ? "-md-auto" : ""}`}>
+            {width > 992 && (
+              <div style={{ visibility: "hidden" }}>
+                <h3>Register</h3>
+                <p>Not a user yet? Sign up now!</p>
+              </div>
+            )}
+
+            <div className="form-group my-3">
+              <label htmlFor="email" className="form-label">
+                Student Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                placeholder="Student Email"
+                className="form-control shadow-none"
+                value={studentEmail}
+                onChange={(e) => {
+                  setStudentEmail(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="form-group my-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                className="form-control shadow-none"
+                style={{ borderRadius: "5px 5px 0px 0px" }}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+              <PasswordStrengthMeter password={password} />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="confirm_password" className="form-label">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                name="confirm_password"
+                placeholder="Confirm Password"
+                className="form-control shadow-none"
+                onFocus={() => setFocused((oldState) => !oldState)}
+                disabled={password === ""}
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                }}
+              />
+            </div>
+
+            {width < 992 && (
+              <div>
+                <button
+                  type="button"
+                  className="btn btn-block shadow-sm my-3"
+                  onClick={register}
+                >
+                  Register
+                </button>
+                <p className={`alert alert-success my-3`}>{error}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

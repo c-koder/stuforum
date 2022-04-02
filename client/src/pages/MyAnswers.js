@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { AuthContext } from "../helpers/AuthContext";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import axios from "axios";
+import { PORT } from "../constants/Port";
 
 const MyAnswers = ({ socket }) => {
   const { width } = useWindowDimensions();
@@ -58,7 +59,7 @@ const MyAnswers = ({ socket }) => {
 
   useEffect(() => {
     axios
-      .post("https://stuforum.herokuapp.com/api/user/getuserpostcount", {
+      .post(`${PORT}user/getuserpostcount`, {
         user_id: authState.id,
       })
       .then((res) => {

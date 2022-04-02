@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "animate.css": "^4.1.1",
     "axios": "^0.24.0",
+    "bootstrap-icons": "^1.8.1",
     "framer-motion": "^5.5.5",
     "highlight.js": "^11.3.1",
     "html-to-react": "^1.4.7",

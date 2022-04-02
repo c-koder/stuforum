@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
 import moment from "moment";
+import { PORT } from "../constants/Port";
 
 const Login = ({ socket }) => {
   const [username, setUsername] = useState("");
@@ -24,7 +25,7 @@ const Login = ({ socket }) => {
     } else {
       const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
       axios
-        .post("https://stuforum.herokuapp.com/api/user/login", {
+        .post(`${PORT}user/login`, {
           username: username,
           password: password,
           time: time,
@@ -60,22 +61,31 @@ const Login = ({ socket }) => {
       <h3>Login</h3>
       <p>Find the answer to your question!</p>
       <form onSubmit={login}>
-        <div className="form-control">
-          <label>Credential</label>
+        <div className="form-group my-3">
+          <label htmlFor="credential" className="form-label">
+            Credential
+          </label>
           <input
             type="text"
-            placeholder="Nickname/Email/Student ID"
+            name="credential"
+            placeholder="Credential"
+            className="form-control shadow-none"
             value={username}
             onChange={(e) => {
               setUsername(e.target.value);
             }}
           />
         </div>
-        <div className="form-control">
-          <label>Password</label>
+
+        <div className="form-group my-3">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
           <input
             type="password"
+            name="password"
             placeholder="Password"
+            className="form-control shadow-none"
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
@@ -83,18 +93,12 @@ const Login = ({ socket }) => {
           />
         </div>
 
-        <button
-          type="submit"
-          style={{ marginLeft: 5 }}
-          className="btn btn-block"
-        >
+        <button type="submit" className="btn btn-block shadow-sm">
           Login
         </button>
       </form>
 
-      <div id="error" className={error !== "" ? "error active" : "error"}>
-        {error}
-      </div>
+      <p className={`alert alert-success my-3`}>{error}</p>
     </div>
   );
 };

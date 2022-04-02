@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { PORT } from "../constants/Port";
 
 const usePostData = (post_id, user_id) => {
   const [response, setResponse] = useState(null);
   const fetchData = () => {
     axios
-      .post("https://stuforum.herokuapp.com/api/getpostdata", {
+      .post(`${PORT}getpostdata`, {
         post_id: post_id,
         user_id: user_id,
       })

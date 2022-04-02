@@ -19,6 +19,7 @@ import ReactTooltip from "react-tooltip";
 import { Parser } from "html-to-react";
 import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import { PORT } from "../../constants/Port";
 
 const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
   const { width } = useWindowDimensions();
@@ -76,7 +77,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
   const updateReplyPref = (pref, previousPref) => {
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     axios
-      .post("https://stuforum.herokuapp.com/api/reply/updatereplypref", {
+      .post(`${PORT}reply/updatereplypref`, {
         id: prefId,
         reply_id: reply.id,
         parent_id: reply.parent_id,
@@ -199,7 +200,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
         delayShow={500}
       />
       <div
-        className="postsContainer"
+        className="posts-container"
         style={{
           float: reply.replied_to != null && "right",
           width: reply.replied_to != null && "95%",
@@ -207,7 +208,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
         }}
       >
         <div
-          className="postsContainer-div"
+          className="posts-container-div"
           style={{
             width: width > 900 ? "10%" : "25%",
             margin: width > 900 ? "0 10px 0 0px" : "0 5px 0px -10px",
@@ -217,7 +218,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
         >
           <img href="#profile" className="avatar" src={avatar} alt="Profile" />
         </div>
-        <div className="postsContainer-div">
+        <div className="posts-container-div">
           <div
             style={{
               display: "flex",
@@ -273,7 +274,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
           )}
 
           <div style={{ display: "flex" }}>
-            <p style={{ color: "var(--gray)" }}>
+            <p style={{ color: "var(--dark)" }}>
               {reply.replied_to != null && (
                 <a
                   href={`/user/${reply.replied_to}`}
