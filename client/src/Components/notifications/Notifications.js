@@ -1,14 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import "../../styles/notification.css";
+import InfiniteScoll from "react-infinite-scroll-component";
+import axios from "axios";
+
+import { PORT } from "../../constants/Port";
 import { AuthContext } from "../../helpers/AuthContext";
 import useNotifications from "../../hooks/useNotifications";
 import Notification from "./Notification";
-import InfiniteScoll from "react-infinite-scroll-component";
-import axios from "axios";
-import { PORT } from "../../constants/Port";
 
 const Notifications = ({
-  show,
   notificationCount,
   setNotificationCount,
   newNotification,
@@ -102,9 +101,6 @@ const Notifications = ({
     <div
       className="dropdown-menu dropdown-menu-end notifications-menu"
       aria-labelledby="notifications-menu"
-      style={{
-        width: "420px",
-      }}
       id="scrollableDiv"
     >
       <div className="hstack">

@@ -1,17 +1,16 @@
 import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { motion } from "framer-motion";
+import axios from "axios";
+
+import { PORT } from "../constants/Port";
 import Posts from "../Components/posts/Posts";
 import RightBar from "../Components/RightBar";
 import LeftBar from "../Components/LeftBar";
-import { useParams } from "react-router";
-import { motion } from "framer-motion";
 import usePosts from "../hooks/usePosts";
-import FilterMenu from "../Components/FilterMenu";
 import { AuthContext } from "../helpers/AuthContext";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import AskAQuestion from "../Components/AskAQuestion";
-import Button from "../Components/Button";
-import axios from "axios";
-import { PORT } from "../constants/Port";
 
 const Home = ({ socket }) => {
   const { width } = useWindowDimensions();
@@ -97,7 +96,7 @@ const Home = ({ socket }) => {
   return (
     <motion.div
       className="container"
-      style={{ marginTop: 140 }}
+      style={{ marginTop: 40 }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -114,7 +113,13 @@ const Home = ({ socket }) => {
         <div className="col-3" style={{ display: width < 900 && "none" }}>
           {width < 900 && (
             <div style={{ margin: "40px" }}>
-              <Button onClick={askQuestion} text={"Ask a Question"} />
+              <button
+                onClick={askQuestion}
+                className="btn shadow-none"
+                style={{ margin: 0, width: "100%" }}
+              >
+                Ask a Question
+              </button>
             </div>
           )}
           <LeftBar userQuestionCount={userQuestionCount} />

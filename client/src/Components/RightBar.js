@@ -1,15 +1,7 @@
 import { useEffect, useState } from "react";
-import home from "../resources/home.png";
-import activeHome from "../resources/home-blue.png";
-import questions from "../resources/questions.png";
-import activeQuestions from "../resources/questions-blue.png";
-import answers from "../resources/answers.png";
-import activeAnswers from "../resources/answers-blue.png";
-import tag from "../resources/tag.png";
-import activeTag from "../resources/tag-blue.png";
+
 import Tags from "./tags/Tags";
 import useSortedTags from "../hooks//useSortedTags";
-import { motion } from "framer-motion";
 
 const RightBar = ({ activeTab }) => {
   const [tags, setTags] = useState([]);
@@ -24,74 +16,76 @@ const RightBar = ({ activeTab }) => {
   return (
     <div>
       <div className="rightbar content-container">
-        <motion.a
+        <a
           href="/home"
           className={
             activeTab === "home" ? "active rightbar-item" : "rightbar-item"
           }
-          whileHover={{
-            scale: 1.03,
-          }}
         >
-          <span>
-            <img
-              className="navIcon"
-              src={activeTab === "home" ? activeHome : home}
-            />
-          </span>
+          <i
+            class="bi bi-house-door-fill"
+            style={{
+              fontSize: 20,
+              color:
+                activeTab === "home" ? "var(--primary)" : "var(--secondary)",
+              marginRight: 10,
+            }}
+          ></i>
           Home
-        </motion.a>
-        <motion.a
+        </a>
+        <a
           href="/myquestions"
           className={
             activeTab === "questions" ? "active rightbar-item" : "rightbar-item"
           }
-          whileHover={{
-            scale: 1.03,
-          }}
         >
-          <span>
-            <img
-              className="navIcon"
-              src={activeTab === "questions" ? activeQuestions : questions}
-            />
-          </span>
+          <i
+            class="bi bi-question-circle-fill"
+            style={{
+              fontSize: 20,
+              color:
+                activeTab === "questions"
+                  ? "var(--primary)"
+                  : "var(--secondary)",
+              marginRight: 10,
+            }}
+          ></i>
           My Questions
-        </motion.a>
-        <motion.a
+        </a>
+        <a
           href="/myanswers"
           className={
             activeTab === "answers" ? "active rightbar-item" : "rightbar-item"
           }
-          whileHover={{
-            scale: 1.03,
-          }}
         >
-          <span>
-            <img
-              className="navIcon"
-              src={activeTab === "answers" ? activeAnswers : answers}
-            />
-          </span>
+          <i
+            class="bi bi-chat-left-fill"
+            style={{
+              fontSize: 20,
+              color:
+                activeTab === "answers" ? "var(--primary)" : "var(--secondary)",
+              marginRight: 10,
+            }}
+          ></i>
           My Answers
-        </motion.a>
-        <motion.a
+        </a>
+        <a
           href="/tags"
           className={
             activeTab === "tags" ? "active rightbar-item" : "rightbar-item"
           }
-          whileHover={{
-            scale: 1.03,
-          }}
         >
-          <span>
-            <img
-              className="navIcon"
-              src={activeTab === "tags" ? activeTag : tag}
-            />
-          </span>
+          <i
+            class="bi bi-bookmark-fill"
+            style={{
+              fontSize: 22,
+              color:
+                activeTab === "tags" ? "var(--primary)" : "var(--secondary)",
+              marginRight: 10,
+            }}
+          ></i>
           Tags
-        </motion.a>
+        </a>
       </div>
       <div
         className="content-container"

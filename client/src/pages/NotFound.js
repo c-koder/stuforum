@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import "../styles/glitch.css";
+
 import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const NotFound = () => {

@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
+import { Parser } from "html-to-react";
+
 import like from "../resources/like-blue.png";
 import avatar from "../resources/img_avatar.png";
-import Button from "./Button";
 import { AuthContext } from "../helpers/AuthContext";
-import { Parser } from "html-to-react";
 import { abbreviateNumber } from "../helpers/AbbreviateNumber";
 
 const UserDetails = ({ user }) => {
@@ -123,7 +123,12 @@ const UserDetails = ({ user }) => {
                 Joined {formatDate()}
               </h4>
               {authState.nick_name === user.nick_name && (
-                <Button text={"Edit Details"} />
+                <button
+                  className="btn shadow-none"
+                  style={{ margin: 0, width: "100%" }}
+                >
+                  Edit Details
+                </button>
               )}
             </div>
           </div>

@@ -1,15 +1,12 @@
-import time from "../../resources/time.png";
-import { useState, useContext } from "react";
-import { AuthContext } from "../../helpers/AuthContext";
+import { useContext } from "react";
 import moment from "moment";
 import { motion } from "framer-motion";
 
+import { AuthContext } from "../../helpers/AuthContext";
+
 const MiniPost = ({ post }) => {
   const { authState } = useContext(AuthContext);
-
-  const [postedTime, setPostedTime] = useState(
-    moment(post.posted_time).local().fromNow()
-  );
+  const postedTime = moment(post.posted_time).local().fromNow();
 
   return (
     <div className="miniPostsContainer">
@@ -18,12 +15,12 @@ const MiniPost = ({ post }) => {
         href={`/post/${post.id}`}
         whileHover={{ cursor: "pointer" }}
       >
-        <h3>{post.question}</h3>
+        <h6>{post.question}</h6>
       </motion.a>
 
-      <div style={{ display: "flex" }}>
-        <span style={{ marginTop: -6, marginRight: 5 }}>
-          <h4 style={{color: "var(--secondary)",}}>
+      <div className="hstack">
+        <span style={{ marginRight: 15 }}>
+          <h6 style={{ color: "var(--secondary)" }}>
             u/
             <motion.a
               style={{ all: "unset" }}
@@ -36,18 +33,25 @@ const MiniPost = ({ post }) => {
             >
               {post.nick_name}
             </motion.a>
-          </h4>
+          </h6>
         </span>
-        <span style={{ display: "flex", marginRight: 5 }}>
-          <img className="navIcon" src={time} />
-          <h4
+        <span style={{ display: "flex" }}>
+          <i
+            class="bi bi-clock-fill"
+            style={{
+              fontSize: 18,
+              marginTop: 2,
+              marginRight: 5,
+              color: "var(--secondary)",
+            }}
+          ></i>
+          <h6
             style={{
               color: "var(--secondary)",
-              marginTop: -1,
             }}
           >
             {postedTime}
-          </h4>
+          </h6>
         </span>
       </div>
     </div>

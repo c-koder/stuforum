@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import InfiniteScoll from "react-infinite-scroll-component";
+
 import MiniPost from "./MiniPost";
 
 const MiniPosts = ({ miniPosts, searchText, scrollableTarget }) => {
@@ -26,9 +27,9 @@ const MiniPosts = ({ miniPosts, searchText, scrollableTarget }) => {
 
   return (
     <div style={{ width: "100%" }}>
-      <h5 style={{ letterSpacing: 1.1, marginBottom: 10, marginTop: -5 }}>
+      <h6 style={{ letterSpacing: 1.1, marginBottom: 10, marginTop: -5 }}>
         {heading}
-      </h5>
+      </h6>
       <InfiniteScoll
         dataLength={scrollsVisited}
         hasMore={hasMore}

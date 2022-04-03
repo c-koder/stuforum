@@ -1,13 +1,14 @@
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import avatar from "../resources/img_avatar.png";
 import ReactQuill, { Delta } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
+
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import { PORT } from "../constants/Port";
+import avatar from "../resources/img_avatar.png";
 
 hljs.configure({
   languages: ["javascript", "java", "c", "c++", "python"],

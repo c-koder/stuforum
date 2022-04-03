@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from "react";
-import Posts from "../Components/posts/Posts";
-import RightBar from "../Components/RightBar";
-import LeftBar from "../Components/LeftBar";
 import { motion } from "framer-motion";
 import { AuthContext } from "../helpers/AuthContext";
 import axios from "axios";
+
 import usePosts from "../hooks/usePosts";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import FilterMenu from "../Components/FilterMenu";
 import { PORT } from "../constants/Port";
+import Posts from "../Components/posts/Posts";
+import RightBar from "../Components/RightBar";
+import LeftBar from "../Components/LeftBar";
 
 const MyQuestions = ({ socket }) => {
   const { width } = useWindowDimensions();

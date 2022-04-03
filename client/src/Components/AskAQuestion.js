@@ -1,16 +1,14 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useContext, useEffect, useRef, useState } from "react";
-import close from "../resources/close.png";
-import TagsInput from "./tags/TagsInput";
-import { AuthContext } from "../helpers/AuthContext";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
-import useWindowDimensions from "../hooks/useWindowDimensions";
+
 import { PORT } from "../constants/Port";
+import { AuthContext } from "../helpers/AuthContext";
+import TagsInput from "./tags/TagsInput";
 
 hljs.configure({
   languages: ["javascript", "java", "c", "c++", "python"],
@@ -44,12 +42,8 @@ const formats = [
   "image",
 ];
 
-const AskAQuestion = (props) => {
-  const { width } = useWindowDimensions();
+const AskAQuestion = () => {
   const { authState } = useContext(AuthContext);
-
-  const { setQuestionPopup } = props;
-  const { questionPopup } = props;
 
   const [question, setQuestion] = useState("");
   const [description, setDescription] = useState("");
@@ -58,41 +52,9 @@ const AskAQuestion = (props) => {
 
   const [error, setError] = useState("");
 
-  const ref = useRef(null);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setQuestionPopup(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [ref]);
-
-  const containerVariants = {
-    hidden: {
-      scale: 1.05,
-      opacity: 0.1,
-    },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: { duration: 0.3 },
-    },
-    exit: {
-      transition: { ease: "easeIn" },
-    },
-  };
-
   const handleChange = (html) => {
     setDescription(html);
   };
-
-  const [closeQuestionModal, setCloseQuestionModal] = useState(false);
 
   const submitQuestion = (e) => {
     e.preventDefault();
@@ -119,16 +81,11 @@ const AskAQuestion = (props) => {
             setQuestion("");
             setDescription("");
             setSelectedTags();
-            setCloseQuestionModal(true);
             window.location.reload();
           }
         });
     }
   };
-
-  useEffect(() => {
-    if (closeQuestionModal) setQuestionPopup(false);
-  }, [closeQuestionModal]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -138,118 +95,123 @@ const AskAQuestion = (props) => {
   }, []);
 
   return (
-    <div className="overlay">
-      <AnimatePresence>
-        <motion.div
-          ref={ref}
-          className="content"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-          style={{ width: width < 900 && "80%", height: width < 900 && "85%" }}
+    <div
+      class="modal fade"
+      id="askQuestionModal"
+      data-bs-keyboard="false"
+      data-bs-backdrop="static"
+      tabindex="-1"
+      aria-labelledby="askQuestionModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div
+          class="modal-content"
+          style={{ borderRadius: 10, padding: "0px 10px" }}
         >
-          <div>
-            <h2 style={{ display: "inline-block", float: "left" }}>
-              Ask a Question
-            </h2>
-            <span
-              style={{ cursor: "pointer", float: "right" }}
-              onClick={() => setQuestionPopup(false)}
-            >
-              <img className="icon" src={close} />
-            </span>
+          <div class="modal-header">
+            <h2>Ask a Question</h2>
+            <button
+              type="button"
+              class="btn-close shadow-none"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
 
-          <div
-            className="content-container"
-            style={{
-              backgroundColor: "var(--primary-light)",
-              marginBottom: 20,
-            }}
-          >
-            <p style={{ color: "var(--primary)", lineHeight: 1.5 }}>
-              <span style={{ fontWeight: 600, color: "var(--primary)" }}>
-                Tips on getting good answers quickly
-              </span>
-              <br />
-              &emsp;- Make sure your question has not been asked already
-              <br />
-              &emsp;- Keep your question short and to the point
-              <br />
-              &emsp;- Double check grammar and spelling
-            </p>
-          </div>
-          <h4>{authState.nick_name} is asking...</h4>
-          <div
-            className="form-control"
-            style={{ marginBottom: 30, marginTop: 10 }}
-          >
-            <input
-              type="text"
-              style={{ width: "100%", marginLeft: 0 }}
-              placeholder="Ask your question"
-              value={question}
-              onChange={(e) => {
-                setQuestion(e.target.value);
-              }}
-            />
-          </div>
-
-          <ReactQuill
-            onChange={handleChange}
-            value={description}
-            modules={modules}
-            bounds={".quill"}
-            formats={formats}
-          />
-
-          <div className="form-control" style={{ marginBottom: 30 }}>
-            <TagsInput setSelectedTags={setSelectedTags} />
-          </div>
-
-          <div style={{ display: "flex", width: "100%" }}>
-            <div className="check-field" style={{ marginTop: 15 }}>
-              <input
-                id="my-check"
-                type="checkbox"
-                checked={urgent}
-                value={urgent}
-                onChange={(e) => setUrgent(e.currentTarget.checked)}
-              />
-              <label htmlFor="my-check" style={{ fontSize: 18 }}>
-                Mark as urgent
-              </label>
-            </div>
+          <div class="modal-body">
             <div
-              id="error"
-              className={error == "" ? "error" : "error active"}
+              className="content-container"
               style={{
-                margin: "0px auto",
-                display: width < 900 && "none",
+                backgroundColor: "var(--primary-light)",
+                marginBottom: 10,
               }}
             >
-              {error}
+              <p style={{ color: "var(--primary)", lineHeight: 1.5 }}>
+                <span style={{ fontWeight: 600, color: "var(--primary)" }}>
+                  Tips on getting good answers quickly
+                </span>
+                <br />
+                &emsp;- Make sure your question has not been asked already
+                <br />
+                &emsp;- Keep your question short and to the point
+                <br />
+                &emsp;- Double check grammar and spelling
+              </p>
             </div>
-            <span
-              style={{
-                float: "right",
-                marginBottom: 0,
-                marginLeft: width < 900 ? "30%" : 10,
-                width: 120,
-              }}
-            >
-              <button
-                style={{ width: "100%" }}
-                className="btn btn-block"
-                onClick={submitQuestion}
-              >
-                Ask it
-              </button>
-            </span>
+            <h6 style={{ fontWeight: 600 }}>
+              {authState.nick_name} is asking...
+            </h6>
+            <div className="form-group my-3">
+              <label htmlFor="name" className="form-label">
+                Question
+              </label>
+              <input
+                type="text"
+                name="name"
+                className="form-control shadow-none"
+                placeholder="Ask your question"
+                value={question}
+                onChange={(e) => {
+                  setQuestion(e.target.value);
+                }}
+              />
+            </div>
+            <br />
+            <ReactQuill
+              onChange={handleChange}
+              value={description}
+              modules={modules}
+              bounds={".quill"}
+              formats={formats}
+            />
+
+            <div className="form-group my-3">
+              <label htmlFor="name" className="form-label">
+                Tags
+              </label>
+              <TagsInput setSelectedTags={setSelectedTags} />
+            </div>
+
+            <div className="hstack my-3">
+              <div class="form-group">
+                <div class="form-check">
+                  <input
+                    class="form-check-input shadow-none"
+                    type="checkbox"
+                    id="urgentCheck"
+                    checked={urgent}
+                    value={urgent}
+                    onChange={(e) => setUrgent(e.currentTarget.checked)}
+                  />
+                  <label class="form-check-label" htmlFor="urgentCheck">
+                    Mark as urgent
+                  </label>
+                </div>
+              </div>
+              {error != "" ? (
+                <p
+                  class={`alert alert-${
+                    error == "" ? "success" : "danger"
+                  } ms-auto`}
+                >
+                  {error}
+                </p>
+              ) : (
+                <p className="ms-auto" />
+              )}
+              <span className="">
+                <button
+                  className="btn btn-block shadow-none"
+                  onClick={submitQuestion}
+                >
+                  Ask it
+                </button>
+              </span>
+            </div>
           </div>
-        </motion.div>
-      </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
 };

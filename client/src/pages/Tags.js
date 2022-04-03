@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
 import RightBar from "../Components/RightBar";
 import ShowTags from "../Components/tags/Tags";
-import { motion } from "framer-motion";
 import useAllTags from "../hooks/useAllTags";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 

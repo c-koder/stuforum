@@ -1,17 +1,15 @@
 import { useContext, useEffect, useState } from "react";
-import AskAQuestion from "./AskAQuestion";
-import Button from "./Button";
-import TopUsers from "./TopUsers";
-import useSortedUsers from "../hooks/useSortedUsers";
 import { Link } from "react-router-dom";
+
 import { abbreviateNumber } from "../helpers/AbbreviateNumber";
 import useUser from "../hooks/useUser";
 import { AuthContext } from "../helpers/AuthContext";
+import AskAQuestion from "./AskAQuestion";
+import TopUsers from "./TopUsers";
+import useSortedUsers from "../hooks/useSortedUsers";
 
 const LeftBar = ({ userQuestionCount }) => {
   const { authState } = useContext(AuthContext);
-
-  const [questionPopup, setQuestionPopup] = useState(false);
 
   const [user, setUser] = useState([]);
   const { userResponse } = useUser(authState.nick_name);
@@ -31,20 +29,17 @@ const LeftBar = ({ userQuestionCount }) => {
     }
   }, [sortedUserResponse]);
 
-  const askQuestion = (e) => {
-    e.preventDefault();
-    setQuestionPopup(true);
-  };
-
   return (
     <div>
-      {questionPopup && (
-        <AskAQuestion
-          questionPopup={questionPopup}
-          setQuestionPopup={setQuestionPopup}
-        />
-      )}
-      <Button onClick={askQuestion} text={"Ask a Question"} />
+      <button
+        data-bs-toggle="modal"
+        data-bs-target="#askQuestionModal"
+        className="btn shadow-none"
+        style={{ margin: 0, width: "100%" }}
+      >
+        Ask a Question
+      </button>
+      <AskAQuestion />
       <div className="content-container" style={{ marginTop: 25 }}>
         <h5 style={{ marginBottom: 20, fontWeight: 600 }}>Top Users</h5>
         <TopUsers topUsers={topUsers} />

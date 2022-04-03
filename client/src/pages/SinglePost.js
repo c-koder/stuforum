@@ -1,18 +1,19 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Post from "../Components/posts/Post";
-import RightBar from "../Components/RightBar";
+import axios from "axios";
 import { useParams } from "react-router";
-import CommentBox from "../Components/CommentBox";
-import Replies from "../Components/replies/Replies";
 import { motion } from "framer-motion";
+
 import useSinglePost from "../hooks/useSinglePost";
 import useReplies from "../hooks/useReplies";
 import { AuthContext } from "../helpers/AuthContext";
-import axios from "axios";
+import CommentBox from "../Components/CommentBox";
+import Replies from "../Components/replies/Replies";
 import FilterMenu from "../Components/FilterMenu";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import { PORT } from "../constants/Port";
+import Post from "../Components/posts/Post";
+import RightBar from "../Components/RightBar";
 
 const SinglePost = ({ socket }) => {
   const { width } = useWindowDimensions();

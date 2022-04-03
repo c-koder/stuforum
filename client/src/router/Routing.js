@@ -1,31 +1,35 @@
-import LoginAndRegister from "../pages/LoginAndRegister";
-import Home from "../pages/Home";
-import SinglePost from "../pages/SinglePost";
-import MyAnswers from "../pages/MyAnswers";
-import MyQuestions from "../pages/MyQuestions";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
 } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import moment from "moment";
+import io from "socket.io-client";
+import { motion } from "framer-motion";
+
+import { PORT } from "../constants/Port";
+import LoginAndRegister from "../pages/LoginAndRegister";
+import Home from "../pages/Home";
+import SinglePost from "../pages/SinglePost";
+import MyAnswers from "../pages/MyAnswers";
+import MyQuestions from "../pages/MyQuestions";
 import UserProfile from "../pages/UserProfile";
 import Tags from "../pages/Tags";
 import Navigation from "../Components/navigation/Navigation";
 import ViewUser from "../pages/ViewUser";
-import { useState, useEffect } from "react";
-import { AuthContext } from "../helpers/AuthContext";
-import axios from "axios";
+import Footer from "../Components/Footer";
+
 import sun from "../resources/sun.png";
 import moon from "../resources/moon.png";
-import { motion } from "framer-motion";
 import NotFound from "../pages/NotFound";
+
 import useWindowDimensions from "../hooks/useWindowDimensions";
-import moment from "moment";
-import io from "socket.io-client";
-import NotificationCards from "../Components/notifications/NotificationCards";
-import { PORT } from "../constants/Port";
-// import Footer from "../Components/Footer";
+import { AuthContext } from "../helpers/AuthContext";
 
 const socket = io.connect(`http://localhost:3001`);
 
@@ -129,7 +133,6 @@ const Routing = () => {
   };
 
   const [notifs, setNotifs] = useState([]);
-
   const [newNotification, setNewNotification] = useState();
 
   useEffect(() => {
@@ -140,25 +143,23 @@ const Routing = () => {
 
   useEffect(() => {
     if (newNotification != null) {
+      toast(newNotification.user_from + " " + newNotification.description);
       !notifs.find((notif) => notif == newNotification) &&
         setNotifs([...notifs, newNotification]);
     }
   }, [newNotification]);
 
-  const deleteNotif = (id) => {
-    setNotifs(notifs.filter((notif) => notif.id !== id));
-  };
-
-  const decayNotif = () => {
-    setNotifs((notifs) => notifs.slice(0, -1));
-  };
-
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
-      <NotificationCards
-        notifs={notifs}
-        onDelete={deleteNotif}
-        decayNotif={decayNotif}
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop
+        theme="dark"
+        toastClassName="toast-style"
+        draggable
+        pauseOnHover
       />
       <Navigation
         isLogged={authState.status}
@@ -259,7 +260,7 @@ const Routing = () => {
             </>
           )}
         </Routes>
-        {/* <Footer /> */}
+        <Footer />
       </Router>
       {width > 900 && (
         <motion.button

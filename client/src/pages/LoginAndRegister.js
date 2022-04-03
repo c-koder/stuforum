@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import { validEmail, validPassword, validStudentID } from "../constants/Regex";
-import PasswordStrengthMeter from "../utils/PasswordStrengthMeter";
-import Login from "./Login";
 import { motion } from "framer-motion";
+
+import Login from "./Login";
 import { PORT } from "../constants/Port";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import { validEmail, validPassword, validStudentID } from "../constants/Regex";
+import PasswordStrengthMeter from "../utils/PasswordStrengthMeter";
 
 const LoginAndRegister = () => {
   const { width } = useWindowDimensions();
@@ -103,18 +104,6 @@ const LoginAndRegister = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const errorStyling = () => {
-    if (error != "") {
-      if (error === "Registration Successful") {
-        return "error success";
-      } else {
-        return "error active";
-      }
-    } else {
-      return "error";
-    }
-  };
-
   const containerVariants = {
     hidden: {
       opacity: 0,
@@ -128,7 +117,7 @@ const LoginAndRegister = () => {
   return (
     <motion.div
       className="container"
-      style={{ marginTop: 120 }}
+      style={{ marginTop: 40 }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"

@@ -29,11 +29,13 @@ const TagsInput = (props) => {
         ))}
       </ul>
       <input
-        disabled={tags.length >= 5 ? true : false}
-        style={{ border: "none" }}
         type="text"
+        name="name"
+        className="form-control shadow-none"
+        style={{ border: "none" }}
         onKeyUp={(e) => (e.key == "Enter" ? addTags(e) : null)}
         value={tagField}
+        disabled={tags.length >= 5 ? true : false}
         onChange={(e) => {
           let value = e.target.value;
           value = value.replace(/[^0-9a-z@&#-]/, "");

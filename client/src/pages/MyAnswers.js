@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { motion } from "framer-motion";
+
+import { AuthContext } from "../helpers/AuthContext";
+import useWindowDimensions from "../hooks/useWindowDimensions";
+import { PORT } from "../constants/Port";
 import RightBar from "../Components/RightBar";
 import LeftBar from "../Components/LeftBar";
 import Answer from "../Components/Answers";
 import useAnswers from "../hooks/useAnswers";
-import { motion } from "framer-motion";
-import { AuthContext } from "../helpers/AuthContext";
-import useWindowDimensions from "../hooks/useWindowDimensions";
-import axios from "axios";
-import { PORT } from "../constants/Port";
 
 const MyAnswers = ({ socket }) => {
   const { width } = useWindowDimensions();

@@ -1,15 +1,15 @@
-import avatar from "../../resources/img_avatar.png";
-import Notifications from "../notifications/Notifications";
 import { useEffect, useRef, useState } from "react";
-import NavContext from "./NavContext";
 import { AnimatePresence, motion } from "framer-motion";
+import axios from "axios";
+
+import Notifications from "../notifications/Notifications";
+import { PORT } from "../../constants/Port";
+import avatar from "../../resources/img_avatar.png";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import MobileNav from "./MobileNav";
+import NavContext from "./NavContext";
 import MiniPosts from "../posts/MiniPosts";
 import useMiniPosts from "../../hooks/useMiniPosts";
-import axios from "axios";
-import { PORT } from "../../constants/Port";
-
 const Navigation = ({ isLogged, onLogout, newNotification }) => {
   const { width } = useWindowDimensions();
 
@@ -90,7 +90,7 @@ const Navigation = ({ isLogged, onLogout, newNotification }) => {
   };
 
   return (
-    <nav className="navbar navbar-light navbar-expand-lg py-4 fixed-top justify-content-center">
+    <nav className="navbar navbar-light navbar-expand-lg py-4 justify-content-center">
       <div className="container">
         <div className="navbar-brand d-flex w-50 me-auto">
           <a href="/">
@@ -189,6 +189,7 @@ const Navigation = ({ isLogged, onLogout, newNotification }) => {
                         className="bi bi-bell-fill"
                         style={{ fontSize: 24 }}
                       ></i>
+                      <span class="badge badge-light">{notificationCount}</span>
                     </a>
                     <Notifications
                       setNotificationCount={setNotificationCount}

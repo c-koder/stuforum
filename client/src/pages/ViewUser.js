@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import RightBar from "../Components/RightBar";
-import UserDetails from "../Components/UserDetails";
 import { motion } from "framer-motion";
 import { useParams } from "react-router";
+
+import RightBar from "../Components/RightBar";
+import UserDetails from "../Components/UserDetails";
 import useUser from "../hooks/useUser";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 

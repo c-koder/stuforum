@@ -1,22 +1,15 @@
-import upArrow from "../../resources/upArrow.png";
-import upArrowBlue from "../../resources/upArrow-blue.png";
-import downArrow from "../../resources/downArrow.png";
-import downArrowRed from "../../resources/downArrow-red.png";
-import answers from "../../resources/answers.png";
-import time from "../../resources/time.png";
-import settings from "../../resources/settings.png";
 import { useRef, useEffect, useState, useContext } from "react";
 import ReactTooltip from "react-tooltip";
-import Tags from "../tags/Tags";
-import ContextMenu from "../ContextMenu";
-import { motion } from "framer-motion";
-import { AuthContext } from "../../helpers/AuthContext";
 import moment from "moment";
 import axios from "axios";
 import { Parser } from "html-to-react";
+
+import { AuthContext } from "../../helpers/AuthContext";
 import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import { PORT } from "../../constants/Port";
+import Tags from "../tags/Tags";
+import ContextMenu from "../ContextMenu";
 
 const Post = ({
   post,
@@ -175,7 +168,7 @@ const Post = ({
 
   const description =
     post.description.length > 600 && !singlePost
-      ? post.description.substring(0, 500) + " . . ."
+      ? post.description.substring(0, 300) + " . . ."
       : post.description;
 
   const [postedTime, setPostedTime] = useState(
@@ -273,9 +266,10 @@ const Post = ({
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                     variants={rotateVariant}
-                    // style={{
-                    //   display: viewingQuestions || singlePost ? "block" : "none",
-                    // }}
+                    style={{
+                      display:
+                        viewingQuestions || singlePost ? "block" : "none",
+                    }}
                   >
                     <i
                       class="bi bi-gear-fill"

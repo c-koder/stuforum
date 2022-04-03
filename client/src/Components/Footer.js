@@ -1,9 +1,7 @@
-import React from "react";
-
 const Footer = () => {
   return (
     <div className="footer">
-      <h4>© 2021-2022 Stuforum | All Rights Reserved</h4>
+      <p>Copyright &#169; 2022 stuforum Inc. All Rights Reserved</p>
     </div>
   );
 };
