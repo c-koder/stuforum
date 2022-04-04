@@ -201,9 +201,15 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
       />
       <div className="row">
         <div className="col-1">
-          <img href="#profile" className="avatar" src={avatar} alt="Profile" />
+          <img
+            href="#profile"
+            className="avatar"
+            style={{ height: width < 992 && "25px" }}
+            src={avatar}
+            alt="Profile"
+          />
         </div>
-        <div className="col" style={{ marginLeft: width < 992 ? 10 : -25 }}>
+        <div className="col-11" style={{ marginLeft: -20 }}>
           <div
             className="d-flex"
             style={{
@@ -397,7 +403,11 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
               {reply.replies.length > 0 && (
                 <button
                   className="btn shadow-none"
-                  style={{ margin: "10px 0px" }}
+                  style={{
+                    margin: "10px 0px",
+                    padding: "3px 6px",
+                    fontSize: 14,
+                  }}
                   onClick={(e) => {
                     e.preventDefault();
                     setShowChildReplies((oldState) => !oldState);

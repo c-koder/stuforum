@@ -6,6 +6,7 @@ import "react-quill/dist/quill.snow.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
 import { PORT } from "../constants/Port";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 hljs.configure({
   languages: ["javascript", "java", "c", "c++", "python"],
@@ -27,6 +28,17 @@ const modules = {
   },
 };
 
+const mobile_modules = {
+  syntax: {
+    highlight: (description) => hljs.highlightAuto(description).value,
+  },
+  toolbar: [["bold", "italic", "underline"]],
+
+  clipboard: {
+    matchVisual: false,
+  },
+};
+
 const formats = [
   "bold",
   "italic",
@@ -40,6 +52,7 @@ const formats = [
 ];
 
 const CommentBox = (props) => {
+  const { width } = useWindowDimensions();
   const [description, setDescription] = useState("");
   const [disabled, setDisabled] = useState(
     description === "" || description !== "<p><br></p>"
@@ -110,7 +123,7 @@ const CommentBox = (props) => {
           onChange={handleChange}
           value={description}
           placeholder="Leave an answer..."
-          modules={modules}
+          modules={width > 992 ? modules : mobile_modules}
           bounds={".quill .reply-to-editor"}
           formats={formats}
         />
@@ -119,9 +132,10 @@ const CommentBox = (props) => {
           onClick={submitComment}
           className="btn position-absolute top-0 end-0"
           style={{
-            padding: "3px 15px",
+            padding: "3px 6px",
             marginRight: 8,
-            marginTop: 7,
+            fontSize: 14,
+            marginTop: 10,
           }}
           disabled={disabled}
         >

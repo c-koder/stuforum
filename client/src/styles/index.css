@@ -138,8 +138,7 @@ p {
 }
 
 .notification-item {
-  display: flex;
-  margin: 0px 0px 15px 0px;
+  margin: 7px 0px 0px 0px;
   background: rgba(240, 240, 240, 0.1);
   padding: 10px;
   border-radius: 10px;
@@ -147,11 +146,6 @@ p {
 
 .notification-item:hover {
   background-color: var(--bg);
-}
-
-.notification-item.viewed {
-  border-right: 2px solid;
-  border-color: var(--light);
 }
 
 .badge {
@@ -259,7 +253,7 @@ p {
 
 .tag {
   cursor: pointer;
-  transition: all 150ms ease-in;
+  transition: all 0.1s ease-in;
   width: auto;
   display: flex;
   text-align: center;
@@ -271,7 +265,7 @@ p {
   border: none;
   border-radius: 5px;
   font-weight: 600;
-  margin: 0px 8px 8px 0;
+  margin: 0px 6px 0px 0;
   color: var(--primary);
   background-color: var(--primary-light);
 }
@@ -320,19 +314,14 @@ p {
 }
 
 .notifications-menu {
-  position: absolute;
-  margin-top: 90px;
-  z-index: 999;
+  z-index: 2;
   border: 1px solid var(--light-white);
-  border-top: 2px solid var(--light-white);
   background-color: var(--light);
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px 20px;
   width: 420px;
   height: 420px;
-  overflow: scroll;
-  visibility: visible;
-  opacity: 100;
+  overflow-y: scroll;
   transition: 0.2s ease;
 }
 
@@ -494,61 +483,42 @@ a {
 }
 
 .paginationBtns {
-  width: 80%;
-  height: 40px;
-  list-style: none;
   display: flex;
-  margin: 30px 0px 0px 0px;
+  list-style: none;
+  margin-top: 10px;
 }
 
 .paginationBtns a {
-  padding: 10px 15px 10px 15px;
-  margin: 0px 15px 0px 0px;
+  padding: 3px 9px;
+  margin: 0px 10px 0px 0px;
   border-radius: 5px;
-  background-color: var(--primary-light);
+  background: var(--light-white);
   font-weight: bold;
-  color: var(--primary);
+  color: var(--dark) !important;
   cursor: pointer;
-  transition: all 150ms ease-in;
+  transition: 0.1s ease;
 }
 
 .paginationBtns a:hover {
-  transition: all 150ms ease-in;
-  background-color: var(--primary);
-  color: var(--light);
+  transition: 0.1s ease;
+  background-color: var(--dark);
+  color: var(--light) !important;
 }
 
 .paginationActive a {
   background-color: var(--primary);
-  color: var(--light);
+  color: var(--light) !important;
 }
 
 .paginationDisabled a {
-  background-color: var(--light-gray-color);
-  color: var(--secondary);
-  cursor: default;
+  background-color: var(--light-white);
+  color: var(--secondary) !important;
 }
 
 .paginationDisabled a:hover {
-  background-color: var(--light-gray-color);
-  color: var(--secondary);
-}
-
-.showMoreLink {
-  display: inline-block;
-  font-size: var(--main-font-size);
-  border: 1px solid var(--light-white);
-  color: var(--secondary);
-  font-weight: bold;
-  margin-left: 65px;
-  padding: 10px 15px;
-  border-radius: 5px;
-  background-color: var(--light);
-}
-
-.showmorelink:hover {
-  cursor: pointer;
-  background-color: var(--primary);
+  background-color: var(--light-white);
+  color: var(--secondary) !important;
+  cursor: not-allowed;
 }
 
 .tooltip {
@@ -625,7 +595,7 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: var(--light);
 }
 
 ::-webkit-scrollbar {

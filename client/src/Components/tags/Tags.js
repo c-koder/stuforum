@@ -36,37 +36,34 @@ const Tags = ({ tags, tagOnly, display }) => {
   return (
     <div>
       {tagOnly && display && (
-        <div className="form-control">
+        <div className="form-group my-2">
           <input
-            style={{
-              width: width < 900 ? "70%" : "30%",
-              paddingLeft: 40,
-              marginLeft: 0,
-            }}
-            className="searchInput"
             type="text"
+            placeholder="Filter by tag name"
+            className="form-control shadow-none"
+            value={searchTag}
             onChange={(e) => {
               setSearchTag(e.target.value);
             }}
-            placeholder="Filter by tag name"
-          ></input>
+          />
         </div>
       )}
-
       <div style={{ display: tagOnly && "inline-block" }}>{displayTags}</div>
       <br />
       {tagOnly && display && searchTag == "" && (
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          pageCount={pageCount}
-          onPageChange={changePage}
-          containerClassName={"paginationBtns"}
-          previousLinkClassName={"previousBtn"}
-          nextLinkClassName={"nextBtn"}
-          disabledClassName={"paginationDisabled"}
-          activeClassName={"paginationActive"}
-        />
+        <div className="row">
+          <ReactPaginate
+            previousLabel={"Previous"}
+            nextLabel={"Next"}
+            pageCount={pageCount}
+            onPageChange={changePage}
+            containerClassName={"paginationBtns"}
+            previousLinkClassName={"previousBtn"}
+            nextLinkClassName={"nextBtn"}
+            disabledClassName={"paginationDisabled"}
+            activeClassName={"paginationActive"}
+          />
+        </div>
       )}
     </div>
   );

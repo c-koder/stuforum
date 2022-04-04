@@ -207,7 +207,7 @@ const SinglePost = ({ socket }) => {
           exit="exit"
         >
           <div className="row">
-            <div className="col-9">
+            <div className={width > 992 ? "col-9" : "col"}>
               <Post
                 post={post}
                 tags={tags}

@@ -38,16 +38,16 @@ const Tags = () => {
   }, []);
 
   return (
-    <>
-      <motion.div
-        className={"container"}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
+    <motion.div
+      className="container"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
+      <div className="row">
         <div
-          className="container-div"
+          className="col"
           style={{
             width: "346%",
             margin: width < 900 && "-80px 0px 0px 0px",
@@ -57,10 +57,10 @@ const Tags = () => {
           {!loading && (
             <div
               className="content-container"
-              style={{ marginTop: 0, padding: "40px" }}
+              style={{ marginTop: 0, padding: "20px" }}
             >
-              <h2>Tags</h2>
-              <p style={{ margin: "10px 0 10px 0", width: "90%" }}>
+              <h5 style={{ fontWeight: 600 }}>Tags</h5>
+              <p style={{ margin: "10px 0 10px 0", width: "75%" }}>
                 A tag is a keyword or label that categorizes your question with
                 other, similar questions. Using the right tags makes it easier
                 for others to find and answer your question.
@@ -69,14 +69,11 @@ const Tags = () => {
             </div>
           )}
         </div>
-        <div
-          className="container-div"
-          style={{ display: width < 900 && "none" }}
-        >
+        <div className="col-3" style={{ display: width < 900 && "none" }}>
           <RightBar activeTab={"tags"} />
         </div>
-      </motion.div>
-    </>
+      </div>
+    </motion.div>
   );
 };
 

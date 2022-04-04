@@ -100,18 +100,16 @@ const Notifications = ({
   return (
     <div
       className="dropdown-menu dropdown-menu-end notifications-menu"
-      aria-labelledby="notifications-menu"
       id="scrollableDiv"
     >
       <div className="hstack">
-        <h4>Notifications</h4>
+        <h5 style={{ fontWeight: 600 }}>Notifications</h5>
         <div className="ms-auto">
           <button
-            className="btn btn-block ms-auto"
+            className="btn ms-auto"
             style={{
-              width: "100%",
-              padding: "5px 20px",
-              fontSize: 16,
+              padding: "3px 6px",
+              fontSize: 14,
             }}
             onClick={markAsSeen}
             disabled={notificationCount == 0 ? true : false}
@@ -120,7 +118,6 @@ const Notifications = ({
           </button>
         </div>
       </div>
-      <hr style={{ opacity: 0.3 }} />
       <div>
         <InfiniteScoll
           dataLength={scrollsVisited}

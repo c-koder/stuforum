@@ -262,8 +262,8 @@ const Routing = () => {
             </>
           )}
         </Routes>
-        <div className="footer-gap" />
-        <Footer />
+        {/* <div className="footer-gap" />
+        <Footer /> */}
       </Router>
       {width > 900 && (
         <motion.button
