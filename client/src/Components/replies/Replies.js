@@ -35,44 +35,6 @@ const Replies = ({ socket, replies, onDelete, addReply, answered }) => {
           setScollNumber(scrollNumber + 1);
         }, 1000);
       }}
-      loader={
-        replies.length > 0 && (
-          <div className="posts-container">
-            <div
-              className="posts-container-div"
-              style={{
-                marginLeft: "2%",
-              }}
-            >
-              <Skeleton
-                circle
-                width="5.7%"
-                height="70%"
-                containerClassName="avatar-skeleton"
-              />
-            </div>
-
-            <div className="posts-container-div" style={{ marginLeft: "-82%" }}>
-              <Skeleton
-                baseColor="var(--light-white)"
-                highlightColor="var(--light)"
-                height={25}
-                width={250}
-              />
-              <Skeleton
-                baseColor="var(--light-white)"
-                highlightColor="var(--light)"
-                height={25}
-              />
-              <Skeleton
-                baseColor="var(--light-white)"
-                highlightColor="var(--light)"
-                height={25}
-              />
-            </div>
-          </div>
-        )
-      }
     >
       {displayPosts}
     </InfiniteScoll>

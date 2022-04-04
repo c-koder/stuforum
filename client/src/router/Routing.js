@@ -30,6 +30,7 @@ import NotFound from "../pages/NotFound";
 
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import { AuthContext } from "../helpers/AuthContext";
+import AskAQuestion from "../Components/AskAQuestion";
 
 const socket = io.connect(`http://localhost:3001`);
 
@@ -166,6 +167,7 @@ const Routing = () => {
         onLogout={onLogout}
         newNotification={newNotification}
       />
+      <AskAQuestion />
       <Router>
         <Routes>
           <Route

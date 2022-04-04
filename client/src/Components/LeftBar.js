@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { abbreviateNumber } from "../helpers/AbbreviateNumber";
 import useUser from "../hooks/useUser";
 import { AuthContext } from "../helpers/AuthContext";
-import AskAQuestion from "./AskAQuestion";
 import TopUsers from "./TopUsers";
 import useSortedUsers from "../hooks/useSortedUsers";
 
@@ -30,7 +29,7 @@ const LeftBar = ({ userQuestionCount }) => {
   }, [sortedUserResponse]);
 
   return (
-    <div>
+    <div className="sticky-top">
       <button
         data-bs-toggle="modal"
         data-bs-target="#askQuestionModal"
@@ -39,7 +38,6 @@ const LeftBar = ({ userQuestionCount }) => {
       >
         Ask a Question
       </button>
-      <AskAQuestion />
       <div className="content-container" style={{ marginTop: 25 }}>
         <h5 style={{ marginBottom: 20, fontWeight: 600 }}>Top Users</h5>
         <TopUsers topUsers={topUsers} />

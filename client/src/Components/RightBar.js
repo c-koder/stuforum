@@ -14,7 +14,7 @@ const RightBar = ({ activeTab }) => {
   }, [response]);
 
   return (
-    <div>
+    <div className="sticky-top">
       <div className="rightbar content-container">
         <a
           href="/home"

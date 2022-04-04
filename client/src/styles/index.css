@@ -62,9 +62,14 @@ input[type="text"]::placeholder {
   margin-bottom: 40px;
 }
 
+.sticky-top {
+  top: 1.5em;
+  z-index: 0;
+}
+
 .avatar {
   border-radius: 50%;
-  height: 50px;
+  height: 40px;
 }
 
 .profileAvatar {
@@ -115,14 +120,9 @@ p {
   transition: 0.1s ease;
 }
 
-.btn:hover {
+.btn:disabled {
+  cursor: not-allowed;
   color: var(--light);
-  transform: scale(1.01);
-  transition: 0.1s ease;
-}
-
-button:disabled {
-  cursor: not-allowed !important;
   background-color: var(--dark);
 }
 
@@ -137,14 +137,10 @@ button:disabled {
   cursor: pointer;
 }
 
-.nullBtn:disabled {
-  background-color: transparent;
-}
-
 .notification-item {
   display: flex;
   margin: 0px 0px 15px 0px;
-  background: var(--bg);
+  background: rgba(240, 240, 240, 0.1);
   padding: 10px;
   border-radius: 10px;
 }
@@ -572,19 +568,21 @@ a {
 }
 
 .quill {
-  margin-top: -15px;
+  /* max-width: 965px; */
 }
 
 .quill .ql-container {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  background: transparent;
+  background: var(--light);
+  /* max-width: 965px; */
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .quill .ql-snow.ql-toolbar {
   border: 1px solid rgba(0, 0, 0, 0.2);
   display: block;
+  padding: 10px;
   background: #ececec;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;

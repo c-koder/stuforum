@@ -6,7 +6,6 @@ import { Parser } from "html-to-react";
 
 import { AuthContext } from "../../helpers/AuthContext";
 import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
 import { PORT } from "../../constants/Port";
 import Tags from "../tags/Tags";
 import ContextMenu from "../ContextMenu";
@@ -24,10 +23,8 @@ const Post = ({
   answerOnly,
   socket,
 }) => {
-  const { width } = useWindowDimensions();
   const { authState } = useContext(AuthContext);
 
-  const [show, setShow] = useState(false);
   const [leads, setLeads] = useState(post.leads);
 
   const [userVoted, setUserVoted] = useState();
@@ -151,21 +148,6 @@ const Post = ({
     },
   };
 
-  const ref = useRef(null);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setShow(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [ref]);
-
   const description =
     post.description.length > 600 && !singlePost
       ? post.description.substring(0, 300) + " . . ."
@@ -183,7 +165,7 @@ const Post = ({
   }, []);
 
   return (
-    <>
+    <div className="col posts-container">
       <ReactTooltip
         effect="solid"
         place="bottom"
@@ -192,59 +174,56 @@ const Post = ({
         arrowColor={"var(--secondary)"}
         delayShow={500}
       />
-      <div className="posts-container">
-        <div className="hstack" style={{ alignItems: "baseline" }}>
-          <a href={`/post/${post.id}`}>
-            <h5>{post.question}</h5>
-          </a>
+      <div className="hstack" style={{ alignItems: "baseline" }}>
+        <a href={`/post/${post.id}`}>
+          <h5>{post.question}</h5>
+        </a>
 
-          {(post.urgent == 1 || post.answered == 1) && (
-            <div className="ms-auto">
-              <span
-                className="label"
-                style={{
-                  background: labelColor,
-                }}
-              >
-                {post.urgent == 1
-                  ? "Urgent"
-                  : post.answered == 1
-                  ? "Answered"
-                  : ""}
-              </span>
-            </div>
-          )}
-
-          {post.user_id == authState.id && (viewingQuestions || singlePost) && (
-            <div
-              className={
-                post.urgent == 1 || post.answered == 1 ? "" : "ms-auto"
-              }
-              style={{ marginLeft: 10 }}
+        {(post.urgent == 1 || post.answered == 1) && (
+          <div className="ms-auto">
+            <span
+              className="label"
+              style={{
+                background: labelColor,
+              }}
             >
-              <a
-                role="button"
-                id="post-context"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                variants={rotateVariant}
-              >
-                <i
-                  class="bi bi-gear-fill"
-                  style={{ color: "var(--secondary)", fontSize: 22 }}
-                ></i>
-              </a>
-              <ContextMenu
-                post={post}
-                onDelete={onDelete}
-                onToggleUrgent={onToggleUrgent}
-                onToggleAnswered={onToggleAnswered}
-              />
-            </div>
-          )}
-        </div>
+              {post.urgent == 1
+                ? "Urgent"
+                : post.answered == 1
+                ? "Answered"
+                : ""}
+            </span>
+          </div>
+        )}
 
-        <div
+        {post.user_id == authState.id && (viewingQuestions || singlePost) && (
+          <div
+            className={post.urgent == 1 || post.answered == 1 ? "" : "ms-auto"}
+            style={{ marginLeft: 10 }}
+          >
+            <a
+              role="button"
+              id="post-context"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              variants={rotateVariant}
+            >
+              <i
+                class="bi bi-gear-fill"
+                style={{ color: "var(--secondary)", fontSize: 22 }}
+              ></i>
+            </a>
+            <ContextMenu
+              post={post}
+              onDelete={onDelete}
+              onToggleUrgent={onToggleUrgent}
+              onToggleAnswered={onToggleAnswered}
+            />
+          </div>
+        )}
+      </div>
+      <div className="hstack">
+        <span
           style={{
             color: "var(--secondary)",
             fontWeight: 600,
@@ -262,128 +241,122 @@ const Post = ({
               {post.nick_name}
             </span>
           </a>
-        </div>
+        </span>
 
-        {tags != null && <Tags tags={tags} tagOnly={true} />}
-
-        <div style={{ margin: "0 auto", textAlign: "justify" }}>
-          {Parser().parse(description)}
-        </div>
-
-        <hr style={{ margin: "0px 0 15px 0" }} />
-
-        <div className="hstack" style={{ margin: "-10px 0px -10px 0px" }}>
-          <div
+        <div
+          style={{
+            marginLeft: 5,
+            marginBottom: -3,
+          }}
+        >
+          <i
+            class="bi bi-clock-fill"
             style={{
-              display: "flex",
+              fontSize: 17,
               color: "var(--secondary)",
             }}
+          ></i>
+          <span
+            style={{
+              color: "var(--secondary)",
+              marginLeft: 5,
+            }}
+            data-tip={moment(post.posted_time).format(
+              "MMMM Do YYYY, h:mm:ss a"
+            )}
           >
-            <i
-              class="bi bi-clock-fill"
-              style={{
-                fontSize: 20,
-                color: "var(--secondary)",
-              }}
-            ></i>
-            <span
-              style={{
-                color: "var(--secondary)",
-                marginLeft: 5,
-                marginTop: 2,
-              }}
-              data-tip={moment(post.posted_time).format(
-                "MMMM Do YYYY, h:mm:ss a"
-              )}
-            >
-              {postedTime}
-            </span>
-          </div>
-
-          <div
-            className="ms-auto"
-            data-tip={`${abbreviateNumber(leads)} leads so far`}
-            style={{ display: "flex", marginTop: 5 }}
-          >
-            <i
-              class="bi bi-lightning-charge-fill"
-              style={{
-                fontSize: 20,
-                color: leadsColor,
-              }}
-            ></i>
-            <span
-              style={{
-                color: leadsColor,
-                textAlign: "center",
-                lineHeight: "30px",
-                marginLeft: 5,
-              }}
-            >
-              {abbreviateNumber(leads)}
-            </span>
-          </div>
-
-          <div
-            className="ms-auto"
-            data-tip={`${abbreviateNumber(
-              commentCount || post.comments
-            )} answers so far`}
-            style={{ display: "flex", marginTop: 5 }}
-          >
-            <i
-              class="bi bi-chat-left-fill"
-              style={{ fontSize: 20, color: "var(--secondary)" }}
-            ></i>
-            <span
-              style={{
-                color: "var(--secondary)",
-                marginLeft: 10,
-              }}
-            >
-              {abbreviateNumber(commentCount || post.comments)}
-            </span>
-          </div>
-
-          <div className="ms-auto">
-            <button
-              className="nullBtn"
-              onClick={upVote}
-              data-tip="Vote as useful"
-              disabled={disabled}
-            >
-              <i
-                class="bi bi-arrow-up-short"
-                style={{
-                  fontSize: 36,
-                  color:
-                    userVoted === "useful"
-                      ? "var(--primary)"
-                      : "var(--secondary)",
-                }}
-              ></i>
-            </button>
-            <button
-              className="nullBtn"
-              onClick={downVote}
-              data-tip="Vote as not useful"
-              disabled={disabled}
-            >
-              <i
-                class="bi bi-arrow-down-short"
-                style={{
-                  fontSize: 36,
-                  color:
-                    userVoted === "useless"
-                      ? "var(--warning)"
-                      : "var(--secondary)",
-                }}
-              ></i>
-            </button>
-          </div>
+            {postedTime}
+          </span>
         </div>
       </div>
-    </>
+      {tags != null && <Tags tags={tags} tagOnly={true} />}
+      <div style={{ margin: "0 auto", textAlign: "justify" }}>
+        {Parser().parse(description)}
+      </div>
+      <hr style={{ margin: "0px 0 15px 0" }} />
+      <div className="hstack" style={{ margin: "-10px 0px -10px 0px" }}>
+        <div
+          data-tip={`${abbreviateNumber(leads)} leads so far`}
+          style={{ display: "flex", marginTop: 5 }}
+        >
+          <i
+            class="bi bi-lightning-charge-fill"
+            style={{
+              fontSize: 20,
+              color: leadsColor,
+            }}
+          ></i>
+          <span
+            style={{
+              color: leadsColor,
+              textAlign: "center",
+              lineHeight: "26px",
+              marginLeft: 5,
+            }}
+          >
+            {abbreviateNumber(leads)}
+          </span>
+        </div>
+
+        <div
+          className="ms-auto"
+          data-tip={`${abbreviateNumber(
+            commentCount || post.comments
+          )} answers so far`}
+          style={{ display: "flex", marginTop: 5 }}
+        >
+          <i
+            class="bi bi-chat-left-fill"
+            style={{ fontSize: 17, color: "var(--secondary)" }}
+          ></i>
+          <span
+            style={{
+              color: "var(--secondary)",
+              marginLeft: 10,
+            }}
+          >
+            {abbreviateNumber(commentCount || post.comments)}
+          </span>
+        </div>
+
+        <div className="ms-auto">
+          <button
+            className="nullBtn"
+            onClick={upVote}
+            data-tip="Vote as useful"
+            disabled={disabled}
+          >
+            <i
+              class="bi bi-arrow-up-short"
+              style={{
+                fontSize: 36,
+                color:
+                  userVoted === "useful"
+                    ? "var(--primary)"
+                    : "var(--secondary)",
+              }}
+            ></i>
+          </button>
+          <button
+            className="nullBtn"
+            onClick={downVote}
+            data-tip="Vote as not useful"
+            disabled={disabled}
+          >
+            <i
+              class="bi bi-arrow-down-short"
+              style={{
+                fontSize: 36,
+                color:
+                  userVoted === "useless"
+                    ? "var(--warning)"
+                    : "var(--secondary)",
+              }}
+            ></i>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

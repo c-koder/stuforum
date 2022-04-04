@@ -56,43 +56,6 @@ const Posts = ({
             setPageNumber(pageNumber + 1);
           }, 1000);
         }}
-        loader={
-          posts.length > 1 && (
-            <div
-              className="posts-container"
-              style={{ marginTop: viewingQuestions ? 0 : 55, marginBottom: 55 }}
-            >
-              <div className="posts-container-div">
-                <Skeleton
-                  baseColor="var(--light-white)"
-                  highlightColor="var(--light)"
-                  height={30}
-                />
-                <Skeleton
-                  baseColor="var(--light-white)"
-                  highlightColor="var(--light)"
-                  height={30}
-                  width={200}
-                />
-                <Skeleton
-                  baseColor="var(--light-white)"
-                  highlightColor="var(--light)"
-                  height={30}
-                />
-                <Skeleton
-                  baseColor="var(--light-white)"
-                  highlightColor="var(--light)"
-                  height={160}
-                />
-                <Skeleton
-                  baseColor="var(--light-white)"
-                  highlightColor="var(--light)"
-                  height={30}
-                />
-              </div>
-            </div>
-          )
-        }
         endMessage={
           posts.length > 0 && (
             <div className="sortLabel" style={{ width: "200px" }}>

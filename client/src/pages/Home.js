@@ -109,18 +109,7 @@ const Home = ({ socket }) => {
       )}
 
       <div className="row justify-content-center">
-        <div className="col-3" style={{ display: width < 900 && "none" }}>
-          {width < 900 && (
-            <div style={{ margin: "40px" }}>
-              <button
-                onClick={askQuestion}
-                className="btn shadow-none"
-                style={{ margin: 0, width: "100%" }}
-              >
-                Ask a Question
-              </button>
-            </div>
-          )}
+        <div className="col-3" style={{ display: width < 992 && "none" }}>
           <LeftBar userQuestionCount={userQuestionCount} />
         </div>
 
@@ -170,7 +159,7 @@ const Home = ({ socket }) => {
             </div>
           )}
         </div>
-        <div className="col-3" style={{ display: width < 900 && "none" }}>
+        <div className="col-3" style={{ display: width < 992 && "none" }}>
           <RightBar activeTab={"home"} />
         </div>
       </div>

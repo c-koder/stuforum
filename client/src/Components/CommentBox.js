@@ -1,14 +1,11 @@
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import ReactQuill, { Delta } from "react-quill";
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
-
-import useWindowDimensions from "../hooks/useWindowDimensions";
 import { PORT } from "../constants/Port";
-import avatar from "../resources/img_avatar.png";
 
 hljs.configure({
   languages: ["javascript", "java", "c", "c++", "python"],
@@ -43,10 +40,10 @@ const formats = [
 ];
 
 const CommentBox = (props) => {
-  const { width } = useWindowDimensions();
   const [description, setDescription] = useState("");
-  const [error, setError] = useState("");
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(
+    description === "" || description !== "<p><br></p>"
+  );
 
   const submitComment = (e) => {
     e.preventDefault();
@@ -56,9 +53,7 @@ const CommentBox = (props) => {
     const nick_name = props.nick_name;
     const post_id = props.post_id;
     const replied_time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
-    if (description == "") {
-      setError("Comment required.");
-    } else {
+    if (description !== "" || description !== "<p><br></p>") {
       axios
         .post(`${PORT}reply/addreply`, {
           parent_id: parent_id,
@@ -95,11 +90,8 @@ const CommentBox = (props) => {
   };
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setError("");
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+    setDisabled(description === "" || description === "<p><br></p>");
+  }, [description]);
 
   window.onbeforeunload = () => {
     if (description != "") {
@@ -113,46 +105,28 @@ const CommentBox = (props) => {
 
   return (
     !props.answered && (
-      <div className="content-container" style={{}}>
-        <div className="row mx-auto">
-          {width > 992 && (
-            <div className="col-1">
-              <img
-                href="#profile"
-                className="avatar"
-                src={avatar}
-                alt="Profile"
-              />
-            </div>
-          )}
-          <div className="col" style={{ paddingTop: 15 }}>
-            <ReactQuill
-              onChange={handleChange}
-              value={description}
-              modules={modules}
-              bounds={".quill reply"}
-              formats={formats}
-            />
-            <div className="hstack pull-right my-3">
-              {error != "" ? (
-                <p class={`alert alert-${error == "" ? "success" : "danger"}`}>
-                  {error}
-                </p>
-              ) : (
-                <p />
-              )}
-              <button
-                type="button"
-                onClick={submitComment}
-                className="btn btn-block"
-                style={{ minWidth: 100, width: 100 }}
-                disabled={disabled}
-              >
-                Reply
-              </button>
-            </div>
-          </div>
-        </div>
+      <div className="position-relative">
+        <ReactQuill
+          onChange={handleChange}
+          value={description}
+          placeholder="Leave an answer..."
+          modules={modules}
+          bounds={".quill .reply-to-editor"}
+          formats={formats}
+        />
+
+        <button
+          onClick={submitComment}
+          className="btn position-absolute top-0 end-0"
+          style={{
+            padding: "3px 15px",
+            marginRight: 8,
+            marginTop: 7,
+          }}
+          disabled={disabled}
+        >
+          Reply
+        </button>
       </div>
     )
   );

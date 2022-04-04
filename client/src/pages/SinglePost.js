@@ -207,7 +207,7 @@ const SinglePost = ({ socket }) => {
           exit="exit"
         >
           <div className="row">
-            <div className="col">
+            <div className="col-9">
               <Post
                 post={post}
                 tags={tags}
@@ -243,7 +243,6 @@ const SinglePost = ({ socket }) => {
                 </div>
               )} */}
               <br />
-
               <Replies
                 replies={replies}
                 onDelete={onDelete}
