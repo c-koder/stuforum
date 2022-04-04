@@ -96,7 +96,6 @@ const Home = ({ socket }) => {
   return (
     <motion.div
       className="container"
-      style={{ marginTop: 40 }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"

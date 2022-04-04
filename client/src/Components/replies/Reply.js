@@ -190,7 +190,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
   const [showChildReplies, setShowChildReplies] = useState(false);
 
   return (
-    <>
+    <div className="content-container">
       <ReactTooltip
         effect="solid"
         place="bottom"
@@ -199,79 +199,64 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
         arrowColor={"var(--secondary)"}
         delayShow={500}
       />
-      <div
-        className="posts-container"
-        style={{
-          float: reply.replied_to != null && "right",
-          width: reply.replied_to != null && "95%",
-          marginBottom: answerOnly ? 40 : 20,
-        }}
-      >
-        <div
-          className="posts-container-div"
-          style={{
-            width: width > 900 ? "10%" : "25%",
-            margin: width > 900 ? "0 10px 0 0px" : "0 5px 0px -10px",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
+      <div className="row">
+        <div className="col-1">
           <img href="#profile" className="avatar" src={avatar} alt="Profile" />
         </div>
-        <div className="posts-container-div">
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-            }}
-          >
-            <h4 style={{ color: "var(--secondary)" }}>
-              Replied by{" "}
-              <a
-                href={
-                  authState.nick_name == reply.nick_name
-                    ? "/profile"
-                    : `/user/${reply.nick_name}`
-                }
-                style={{ color: "var(--primary)", fontWeight: 600 }}
-              >
-                {reply.nick_name}{" "}
-              </a>
-              <img className="navIcon" src={time} style={{ marginTop: -2 }} />
-              <span
-                style={{
-                  color: "var(--secondary)",
-                }}
-                data-tip={moment(reply.replied_time).format(
-                  "MMMM Do YYYY, h:mm:ss a"
-                )}
-              >
-                {repliedTime}
-              </span>
-            </h4>
+        <div className="col" style={{ marginLeft: -10 }}>
+          <div className="hstack" style={{ color: "var(--secondary)" }}>
+            <a
+              href={
+                authState.nick_name == reply.nick_name
+                  ? "/profile"
+                  : `/user/${reply.nick_name}`
+              }
+              style={{ color: "var(--primary)", fontWeight: 600 }}
+            >
+              {reply.nick_name}
+            </a>
+            <i
+              class="bi bi-clock-fill"
+              style={{
+                fontSize: 18,
+                color: "var(--secondary)",
+                marginLeft: 5,
+              }}
+            ></i>
+            <span
+              style={{
+                color: "var(--secondary)",
+                marginLeft: 5,
+              }}
+              data-tip={moment(reply.replied_time).format(
+                "MMMM Do YYYY, h:mm:ss a"
+              )}
+            >
+              {repliedTime}
+            </span>
+            {authState.nick_name == reply.nick_name && (
+              <div className="ms-auto">
+                <a
+                  role="button"
+                  id="post-context"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  variants={rotateVariant}
+                >
+                  <i
+                    class="bi bi-gear-fill"
+                    style={{ color: "var(--secondary)", fontSize: 22 }}
+                  ></i>
+                </a>
+                <ContextMenu
+                  reply={reply}
+                  show={show}
+                  onDelete={onDelete}
+                  answerOnly={answerOnly}
+                />
+              </div>
+            )}
           </div>
-          {authState.nick_name == reply.nick_name && (
-            <div ref={ref} style={{ float: "right", marginTop: "-32px" }}>
-              <motion.img
-                style={{
-                  height: "25px",
-                  marginTop: 5,
-                }}
-                className="icon"
-                src={settings}
-                variants={rotateVariant}
-                animate={show ? "rotate" : "stop"}
-                onClick={() => setShow((oldState) => !oldState)}
-                whileHover={{ cursor: "pointer" }}
-              />
-              <ContextMenu
-                reply={reply}
-                show={show}
-                onDelete={onDelete}
-                answerOnly={answerOnly}
-              />
-            </div>
-          )}
 
           <div style={{ display: "flex" }}>
             <p style={{ color: "var(--dark)" }}>
@@ -419,7 +404,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -59,6 +59,7 @@ input[type="text"]::placeholder {
 .navbar {
   background: var(--bg);
   border-bottom: 1px solid var(--light-white);
+  margin-bottom: 40px;
 }
 
 .avatar {
@@ -386,11 +387,9 @@ button:disabled {
 
 .label {
   text-align: center;
-  height: 35px;
-  margin: 5px 20px 0px 20px;
   padding: 5px 10px;
   font-weight: 600;
-  color: #444444;
+  color: var(--light);
   font-size: var(--main-font-size);
   border-radius: 5px;
 }
@@ -668,4 +667,8 @@ a {
   font-size: 16px;
   background: var(--bg);
   border-top: 1px solid var(--light-white);
+}
+
+.footer-gap {
+  padding: 40px 0 0 0;
 }

@@ -93,11 +93,13 @@ const SinglePost = ({ socket }) => {
 
   const containerVariants = {
     hidden: {
-      scale: 0.96,
+      opacity: 0,
+      y: -25,
     },
     visible: {
-      scale: 1,
-      transition: { duration: 0.5 },
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4 },
     },
     exit: {
       transition: { ease: "easeIn" },
@@ -195,67 +197,68 @@ const SinglePost = ({ socket }) => {
   });
 
   return (
-    <>
+    <div>
       {!loading && post && (
         <motion.div
-          className={"container"}
+          className="container"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
           exit="exit"
-          style={{
-            padding: width < 900 && "20px 0px",
-            margin: width < 900 && "20px 0px",
-          }}
         >
-          <div className="container-div" style={{ width: "347%" }}>
-            <Post
-              post={post}
-              tags={tags}
-              postPref={postPref[0]}
-              singlePost={true}
-              commentCount={commentCount}
-              onToggleUrgent={toggleUrgent}
-              onToggleAnswered={toggleAnswered}
-              onDelete={deletePost}
-              socket={socket}
-            />
-            <CommentBox
-              addReply={addReply}
-              replyTo={null}
-              parent_id={null}
-              user_id={authState.id}
-              nick_name={authState.nick_name}
-              post_id={id}
-              answered={answered}
-              socket={socket}
-            />
+          <div className="row">
+            <div className="col">
+              <Post
+                post={post}
+                tags={tags}
+                postPref={postPref[0]}
+                singlePost={true}
+                commentCount={commentCount}
+                onToggleUrgent={toggleUrgent}
+                onToggleAnswered={toggleAnswered}
+                onDelete={deletePost}
+                socket={socket}
+              />
+              <CommentBox
+                addReply={addReply}
+                replyTo={null}
+                parent_id={null}
+                user_id={authState.id}
+                nick_name={authState.nick_name}
+                post_id={id}
+                answered={answered}
+                socket={socket}
+              />
 
-            {replies.length > 0 && (
-              <div style={{ marginBottom: -20 }}>
-                <FilterMenu show={true} replies={true} sortData={sortReplies} />
-                <div className="sortLabel" style={{ width: "8%" }}>
-                  Sort By
+              {/* {replies.length > 0 && (
+                <div style={{ marginBottom: -20 }}>
+                  <FilterMenu
+                    show={true}
+                    replies={true}
+                    sortData={sortReplies}
+                  />
+                  <div className="sortLabel" style={{ width: "8%" }}>
+                    Sort By
+                  </div>
                 </div>
-              </div>
-            )}
-            <Replies
-              replies={replies}
-              onDelete={onDelete}
-              addReply={addReply}
-              answered={answered}
-              socket={socket}
-            />
-          </div>
-          <div
-            className="container-div"
-            style={{ display: width < 900 && "none" }}
-          >
-            <RightBar activeTab={""} />
+              )} */}
+              <br />
+
+              <Replies
+                replies={replies}
+                onDelete={onDelete}
+                addReply={addReply}
+                answered={answered}
+                socket={socket}
+              />
+            </div>
+            <div className="col-3" style={{ display: width < 900 && "none" }}>
+              <RightBar activeTab={""} />
+            </div>
           </div>
         </motion.div>
       )}
-    </>
+    </div>
   );
 };
 

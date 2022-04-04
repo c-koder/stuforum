@@ -57,7 +57,7 @@ const CommentBox = (props) => {
     const post_id = props.post_id;
     const replied_time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
     if (description == "") {
-      setError("Please add a comment");
+      setError("Comment required.");
     } else {
       axios
         .post(`${PORT}reply/addreply`, {
@@ -112,67 +112,49 @@ const CommentBox = (props) => {
   };
 
   return (
-    <>
-      {!props.answered && (
-        <div className="posts-container" style={{ marginBottom: 20 }}>
-          <div
-            className="posts-container-div"
-            style={{
-              width: width > 900 ? "10%" : "25%",
-              margin: width > 900 ? "0 10px 0 0px" : "0 5px 0px -10px",
-              alignItems: "center",
-              textAlign: "center",
-            }}
-          >
-            <img
-              href="#profile"
-              className="avatar"
-              src={avatar}
-              alt="Profile"
+    !props.answered && (
+      <div className="content-container" style={{}}>
+        <div className="row mx-auto">
+          {width > 992 && (
+            <div className="col-1">
+              <img
+                href="#profile"
+                className="avatar"
+                src={avatar}
+                alt="Profile"
+              />
+            </div>
+          )}
+          <div className="col" style={{ paddingTop: 15 }}>
+            <ReactQuill
+              onChange={handleChange}
+              value={description}
+              modules={modules}
+              bounds={".quill reply"}
+              formats={formats}
             />
-          </div>
-          <div className="posts-container-div">
-            <span style={{ width: "100%" }}>
-              <div className="form-control" style={{ marginBottom: 30 }}>
-                <ReactQuill
-                  onChange={handleChange}
-                  value={description}
-                  modules={modules}
-                  bounds={".quill reply"}
-                  formats={formats}
-                />
-              </div>
+            <div className="hstack pull-right my-3">
+              {error != "" ? (
+                <p class={`alert alert-${error == "" ? "success" : "danger"}`}>
+                  {error}
+                </p>
+              ) : (
+                <p />
+              )}
               <button
                 type="button"
-                style={{
-                  marginLeft: 5,
-                  float: "right",
-                  width: width > 900 ? "20%" : "30%",
-                  margin: "-5px 0px 0px 0px",
-                }}
                 onClick={submitComment}
                 className="btn btn-block"
+                style={{ minWidth: 100, width: 100 }}
                 disabled={disabled}
               >
                 Reply
               </button>
-              <div
-                id="error"
-                className={error !== "" ? "error active" : "error"}
-                style={{
-                  float: "right",
-                  margin: 0,
-                  marginRight: 20,
-                  marginTop: -5,
-                }}
-              >
-                {error}
-              </div>
-            </span>
+            </div>
           </div>
         </div>
-      )}
-    </>
+      </div>
+    )
   );
 };
 

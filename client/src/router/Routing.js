@@ -260,6 +260,7 @@ const Routing = () => {
             </>
           )}
         </Routes>
+        <div className="footer-gap" />
         <Footer />
       </Router>
       {width > 900 && (
