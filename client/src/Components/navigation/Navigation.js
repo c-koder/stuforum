@@ -10,6 +10,7 @@ import MobileNav from "./MobileNav";
 import NavContext from "./NavContext";
 import MiniPosts from "../posts/MiniPosts";
 import useMiniPosts from "../../hooks/useMiniPosts";
+import { Link } from "react-router-dom";
 const Navigation = ({ isLogged, onLogout, newNotification }) => {
   const { width } = useWindowDimensions();
 
@@ -93,7 +94,7 @@ const Navigation = ({ isLogged, onLogout, newNotification }) => {
     <nav className="navbar navbar-light navbar-expand-lg py-4 justify-content-center">
       <div className="container">
         <div className="navbar-brand d-flex w-50 me-auto">
-          <a href="/">
+          <Link to="/">
             <h3
               style={{
                 color: "var(--primary)",
@@ -103,7 +104,7 @@ const Navigation = ({ isLogged, onLogout, newNotification }) => {
             >
               stu<span style={{ color: "var(--dark)" }}>forum</span>
             </h3>
-          </a>
+          </Link>
         </div>
         {isLogged && (
           <button

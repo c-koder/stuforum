@@ -10,7 +10,8 @@ import LeftBar from "../Components/LeftBar";
 import usePosts from "../hooks/usePosts";
 import { AuthContext } from "../helpers/AuthContext";
 import useWindowDimensions from "../hooks/useWindowDimensions";
-import AskAQuestion from "../Components/AskAQuestion";
+import { Link } from "react-router-dom";
+import { containerVariants } from "../constants/Anim";
 
 const Home = ({ socket }) => {
   const { width } = useWindowDimensions();
@@ -67,28 +68,6 @@ const Home = ({ socket }) => {
     setPosts(obj);
   };
 
-  const containerVariants = {
-    hidden: {
-      opacity: 0,
-      y: -25,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4 },
-    },
-    exit: {
-      transition: { ease: "easeIn" },
-    },
-  };
-
-  const [questionPopup, setQuestionPopup] = useState(false);
-
-  const askQuestion = (e) => {
-    e.preventDefault();
-    setQuestionPopup(true);
-  };
-
   useEffect(() => {
     document.title = "stuforum";
   }, []);
@@ -101,13 +80,6 @@ const Home = ({ socket }) => {
       animate="visible"
       exit="exit"
     >
-      {questionPopup && (
-        <AskAQuestion
-          questionPopup={questionPopup}
-          setQuestionPopup={setQuestionPopup}
-        />
-      )}
-
       <div className="row justify-content-center">
         <div className="col-3" style={{ display: width < 992 && "none" }}>
           <LeftBar userQuestionCount={userQuestionCount} />
@@ -120,11 +92,11 @@ const Home = ({ socket }) => {
                 <FilterMenu show={true} posts={true} sortData={sortPosts} />
               )}
               {posts.length == 0 ? (
-                <div className="sortLabel" style={{ width: "200px" }}>
+                <div className="info-label" style={{ width: "200px" }}>
                   No questions yet
                 </div>
               ) : (
-                <div className="sortLabel" style={{ width: "100px" }}>
+                <div className="info-label" style={{ width: "100px" }}>
                   Sort By
                 </div>
               )} */}
@@ -135,18 +107,23 @@ const Home = ({ socket }) => {
                     marginBottom: 20,
                   }}
                 >
-                  <h3 style={{ color: "var(--secondary)", marginTop: 8 }}>
+                  <h5
+                    style={{
+                      color: "var(--secondary)",
+                      fontWeight: 600,
+                    }}
+                  >
                     Tagged
-                  </h3>
-                  <a
-                    href={{
+                  </h5>
+                  <Link
+                    to={{
                       pathname: `/home/tagged/${name}`,
                     }}
                     style={{ marginLeft: 20 }}
                     className="tag"
                   >
                     {name}
-                  </a>
+                  </Link>
                 </div>
               )}
               <Posts

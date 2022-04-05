@@ -117,6 +117,7 @@ const LoginAndRegister = () => {
   return (
     <motion.div
       className="container"
+      style={{ height: "69vh" }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -199,7 +200,15 @@ const LoginAndRegister = () => {
                 >
                   Register
                 </button>
-                <p className={`alert alert-success my-3`}>{error}</p>
+                {error !== "" && (
+                  <p
+                    className={`alert alert-${
+                      error === "Registration Successful" ? "success" : "danger"
+                    } my-3`}
+                  >
+                    {error}
+                  </p>
+                )}
               </div>
             )}
           </div>

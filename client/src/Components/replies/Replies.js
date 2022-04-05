@@ -3,6 +3,7 @@ import InfiniteScoll from "react-infinite-scroll-component";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useState } from "react";
+import Loader from "../Loader";
 
 const Replies = ({ socket, replies, onDelete, addReply, answered }) => {
   const [scrollNumber, setScollNumber] = useState(0);
@@ -35,6 +36,7 @@ const Replies = ({ socket, replies, onDelete, addReply, answered }) => {
           setScollNumber(scrollNumber + 1);
         }, 1000);
       }}
+      loader={<Loader />}
     >
       {displayPosts}
     </InfiniteScoll>

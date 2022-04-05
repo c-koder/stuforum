@@ -6,6 +6,7 @@ import { PORT } from "../../constants/Port";
 import { AuthContext } from "../../helpers/AuthContext";
 import useNotifications from "../../hooks/useNotifications";
 import Notification from "./Notification";
+import Loader from "../Loader";
 
 const Notifications = ({
   notificationCount,
@@ -123,6 +124,7 @@ const Notifications = ({
           dataLength={scrollsVisited}
           hasMore={hasMore}
           scrollableTarget="scrollableDiv"
+          loader={<Loader />}
           next={() => {
             setHasMore(notifications[scrollsVisited] != null);
             setTimeout(() => {

@@ -3,6 +3,7 @@ import moment from "moment";
 import { motion } from "framer-motion";
 
 import { AuthContext } from "../../helpers/AuthContext";
+import { Link } from "react-router-dom";
 
 const MiniPost = ({ post }) => {
   const { authState } = useContext(AuthContext);
@@ -10,29 +11,29 @@ const MiniPost = ({ post }) => {
 
   return (
     <div className="miniPostsContainer">
-      <motion.a
+      <Link
         style={{ all: "unset" }}
-        href={`/post/${post.id}`}
+        to={`/post/${post.id}`}
         whileHover={{ cursor: "pointer" }}
       >
         <h6>{post.question}</h6>
-      </motion.a>
+      </Link>
 
       <div className="hstack">
         <span style={{ marginRight: 15 }}>
           <h6 style={{ color: "var(--secondary)" }}>
             u/
-            <motion.a
+            <Link
               style={{ all: "unset" }}
               whileHover={{ cursor: "pointer" }}
-              href={
+              to={
                 authState.nick_name == post.nick_name
                   ? "/profile"
                   : `/user/${post.nick_name}`
               }
             >
               {post.nick_name}
-            </motion.a>
+            </Link>
           </h6>
         </span>
         <span style={{ display: "flex" }}>

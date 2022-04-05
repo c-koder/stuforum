@@ -5,6 +5,7 @@ import RightBar from "../Components/RightBar";
 import ShowTags from "../Components/tags/Tags";
 import useAllTags from "../hooks/useAllTags";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import { containerVariants } from "../constants/Anim";
 
 const Tags = () => {
   const { width } = useWindowDimensions();
@@ -19,19 +20,6 @@ const Tags = () => {
     }
     setLoading(false);
   }, [response]);
-
-  const containerVariants = {
-    hidden: {
-      scale: 0.96,
-    },
-    visible: {
-      scale: 1,
-      transition: { duration: 0.5 },
-    },
-    exit: {
-      transition: { ease: "easeIn" },
-    },
-  };
 
   useEffect(() => {
     document.title = "Tags";

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import ReactTooltip from "react-tooltip";
 import moment from "moment";
 import axios from "axios";
@@ -9,6 +9,7 @@ import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
 import { PORT } from "../../constants/Port";
 import Tags from "../tags/Tags";
 import ContextMenu from "../ContextMenu";
+import { Link } from "react-router-dom";
 
 const Post = ({
   post,
@@ -175,9 +176,9 @@ const Post = ({
         delayShow={500}
       />
       <div className="hstack" style={{ alignItems: "baseline" }}>
-        <a href={`/post/${post.id}`}>
+        <Link to={`/post/${post.id}`}>
           <h5>{post.question}</h5>
-        </a>
+        </Link>
 
         {(post.urgent == 1 || post.answered == 1) && (
           <div className="ms-auto">
@@ -230,8 +231,8 @@ const Post = ({
           }}
         >
           Posted by{" "}
-          <a
-            href={
+          <Link
+            to={
               authState.nick_name == post.nick_name
                 ? "/profile"
                 : `/user/${post.nick_name}`
@@ -240,7 +241,7 @@ const Post = ({
             <span style={{ color: "var(--primary)", fontWeight: 600 }}>
               {post.nick_name}
             </span>
-          </a>
+          </Link>
         </span>
 
         <div

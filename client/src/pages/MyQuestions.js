@@ -10,6 +10,7 @@ import { PORT } from "../constants/Port";
 import Posts from "../Components/posts/Posts";
 import RightBar from "../Components/RightBar";
 import LeftBar from "../Components/LeftBar";
+import { containerVariants } from "../constants/Anim";
 
 const MyQuestions = ({ socket }) => {
   const { width } = useWindowDimensions();
@@ -108,58 +109,39 @@ const MyQuestions = ({ socket }) => {
       });
   }, []);
 
-  const containerVariants = {
-    hidden: {
-      scale: 0.96,
-    },
-    visible: {
-      scale: 1,
-      transition: { duration: 0.5 },
-    },
-    exit: {
-      transition: { ease: "easeIn" },
-    },
-  };
-
   useEffect(() => {
     document.title = "My Questions";
   }, []);
 
   return (
-    <>
-      <motion.div
-        className={"container"}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
-        <div
-          className="container-div"
-          style={{ display: width < 900 && "none" }}
-        >
+    <motion.div
+      className="container"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
+      <div className="row">
+        <div className="col-3" style={{ display: width < 900 && "none" }}>
           <LeftBar userQuestionCount={userQuestionCount} />
         </div>
-        <div
-          className="container-div"
-          style={{
-            width: "225%",
-            margin: width < 900 && "-80px 0px 0px 0px",
-            marginTop: width < 900 ? "-40px" : 0,
-          }}
-        >
-          {posts.length > 0 && (
+        <div className="col">
+          <h5>
+            <strong>My Questions</strong>
+          </h5>
+          <br />
+          {/* {posts.length > 0 && (
             <FilterMenu show={true} posts={true} sortData={sortPosts} />
           )}
           {posts.length == 0 ? (
-            <div className="sortLabel" style={{ width: "200px" }}>
+            <div className="info-label" style={{ width: "200px" }}>
               No questions yet
             </div>
           ) : (
-            <div className="sortLabel" style={{ width: "100px" }}>
+            <div className="info-label" style={{ width: "100px" }}>
               Sort By
             </div>
-          )}
+          )} */}
           <Posts
             posts={sortedPosts}
             tags={tags}
@@ -171,14 +153,11 @@ const MyQuestions = ({ socket }) => {
             socket={socket}
           />
         </div>
-        <div
-          className="container-div"
-          style={{ display: width < 900 && "none" }}
-        >
+        <div className="col-3" style={{ display: width < 900 && "none" }}>
           <RightBar activeTab={"questions"} />
         </div>
-      </motion.div>
-    </>
+      </div>
+    </motion.div>
   );
 };
 

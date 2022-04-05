@@ -3,21 +3,10 @@ import { motion } from "framer-motion";
 import "../styles/glitch.css";
 
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import { containerVariants } from "../constants/Anim";
 
 const NotFound = () => {
   const { width } = useWindowDimensions();
-  const containerVariants = {
-    hidden: {
-      scale: 0.96,
-    },
-    visible: {
-      scale: 1,
-      transition: { duration: 0.5 },
-    },
-    exit: {
-      transition: { ease: "easeIn" },
-    },
-  };
 
   useEffect(() => {
     document.title = "Page not found";
@@ -25,25 +14,22 @@ const NotFound = () => {
 
   return (
     <motion.div
+      className="container"
+      style={{ height: "69vh" }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
     >
-      <div className={"container"} style={{ padding: "40px 0px" }}>
-        <div className="container-div" style={{ display: "flex" }}>
-          <h2 style={{ marginLeft: 30, marginTop: 13 }}>
-            Oops! The page you visited was either not found or is
-            <span className="glitch" data-text="glitched!">
-              {" "}
-              glitched!
-            </span>
-            <br />
-            <span style={{ fontSize: 14, float: width > 900 && "right" }}>
-              (Most probably the former)
-            </span>
-          </h2>
-        </div>
+      <div className="container-div">
+        <h4>
+          Oops! The page you visited was either not found or is
+          <span className="glitch" data-text="glitched!">
+            {" "}
+            glitched!
+          </span>
+          <br />
+        </h4>
       </div>
     </motion.div>
   );

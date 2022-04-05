@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import Tags from "./tags/Tags";
 import useSortedTags from "../hooks//useSortedTags";
+import { Link } from "react-router-dom";
 
 const RightBar = ({ activeTab }) => {
   const [tags, setTags] = useState([]);
@@ -16,8 +17,8 @@ const RightBar = ({ activeTab }) => {
   return (
     <div className="sticky-top">
       <div className="rightbar content-container">
-        <a
-          href="/home"
+        <Link
+          to="/home"
           className={
             activeTab === "home" ? "active rightbar-item" : "rightbar-item"
           }
@@ -32,9 +33,9 @@ const RightBar = ({ activeTab }) => {
             }}
           ></i>
           Home
-        </a>
-        <a
-          href="/myquestions"
+        </Link>
+        <Link
+          to="/myquestions"
           className={
             activeTab === "questions" ? "active rightbar-item" : "rightbar-item"
           }
@@ -51,9 +52,9 @@ const RightBar = ({ activeTab }) => {
             }}
           ></i>
           My Questions
-        </a>
-        <a
-          href="/myanswers"
+        </Link>
+        <Link
+          to="/myanswers"
           className={
             activeTab === "answers" ? "active rightbar-item" : "rightbar-item"
           }
@@ -68,9 +69,9 @@ const RightBar = ({ activeTab }) => {
             }}
           ></i>
           My Answers
-        </a>
-        <a
-          href="/tags"
+        </Link>
+        <Link
+          to="/tags"
           className={
             activeTab === "tags" ? "active rightbar-item" : "rightbar-item"
           }
@@ -85,7 +86,7 @@ const RightBar = ({ activeTab }) => {
             }}
           ></i>
           Tags
-        </a>
+        </Link>
       </div>
       <div
         className="content-container"

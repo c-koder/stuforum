@@ -20,6 +20,7 @@ import { Parser } from "html-to-react";
 import { abbreviateNumber } from "../../helpers/AbbreviateNumber";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import { PORT } from "../../constants/Port";
+import { Link } from "react-router-dom";
 
 const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
   const { width } = useWindowDimensions();
@@ -202,7 +203,6 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
       <div className="row">
         <div className="col-1">
           <img
-            href="#profile"
             className="avatar"
             style={{ height: width < 992 && "25px" }}
             src={avatar}
@@ -216,8 +216,8 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
               color: "var(--secondary)",
             }}
           >
-            <a
-              href={
+            <Link
+              to={
                 authState.nick_name == reply.nick_name
                   ? "/profile"
                   : `/user/${reply.nick_name}`
@@ -225,7 +225,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
               style={{ color: "var(--primary)", fontWeight: 600 }}
             >
               {reply.nick_name}
-            </a>
+            </Link>
 
             <div style={{ marginLeft: 5 }}>
               <i
@@ -274,14 +274,14 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
           <div className="hstack" style={{ marginTop: -10 }}>
             <p style={{ color: "var(--dark)" }}>
               {reply.replied_to != null && (
-                <a
-                  href={`/user/${reply.replied_to}`}
+                <Link
+                  to={`/user/${reply.replied_to}`}
                   style={{ marginRight: 5 }}
                 >
                   <span style={{ color: "var(--primary)", fontWeight: 600 }}>
                     @{reply.replied_to}
                   </span>
-                </a>
+                </Link>
               )}
             </p>
             <span

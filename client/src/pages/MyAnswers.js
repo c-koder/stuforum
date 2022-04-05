@@ -9,22 +9,10 @@ import RightBar from "../Components/RightBar";
 import LeftBar from "../Components/LeftBar";
 import Answer from "../Components/Answers";
 import useAnswers from "../hooks/useAnswers";
+import { containerVariants } from "../constants/Anim";
 
 const MyAnswers = ({ socket }) => {
   const { width } = useWindowDimensions();
-
-  const containerVariants = {
-    hidden: {
-      scale: 0.96,
-    },
-    visible: {
-      scale: 1,
-      transition: { duration: 0.5 },
-    },
-    exit: {
-      transition: { ease: "easeIn" },
-    },
-  };
 
   const { authState } = useContext(AuthContext);
 
@@ -73,32 +61,26 @@ const MyAnswers = ({ socket }) => {
   }, []);
 
   return (
-    <>
-      <motion.div
-        className={"container"}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
-        <div
-          className="container-div"
-          style={{ display: width < 900 && "none" }}
-        >
+    <motion.div
+      className="container"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
+      <div className="row">
+        <div className="col-3" style={{ display: width < 900 && "none" }}>
           <LeftBar userQuestionCount={userQuestionCount} />
         </div>
-        <div
-          className="container-div"
-          style={{
-            width: "225%",
-            margin: width < 900 && "-80px 0px 0px 0px",
-            marginTop: width < 900 ? "-40px" : 0,
-          }}
-        >
+        <div className="col">
+          <h5>
+            <strong>My Answers</strong>
+          </h5>
+          <br />
           {!loading && (
             <div>
               {posts == null || replies == null ? (
-                <div className="sortLabel" style={{ width: "300px" }}>
+                <div className="info-label" style={{ width: "300px" }}>
                   You haven't answered any yet
                 </div>
               ) : (
@@ -115,14 +97,11 @@ const MyAnswers = ({ socket }) => {
             </div>
           )}
         </div>
-        <div
-          className="container-div"
-          style={{ display: width < 900 && "none" }}
-        >
+        <div className="col-3" style={{ display: width < 900 && "none" }}>
           <RightBar activeTab={"answers"} />
         </div>
-      </motion.div>
-    </>
+      </div>
+    </motion.div>
   );
 };
 

@@ -14,6 +14,7 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import { PORT } from "../constants/Port";
 import Post from "../Components/posts/Post";
 import RightBar from "../Components/RightBar";
+import { containerVariants } from "../constants/Anim";
 
 const SinglePost = ({ socket }) => {
   const { width } = useWindowDimensions();
@@ -89,21 +90,6 @@ const SinglePost = ({ socket }) => {
     }
 
     setReplies(obj);
-  };
-
-  const containerVariants = {
-    hidden: {
-      opacity: 0,
-      y: -25,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4 },
-    },
-    exit: {
-      transition: { ease: "easeIn" },
-    },
   };
 
   const addReply = (data) => {
@@ -237,7 +223,7 @@ const SinglePost = ({ socket }) => {
                     replies={true}
                     sortData={sortReplies}
                   />
-                  <div className="sortLabel" style={{ width: "8%" }}>
+                  <div className="info-label" style={{ width: "8%" }}>
                     Sort By
                   </div>
                 </div>

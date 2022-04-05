@@ -99,7 +99,7 @@ const Login = ({ socket }) => {
         </button>
       </form>
 
-      <p className={`alert alert-success my-3`}>{error}</p>
+      {error !== "" && <p className="alert alert-danger my-3">{error}</p>}
     </div>
   );
 };

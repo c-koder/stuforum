@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 import avatar from "../../resources/img_avatar.png";
+import { Link } from "react-router-dom";
 
 const Notification = ({ notification, changeViewed, onDelete }) => {
   const [time, setTime] = useState(moment(notification.time).local().fromNow());
@@ -62,26 +63,21 @@ const Notification = ({ notification, changeViewed, onDelete }) => {
             ></i>
           </span>
           <span style={{ color: "var(--primary)", fontWeight: 600 }}>
-            <motion.a
+            <Link
               style={{ all: "unset" }}
-              href={`/user/${notification.user_from}`}
-              whileHover={{ cursor: "pointer" }}
+              to={`/user/${notification.user_from}`}
             >
               {notification.user_from}
-            </motion.a>
+            </Link>
           </span>{" "}
           <span
             onClick={() => {
               changeViewed(notification.id);
             }}
           >
-            <motion.a
-              style={{ all: "unset" }}
-              href={`/post/${notification.post_id}`}
-              whileHover={{ cursor: "pointer" }}
-            >
+            <Link style={{ all: "unset" }} to={`/post/${notification.post_id}`}>
               {notification.description}{" "}
-            </motion.a>
+            </Link>
           </span>
         </div>
         <div style={{ float: "left", color: "var(--secondary)", fontSize: 13 }}>

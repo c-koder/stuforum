@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Post from "./Post";
 import InfiniteScoll from "react-infinite-scroll-component";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Loader from "../Loader";
 
 const Posts = ({
   posts,
@@ -56,9 +56,12 @@ const Posts = ({
             setPageNumber(pageNumber + 1);
           }, 1000);
         }}
+        loader={
+          <Loader/>
+        }
         endMessage={
           posts.length > 0 && (
-            <div className="sortLabel" style={{ width: "200px" }}>
+            <div className="info-label" style={{ width: "200px" }}>
               No more questions
             </div>
           )

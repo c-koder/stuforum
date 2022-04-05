@@ -1,11 +1,9 @@
 import ReactPaginate from "react-paginate";
 import { useState } from "react";
 
-import useWindowDimensions from "../../hooks/useWindowDimensions";
 import Tag from "./Tag";
 
 const Tags = ({ tags, tagOnly, display }) => {
-  const { width } = useWindowDimensions();
   const [pageNumber, setPageNumber] = useState(0);
 
   const tagsPerPage = 60;

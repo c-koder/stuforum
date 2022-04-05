@@ -36,12 +36,15 @@ body {
   transition: background-color 200ms ease-in;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="email"] {
   background: var(--light) !important;
   color: var(--dark) !important;
 }
 
-input[type="text"]::placeholder {
+input[type="text"]::placeholder,
+input[type="email"],
+input[type="password"]::placeholder {
   opacity: 0.6 !important;
 }
 
@@ -357,7 +360,7 @@ p {
   font-size: 22px;
 }
 
-.sortLabel {
+.info-label {
   border: 1px solid var(--light-white);
   font-size: 18px;
   color: var(--secondary);

@@ -6,6 +6,7 @@ import useUser from "../hooks/useUser";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import RightBar from "../Components/RightBar";
 import UserDetails from "../Components/UserDetails";
+import { containerVariants } from "../constants/Anim";
 
 const UserProfile = () => {
   const { width } = useWindowDimensions();
@@ -20,53 +21,29 @@ const UserProfile = () => {
     }
   }, [userResponse]);
 
-  const containerVariants = {
-    hidden: {
-      scale: 0.96,
-    },
-    visible: {
-      scale: 1,
-      transition: { duration: 0.5 },
-    },
-    exit: {
-      transition: { ease: "easeIn" },
-    },
-  };
-
   useEffect(() => {
     document.title = "Profile";
   }, []);
 
   return (
-    <>
-      <motion.div
-        className={"container"}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-      >
-        <div
-          className="container-div"
-          style={{
-            margin: width < 900 && "-80px 0px 0px 0px",
-            marginTop: width < 900 ? "-40px" : 0,
-          }}
-        >
+    <motion.div
+      className="container"
+      style={{ height: "69vh" }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
+      <div className="row">
+        <div className={width > 992 ? "col-3" : "col"}>
           <UserDetails user={user} />
         </div>
-        <div
-          className="container-div"
-          style={{ width: "225%", display: width < 900 && "none" }}
-        ></div>
-        <div
-          className="container-div"
-          style={{ display: width < 900 && "none" }}
-        >
+        <div className="col" style={{ display: width < 992 && "none" }} />
+        <div className="col-3" style={{ display: width < 992 && "none" }}>
           <RightBar activeTab={"profile"} />
         </div>
-      </motion.div>
-    </>
+      </div>
+    </motion.div>
   );
 };
 

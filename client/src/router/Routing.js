@@ -162,13 +162,13 @@ const Routing = () => {
         draggable
         pauseOnHover
       />
-      <Navigation
-        isLogged={authState.status}
-        onLogout={onLogout}
-        newNotification={newNotification}
-      />
-      <AskAQuestion />
       <Router>
+        <Navigation
+          isLogged={authState.status}
+          onLogout={onLogout}
+          newNotification={newNotification}
+        />
+        <AskAQuestion />
         <Routes>
           <Route
             path="/"
@@ -262,8 +262,8 @@ const Routing = () => {
             </>
           )}
         </Routes>
-        {/* <div className="footer-gap" />
-        <Footer /> */}
+        <div className="footer-gap" />
+        <Footer />
       </Router>
       {width > 900 && (
         <motion.button
