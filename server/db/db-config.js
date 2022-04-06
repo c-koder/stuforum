@@ -19,15 +19,18 @@ const db = mysql.createConnection({
 
 db.connect(function (err) {
   if (!err) {
-    db.query("CREATE DATABASE IF NOT EXISTS stuforum", (err, res) => {
-      if (!err) {
-        db.query("USE stuforum", (err, res) => {
-          if (!err) {
-            fabricate.create(db);
-          }
-        });
+    db.query(
+      "CREATE DATABASE IF NOT EXISTS heroku_be0c7c366266a27",
+      (err, res) => {
+        if (!err) {
+          db.query("USE heroku_be0c7c366266a27", (err, res) => {
+            if (!err) {
+              fabricate.create(db);
+            }
+          });
+        }
       }
-    });
+    );
   }
 });
 
