@@ -42,7 +42,7 @@ const UserDetails = ({ user }) => {
               alt="Profile Pic"
             />
             <div className="profilepic__content">
-              <span className="profilepic__text">Edit Profile</span>
+              <span className="profilepic__text">Update Avatar</span>
             </div>
           </div>
           <h4 style={{ fontWeight: 600, marginTop: 10 }}>
@@ -63,9 +63,20 @@ const UserDetails = ({ user }) => {
               }}
             ></i>
           </div>
-          <span style={{ textAlign: "center", fontSize: 18 }}>
-            {Parser().parse(user.description)}
-          </span>
+
+          {user.description !== null && (
+            <span
+              style={{
+                textAlign: "center",
+                fontSize: 16,
+                background: "var(--light-white)",
+                padding: "5px 10px",
+                borderRadius: 5,
+              }}
+            >
+              {Parser().parse(user.description)}
+            </span>
+          )}
           <hr />
           <h6
             style={{
@@ -85,7 +96,7 @@ const UserDetails = ({ user }) => {
               data-bs-toggle="modal"
               data-bs-target="#editProfileModal"
             >
-              Edit Details
+              Edit Profile
             </button>
           )}
         </center>

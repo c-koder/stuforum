@@ -38,7 +38,6 @@ body {
 
 input[type="text"],
 input[type="email"] {
-  background: var(--light) !important;
   color: var(--dark) !important;
 }
 
@@ -194,49 +193,6 @@ p {
   height: 45%;
 }
 
-.content-container {
-  border-radius: 10px;
-  padding: 20px;
-  border: 1px solid var(--light-white);
-  background-color: var(--light);
-  transition: all 200ms ease-in;
-}
-
-.horizontalContainer {
-  display: flex;
-  border-radius: 10px;
-  padding: 40px;
-  border: 1px solid var(--light-white);
-  transition: all 200ms ease-in;
-  background-color: var(--light);
-}
-
-.rightbar-item {
-  display: block;
-  width: 100%;
-  background: transparent;
-  color: var(--secondary);
-  text-align: left;
-  border: none;
-  padding: 5px 20px;
-  font-size: 14px;
-  font-weight: 400;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: var(--main-font-size);
-}
-
-.rightbar-item:hover {
-  color: var(--secondary);
-  background: var(--light-white);
-}
-
-.rightbar .active {
-  background-color: var(--primary-light);
-  color: var(--primary);
-  font-weight: 600;
-}
-
 .tags-input {
   display: flex;
   align-items: flex-start;
@@ -291,14 +247,43 @@ p {
   cursor: pointer;
 }
 
-.posts-container {
-  background-color: var(--light);
+.rightbar-item {
+  display: block;
+  width: 100%;
+  background: transparent;
+  color: var(--secondary);
+  text-align: left;
+  border: none;
+  padding: 5px 20px;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: var(--main-font-size);
+}
+
+.rightbar-item:hover {
+  color: var(--secondary);
+  background: var(--light-white);
+}
+
+.rightbar .active {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.content-container {
   padding: 20px;
   border: 1px solid var(--light-white);
+  background-color: var(--light);
   margin-bottom: 25px;
   border-radius: 10px;
-  transition: all 200ms ease-in;
-  width: 100%;
+  transition: 50ms ease;
+}
+
+.content-container:hover {
+  border: 1px solid var(--secondary);
 }
 
 .miniPostsContainer {

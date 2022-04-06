@@ -36,7 +36,7 @@ const Replies = ({ socket, replies, onDelete, addReply, answered }) => {
           setScollNumber(scrollNumber + 1);
         }, 1000);
       }}
-      loader={<Loader />}
+      loader={replies.length > 0 && <Loader />}
     >
       {displayPosts}
     </InfiniteScoll>

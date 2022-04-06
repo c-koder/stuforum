@@ -41,7 +41,6 @@ const Login = ({ socket }) => {
               id: response.data.id,
               status: true,
             });
-
             navigate("/home");
           }
         })

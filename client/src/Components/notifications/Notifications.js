@@ -124,7 +124,7 @@ const Notifications = ({
           dataLength={scrollsVisited}
           hasMore={hasMore}
           scrollableTarget="scrollableDiv"
-          loader={<Loader />}
+          loader={notifications.length > 0 && <Loader />}
           next={() => {
             setHasMore(notifications[scrollsVisited] != null);
             setTimeout(() => {

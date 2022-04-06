@@ -88,10 +88,7 @@ const RightBar = ({ activeTab }) => {
           Tags
         </Link>
       </div>
-      <div
-        className="content-container"
-        style={{ marginTop: 25, paddingBottom: 0 }}
-      >
+      <div className="content-container" style={{ paddingBottom: 0 }}>
         <h5 style={{ marginBottom: 20, fontWeight: 600 }}>
           Frequently used tags
         </h5>

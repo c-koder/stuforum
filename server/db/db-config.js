@@ -2,21 +2,20 @@ const mysql = require("mysql");
 
 const fabricate = require("./fabricate");
 
-// const db = mysql.createConnection({
-//   user: "	qx1onq4eu3usxho4",
-//   password: "y59qgwtg32oaa71o",
-//   host: "i54jns50s3z6gbjt.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
-//   port: 3306,
-//   database: "cp3zt6u8detuivdr",
-// });
-
 const db = mysql.createConnection({
-  user: "root",
-  password: "",
-  host: "localhost",
-  port: 3306,
-  database: "stuforum",
+  user: "baa3222a1c4772",
+  password: "319450b9",
+  host: "eu-cdbr-west-02.cleardb.net",
+  database: "heroku_be0c7c366266a27",
 });
+
+// const db = mysql.createConnection({
+//   user: "root",
+//   password: "",
+//   host: "localhost",
+//   port: 3306,
+//   database: "stuforum",
+// });
 
 db.connect(function (err) {
   if (!err) {

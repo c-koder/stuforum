@@ -166,7 +166,7 @@ const Post = ({
   }, []);
 
   return (
-    <div className="col posts-container">
+    <div className="col content-container">
       <ReactTooltip
         effect="solid"
         place="bottom"
@@ -233,7 +233,9 @@ const Post = ({
           Posted by{" "}
           <Link
             to={
-              authState.id == post.user_id ? "/profile" : `/user/${post.nick_name}`
+              authState.id == post.user_id
+                ? "/profile"
+                : `/user/${post.nick_name}`
             }
           >
             <span style={{ color: "var(--primary)", fontWeight: 600 }}>

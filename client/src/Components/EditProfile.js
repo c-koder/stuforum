@@ -52,8 +52,8 @@ const EditProfile = ({ user }) => {
         })
         .then((response) => {
           if (response.data.message == "profile_updated") {
-            setAuthState({ ...authState, nick_name: nickname });
             setError("Profile updated");
+            window.location.reload();
           } else {
             setError(response.data.message);
           }
@@ -123,6 +123,7 @@ const EditProfile = ({ user }) => {
                 className="form-control shadow-none"
                 placeholder="Update your nick name"
                 value={nickname}
+                disabled={true}
                 onChange={(e) => {
                   setNickname(e.target.value);
                 }}

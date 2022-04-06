@@ -152,7 +152,7 @@ const Navigation = ({ isLogged, onLogout, newNotification }) => {
                     initial="hidden"
                     animate={remove ? "hidden" : "visible"}
                     exit="exit"
-                    className="posts-container"
+                    className="content-container"
                     style={{
                       position: "absolute",
                       transform: "translate(-50%, 0%)",
