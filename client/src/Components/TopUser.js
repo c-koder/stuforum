@@ -22,7 +22,7 @@ const TopUser = ({ topUser }) => {
           {abbreviateNumber(topUser.likes)}
         </h5>
         <i
-          class="bi bi-hand-thumbs-up-fill"
+          className="bi bi-hand-thumbs-up-fill"
           style={{
             marginLeft: 5,
             color: "var(--primary)",

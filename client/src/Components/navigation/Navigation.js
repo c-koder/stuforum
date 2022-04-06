@@ -190,7 +190,9 @@ const Navigation = ({ isLogged, onLogout, newNotification }) => {
                         className="bi bi-bell-fill"
                         style={{ fontSize: 24 }}
                       ></i>
-                      <span class="badge badge-light">{notificationCount}</span>
+                      <span className="badge badge-light">
+                        {notificationCount}
+                      </span>
                     </a>
                     <Notifications
                       setNotificationCount={setNotificationCount}

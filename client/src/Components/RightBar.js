@@ -24,7 +24,7 @@ const RightBar = ({ activeTab }) => {
           }
         >
           <i
-            class="bi bi-house-door-fill"
+            className="bi bi-house-door-fill"
             style={{
               fontSize: 20,
               color:
@@ -41,7 +41,7 @@ const RightBar = ({ activeTab }) => {
           }
         >
           <i
-            class="bi bi-question-circle-fill"
+            className="bi bi-question-circle-fill"
             style={{
               fontSize: 20,
               color:
@@ -60,7 +60,7 @@ const RightBar = ({ activeTab }) => {
           }
         >
           <i
-            class="bi bi-chat-left-fill"
+            className="bi bi-chat-left-fill"
             style={{
               fontSize: 20,
               color:
@@ -77,7 +77,7 @@ const RightBar = ({ activeTab }) => {
           }
         >
           <i
-            class="bi bi-bookmark-fill"
+            className="bi bi-bookmark-fill"
             style={{
               fontSize: 22,
               color:

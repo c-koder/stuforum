@@ -36,7 +36,7 @@ const ContextMenu = ({
             }}
             style={{ color: post.answered == 1 && "var(--secondary)" }}
           >
-            <i class="bi bi-check-all"></i>
+            <i className="bi bi-check-all"></i>
             <span>
               {post.urgent == 1 ? "Unmark as Urgent" : "Mark as Urgent"}
             </span>
@@ -49,7 +49,7 @@ const ContextMenu = ({
             }}
             style={{ color: post.urgent == 1 && "var(--secondary)" }}
           >
-            <i class="bi bi-exclamation"></i>
+            <i className="bi bi-exclamation"></i>
             <span>
               {post.answered == 1 ? "Unmark as Answered" : "Mark as Answered"}
             </span>
@@ -57,7 +57,7 @@ const ContextMenu = ({
         </div>
       )}
       <li onClick={() => setConfirmationPopup(true)} className="dropdown-item">
-        <i class="bi bi-x"></i>
+        <i className="bi bi-x"></i>
         <span>Delete</span>
       </li>
     </ul>

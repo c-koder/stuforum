@@ -43,7 +43,7 @@ input[type="email"] {
 }
 
 input[type="text"]::placeholder,
-input[type="email"],
+input[type="email"]::placeholder,
 input[type="password"]::placeholder {
   opacity: 0.6 !important;
 }
@@ -540,15 +540,10 @@ a {
   max-height: 210px;
 }
 
-.quill {
-  /* max-width: 965px; */
-}
-
 .quill .ql-container {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   background: var(--light);
-  /* max-width: 965px; */
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 

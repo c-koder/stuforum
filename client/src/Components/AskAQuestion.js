@@ -96,30 +96,32 @@ const AskAQuestion = () => {
 
   return (
     <div
-      class="modal fade"
+      className="modal fade"
       id="askQuestionModal"
       data-bs-keyboard="false"
       data-bs-backdrop="static"
-      tabindex="-1"
+      tabIndex="-1"
       aria-labelledby="askQuestionModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div className="modal-dialog modal-lg modal-dialog-centered">
         <div
-          class="modal-content"
+          className="modal-content"
           style={{ borderRadius: 10, padding: "0px 10px" }}
         >
-          <div class="modal-header">
-            <h2>Ask a Question</h2>
+          <div className="modal-header">
+            <h4>
+              <strong>Ask a Question</strong>
+            </h4>
             <button
               type="button"
-              class="btn-close shadow-none"
+              className="btn-close shadow-none"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
           </div>
 
-          <div class="modal-body">
+          <div className="modal-body">
             <div
               className="content-container"
               style={{
@@ -160,7 +162,7 @@ const AskAQuestion = () => {
             <br />
             <ReactQuill
               onChange={handleChange}
-              value={description}
+              value={description || ""}
               modules={modules}
               bounds={".quill"}
               formats={formats}
@@ -174,24 +176,24 @@ const AskAQuestion = () => {
             </div>
 
             <div className="hstack my-3">
-              <div class="form-group">
-                <div class="form-check">
+              <div className="form-group">
+                <div className="form-check">
                   <input
-                    class="form-check-input shadow-none"
+                    className="form-check-input shadow-none"
                     type="checkbox"
                     id="urgentCheck"
                     checked={urgent}
                     value={urgent}
                     onChange={(e) => setUrgent(e.currentTarget.checked)}
                   />
-                  <label class="form-check-label" htmlFor="urgentCheck">
+                  <label className="form-check-label" htmlFor="urgentCheck">
                     Mark as urgent
                   </label>
                 </div>
               </div>
               {error != "" ? (
                 <p
-                  class={`alert alert-${
+                  className={`alert alert-${
                     error == "" ? "success" : "danger"
                   } ms-auto`}
                 >

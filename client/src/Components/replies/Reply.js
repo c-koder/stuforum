@@ -229,7 +229,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
 
             <div style={{ marginLeft: 5 }}>
               <i
-                class="bi bi-clock-fill"
+                className="bi bi-clock-fill"
                 style={{
                   fontSize: 18,
                   color: "var(--secondary)",
@@ -258,7 +258,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
                   variants={rotateVariant}
                 >
                   <i
-                    class="bi bi-gear-fill"
+                    className="bi bi-gear-fill"
                     style={{ color: "var(--secondary)", fontSize: 22 }}
                   ></i>
                 </a>
@@ -301,7 +301,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
               data-tip="Like this answer"
             >
               <i
-                class="bi bi-hand-thumbs-up-fill"
+                className="bi bi-hand-thumbs-up-fill"
                 style={{
                   marginRight: 5,
                   color:
@@ -330,7 +330,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
               data-tip="Dislike this answer"
             >
               <i
-                class="bi bi-hand-thumbs-down-fill"
+                className="bi bi-hand-thumbs-down-fill"
                 style={{
                   marginLeft: 5,
                   color:
@@ -361,7 +361,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
                 data-tip="Leave an answer"
               >
                 <i
-                  class="bi bi-reply-fill"
+                  className="bi bi-reply-fill"
                   style={{
                     fontSize: 22,
                     color: "var(--secondary)",

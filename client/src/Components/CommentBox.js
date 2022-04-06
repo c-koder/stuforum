@@ -121,7 +121,7 @@ const CommentBox = (props) => {
       <div className="position-relative">
         <ReactQuill
           onChange={handleChange}
-          value={description}
+          value={description || ""}
           placeholder="Leave an answer..."
           modules={width > 992 ? modules : mobile_modules}
           bounds={".quill .reply-to-editor"}

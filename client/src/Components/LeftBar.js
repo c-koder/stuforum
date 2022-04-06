@@ -56,7 +56,7 @@ const LeftBar = ({ userQuestionCount }) => {
               {abbreviateNumber(user != null && user.likes)}
             </h5>
             <i
-              class="bi bi-hand-thumbs-up-fill"
+              className="bi bi-hand-thumbs-up-fill"
               style={{
                 marginLeft: 5,
                 color: "var(--primary)",

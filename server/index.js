@@ -27,11 +27,20 @@ app.use("/api/tag", tag);
 app.use("/api/reply", reply);
 app.use("/api/auth", auth);
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "true",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });

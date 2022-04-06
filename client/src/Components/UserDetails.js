@@ -8,7 +8,7 @@ import { abbreviateNumber } from "../helpers/AbbreviateNumber";
 
 const UserDetails = ({ user }) => {
   const { authState } = useContext(AuthContext);
-  console.log(user);
+
   const onIconClick = () => {
     const input = document.getElementById("file-input");
     if (input) {
@@ -53,7 +53,7 @@ const UserDetails = ({ user }) => {
               {abbreviateNumber(user.likes)}
             </h5>
             <i
-              class="bi bi-hand-thumbs-up-fill"
+              className="bi bi-hand-thumbs-up-fill"
               style={{
                 marginLeft: 5,
                 color: "var(--primary)",
@@ -78,7 +78,13 @@ const UserDetails = ({ user }) => {
             )}
           </h6>
           {authState.nick_name === user.nick_name && (
-            <button className="btn shadow-none">Edit Details</button>
+            <button
+              className="btn shadow-none"
+              data-bs-toggle="modal"
+              data-bs-target="#editProfileModal"
+            >
+              Edit Details
+            </button>
           )}
         </center>
       </div>

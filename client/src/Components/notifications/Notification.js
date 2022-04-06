@@ -28,7 +28,7 @@ const Notification = ({ notification, changeViewed, onDelete }) => {
         style={{ borderRadius: "50%", height: "50px" }}
       />
       <i
-        class={
+        className={
           notification.type === "LK"
             ? "bi bi-hand-thumbs-up-fill"
             : notification.type === "CM"
@@ -58,7 +58,7 @@ const Notification = ({ notification, changeViewed, onDelete }) => {
             }}
           >
             <i
-              class="bi bi-x-circle-fill"
+              className="bi bi-x-circle-fill"
               style={{ color: "var(--dark)", fontSize: 20 }}
             ></i>
           </span>

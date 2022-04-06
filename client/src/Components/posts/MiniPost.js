@@ -38,7 +38,7 @@ const MiniPost = ({ post }) => {
         </span>
         <span style={{ display: "flex" }}>
           <i
-            class="bi bi-clock-fill"
+            className="bi bi-clock-fill"
             style={{
               fontSize: 18,
               marginTop: 2,

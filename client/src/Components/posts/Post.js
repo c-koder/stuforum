@@ -210,7 +210,7 @@ const Post = ({
               variants={rotateVariant}
             >
               <i
-                class="bi bi-gear-fill"
+                className="bi bi-gear-fill"
                 style={{ color: "var(--secondary)", fontSize: 22 }}
               ></i>
             </a>
@@ -251,7 +251,7 @@ const Post = ({
           }}
         >
           <i
-            class="bi bi-clock-fill"
+            className="bi bi-clock-fill"
             style={{
               fontSize: 17,
               color: "var(--secondary)",
@@ -281,7 +281,7 @@ const Post = ({
           style={{ display: "flex", marginTop: 5 }}
         >
           <i
-            class="bi bi-lightning-charge-fill"
+            className="bi bi-lightning-charge-fill"
             style={{
               fontSize: 20,
               color: leadsColor,
@@ -307,7 +307,7 @@ const Post = ({
           style={{ display: "flex", marginTop: 5 }}
         >
           <i
-            class="bi bi-chat-left-fill"
+            className="bi bi-chat-left-fill"
             style={{ fontSize: 17, color: "var(--secondary)" }}
           ></i>
           <span
@@ -328,7 +328,7 @@ const Post = ({
             disabled={disabled}
           >
             <i
-              class="bi bi-arrow-up-short"
+              className="bi bi-arrow-up-short"
               style={{
                 fontSize: 36,
                 color:
@@ -345,7 +345,7 @@ const Post = ({
             disabled={disabled}
           >
             <i
-              class="bi bi-arrow-down-short"
+              className="bi bi-arrow-down-short"
               style={{
                 fontSize: 36,
                 color:
