@@ -10,7 +10,7 @@ const TopUser = ({ topUser }) => {
     <div className="hstack">
       <Link
         to={
-          authState.nick_name == topUser.nick_name
+          authState.id == topUser.id
             ? "/profile"
             : `/user/${topUser.nick_name}`
         }

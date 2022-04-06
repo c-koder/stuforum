@@ -68,6 +68,17 @@ router.post("/getuser", async (req, res) => {
     });
 });
 
+router.post("/updateuser", async (req, res) => {
+  userService
+    .updateUser(req.body)
+    .then((message) => {
+      res.send({ message: message });
+    })
+    .catch((error) => {
+      res.send({ message: error });
+    });
+});
+
 router.get("/getsortedusers", async (req, res) => {
   userService
     .getTopUsers()

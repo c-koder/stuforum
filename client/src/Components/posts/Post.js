@@ -233,9 +233,7 @@ const Post = ({
           Posted by{" "}
           <Link
             to={
-              authState.nick_name == post.nick_name
-                ? "/profile"
-                : `/user/${post.nick_name}`
+              authState.id == post.user_id ? "/profile" : `/user/${post.nick_name}`
             }
           >
             <span style={{ color: "var(--primary)", fontWeight: 600 }}>

@@ -27,7 +27,7 @@ const MiniPost = ({ post }) => {
               style={{ all: "unset" }}
               whileHover={{ cursor: "pointer" }}
               to={
-                authState.nick_name == post.nick_name
+                authState.id == post.user_id
                   ? "/profile"
                   : `/user/${post.nick_name}`
               }

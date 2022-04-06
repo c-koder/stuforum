@@ -9,6 +9,8 @@ import { abbreviateNumber } from "../helpers/AbbreviateNumber";
 const UserDetails = ({ user }) => {
   const { authState } = useContext(AuthContext);
 
+  console.log(user);
+
   const onIconClick = () => {
     const input = document.getElementById("file-input");
     if (input) {
@@ -77,7 +79,7 @@ const UserDetails = ({ user }) => {
               "dddd, MMMM Do YYYY"
             )}
           </h6>
-          {authState.nick_name === user.nick_name && (
+          {authState.id === user.id && (
             <button
               className="btn shadow-none"
               data-bs-toggle="modal"

@@ -94,6 +94,56 @@ const userLogged = async (user_id, logged_in, time) => {
   });
 };
 
+const updateUSer = async (user) => {
+  let sql1 = "SELECT * FROM user WHERE nick_name = ? AND NOT id = ?";
+  return new Promise(async (resolve, reject) => {
+    db.query(sql1, [user.nickname, user.id], (err, result) => {
+      if (result.length > 0) {
+        reject("Nickname already in-use.");
+      } else {
+        let sql2 = "SELECT * FROM user WHERE student_email = ? AND NOT id = ?";
+        db.query(sql2, [user.email, user.id], (err, result) => {
+          if (result.length > 0) {
+            reject("Email already in-use.");
+          } else {
+            let sql3 = "SELECT * FROM user WHERE id = ?";
+            db.query(sql3, user.id, (err, result) => {
+              if (result.length > 0) {
+                if (!bcrypt.compareSync(user.password, result[0].password)) {
+                  reject("Password didn't match.");
+                } else {
+                  const sql4 = `UPDATE user SET full_name = ?, nick_name = ?, student_email = ?, description = ? WHERE id = ?`;
+                  db.query(
+                    sql4,
+                    [
+                      user.fullname,
+                      user.nickname,
+                      user.email,
+                      user.bio,
+                      user.id,
+                    ],
+                    (err, result) => {
+                      if (!err) {
+                        resolve("profile_updated");
+                      } else {
+                        reject(
+                          "An unknown error occured, please try again later."
+                        );
+                      }
+                    }
+                  );
+                }
+              } else {
+                reject("An unknown error occured, please try again later.");
+              }
+            });
+          }
+        });
+      }
+    });
+  });
+};
+
 const getSortedTopUsers = async () => {
   const sql = `SELECT * FROM user WHERE likes > 0 ORDER BY likes DESC LIMIT 5`;
 
@@ -182,6 +232,7 @@ module.exports = {
   getUserByUsernameAndPassword,
   registerNewUser,
   getUserByNickname,
+  updateUSer,
   getSortedTopUsers,
   getUserPostsCount,
   getUserAnswers,

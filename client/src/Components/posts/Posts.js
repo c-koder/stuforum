@@ -56,11 +56,9 @@ const Posts = ({
             setPageNumber(pageNumber + 1);
           }, 1000);
         }}
-        loader={
-          <Loader/>
-        }
+        loader={posts.length > 0 && <Loader />}
         endMessage={
-          posts.length > 0 && (
+          posts.length >= 0 && (
             <div className="info-label" style={{ width: "200px" }}>
               No more questions
             </div>

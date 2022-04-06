@@ -26,6 +26,10 @@ const getUser = async (nick_name) => {
   return userRepository.getUserByNickname(nick_name);
 };
 
+const updateUser = async (user) => {
+  return userRepository.updateUSer(user);
+};
+
 const getTopUsers = async () => {
   return userRepository.getSortedTopUsers();
 };
@@ -50,6 +54,7 @@ module.exports = {
   loginUser,
   registerUser,
   getUser,
+  updateUser,
   getTopUsers,
   getUserPostsCount,
   getUserAnswers,

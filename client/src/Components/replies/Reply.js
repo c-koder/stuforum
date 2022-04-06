@@ -218,7 +218,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
           >
             <Link
               to={
-                authState.nick_name == reply.nick_name
+                authState.id == reply.user_id
                   ? "/profile"
                   : `/user/${reply.nick_name}`
               }
@@ -248,7 +248,7 @@ const Reply = ({ socket, reply, onDelete, addReply, answerOnly, answered }) => {
               </span>
             </div>
 
-            {authState.nick_name == reply.nick_name && (
+            {authState.user_id == reply.user_id && (
               <div className="ms-auto">
                 <a
                   role="button"

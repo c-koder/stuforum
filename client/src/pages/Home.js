@@ -75,6 +75,7 @@ const Home = ({ socket }) => {
   return (
     <motion.div
       className="container"
+      style={{ minHeight: "69vh" }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"

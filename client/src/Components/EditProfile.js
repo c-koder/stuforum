@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import moment from "moment";
+import { AuthContext } from "../helpers/AuthContext";
 
 import { PORT } from "../constants/Port";
 
 const EditProfile = ({ user }) => {
+  const { authState, setAuthState } = useContext(AuthContext);
+
   const [fullname, setFullname] = useState(user.full_name || "");
   const [nickname, setNickname] = useState(user.nick_name || "");
   const [email, setEmail] = useState(user.student_email || "");
@@ -19,7 +21,7 @@ const EditProfile = ({ user }) => {
       fullname === user.full_name &&
       nickname === user.nick_name &&
       email === user.student_email &&
-      bio === user.description
+      (bio === user.description || bio === "")
     ) {
       setDisableUpdate(true);
     } else {
@@ -31,13 +33,33 @@ const EditProfile = ({ user }) => {
     e.preventDefault();
     if (fullname === "") {
       setError("Name is required");
+    } else if (nickname === "") {
+      setError("Nickname is required");
+    } else if (email === "") {
+      setError("Email is required");
+    } else if (password === "") {
+      setError("Password is required");
     } else {
-      const posted_time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
-
-      axios.post(`${PORT}post/addpost`, {}).then((response) => {
-        if (response.data.message == "post_added") {
-        }
-      });
+      setDisableUpdate(true);
+      axios
+        .post(`${PORT}user/updateuser`, {
+          id: user.id,
+          fullname: fullname,
+          nickname: nickname,
+          email: email,
+          bio: bio,
+          password: password,
+        })
+        .then((response) => {
+          if (response.data.message == "profile_updated") {
+            setAuthState({ ...authState, nick_name: nickname });
+            setError("Profile updated");
+          } else {
+            setError(response.data.message);
+          }
+          setDisableUpdate(false);
+        })
+        .catch((err) => {});
     }
   };
 
@@ -160,7 +182,7 @@ const EditProfile = ({ user }) => {
               {error != "" ? (
                 <p
                   className={`alert alert-${
-                    error == "" ? "success" : "danger"
+                    error === "Profile updated" ? "success" : "danger"
                   } ms-auto`}
                 >
                   {error}
