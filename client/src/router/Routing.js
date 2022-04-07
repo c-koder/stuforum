@@ -32,7 +32,7 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import { AuthContext } from "../helpers/AuthContext";
 import AskAQuestion from "../Components/AskAQuestion";
 
-const socket = io.connect(`http://localhost:3001`);
+const socket = io.connect(`https://stuforum.herokuapp.com/`);
 
 const Routing = () => {
   const { width } = useWindowDimensions();
