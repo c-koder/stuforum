@@ -32,7 +32,7 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import { AuthContext } from "../helpers/AuthContext";
 import AskAQuestion from "../Components/AskAQuestion";
 
-// const socket = io.connect(`https://stuforum.herokuapp.com/`);
+const socket = io.connect(`https://stuforum.herokuapp.com/`);
 
 const Routing = () => {
   const { width } = useWindowDimensions();
@@ -62,9 +62,9 @@ const Routing = () => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   authState.id != 0 && socket.emit("registerId", authState.id);
-  // });
+  useEffect(() => {
+    authState.id != 0 && socket.emit("registerId", authState.id);
+  });
 
   const onLogout = () => {
     const time = moment().format("YYYY-MM-DD HH:mm:ss").toString();
@@ -74,7 +74,7 @@ const Routing = () => {
       time: time,
     });
 
-    // socket.emit("userLoggedOut", authState.id);
+    socket.emit("userLoggedOut", authState.id);
 
     localStorage.removeItem("accessToken");
     setAuthState({ ...authState, status: false });
@@ -136,11 +136,11 @@ const Routing = () => {
   const [notifs, setNotifs] = useState([]);
   const [newNotification, setNewNotification] = useState();
 
-  // useEffect(() => {
-  //   socket.on("receive_notification", (data) => {
-  //     setNewNotification(data);
-  //   });
-  // }, [socket]);
+  useEffect(() => {
+    socket.on("receive_notification", (data) => {
+      setNewNotification(data);
+    });
+  }, [socket]);
 
   useEffect(() => {
     if (newNotification != null) {
@@ -184,33 +184,57 @@ const Routing = () => {
             <>
               <Route
                 path="/home"
-                element={authState.status ? <Home /> : <Navigate to={"/"} />}
+                element={
+                  authState.status ? (
+                    <Home socket={socket} />
+                  ) : (
+                    <Navigate to={"/"} />
+                  )
+                }
               />
 
               <Route
                 path="/myquestions"
                 element={
-                  authState.status ? <MyQuestions /> : <Navigate to={"/"} />
+                  authState.status ? (
+                    <MyQuestions socket={socket} />
+                  ) : (
+                    <Navigate to={"/"} />
+                  )
                 }
               />
 
               <Route
                 path="/myanswers"
                 element={
-                  authState.status ? <MyAnswers /> : <Navigate to={"/"} />
+                  authState.status ? (
+                    <MyAnswers socket={socket} />
+                  ) : (
+                    <Navigate to={"/"} />
+                  )
                 }
               />
 
               <Route
                 path="/post/:id"
                 element={
-                  authState.status ? <SinglePost /> : <Navigate to={"/"} />
+                  authState.status ? (
+                    <SinglePost socket={socket} />
+                  ) : (
+                    <Navigate to={"/"} />
+                  )
                 }
               />
 
               <Route
                 path="/tagged/:name"
-                element={authState.status ? <Home /> : <Navigate to={"/"} />}
+                element={
+                  authState.status ? (
+                    <Home socket={socket} />
+                  ) : (
+                    <Navigate to={"/"} />
+                  )
+                }
               />
 
               <Route
