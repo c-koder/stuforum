@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const http = require("http");
-const { Server } = require("socket.io");
+// const { Server } = require("socket.io");
 require("dotenv").config();
 
 const user = require("./controllers/userController");
@@ -21,54 +21,58 @@ app.use("/api/post", post);
 app.use("/api/tag", tag);
 app.use("/api/reply", reply);
 app.use("/api/auth", auth);
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization"
-  );
-  next();
-});
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization"
+//   );
+//   next();
+// });
 
 const server = http.createServer(app);
 
-const io = new Server(server, {
-  transports: ["websocket"],
-  cors: {
-    origin: "https://stuforum.netlify.app/",
-    methods: ["GET", "POST"],
-  },
-});
+// const io = new Server(server, {
+//   transports: ["websocket"],
+//   cors: {
+//     origin: "https://stuforum.netlify.app/",
+//     methods: ["GET", "POST"],
+//   },
+// });
 
-io.on("connection", (socket) => {
-  socket.on("registerId", (id) => {
-    socket.join(id);
-  });
+// io.on("connection", (socket) => {
+//   socket.on("registerId", (id) => {
+//     socket.join(id);
+//   });
 
-  socket.on("userLoggedOut", (id) => {
-    socket.leave(id);
-  });
+//   socket.on("userLoggedOut", (id) => {
+//     socket.leave(id);
+//   });
 
-  socket.on("disconnect", () => {
-    // console.log(socket.id + " got disconnected");
-  });
+//   socket.on("disconnect", () => {
+//     // console.log(socket.id + " got disconnected");
+//   });
 
-  socket.on("send_notification", async (data) => {
-    notificationService
-      .getNotification(data.user_from_id, data.user_to_id, data.time)
-      .then((notifcation) => {
-        socket
-          .to(notifcation.user_to_id)
-          .emit("receive_notification", notifcation);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-});
+//   socket.on("send_notification", async (data) => {
+//     notificationService
+//       .getNotification(data.user_from_id, data.user_to_id, data.time)
+//       .then((notifcation) => {
+//         socket
+//           .to(notifcation.user_to_id)
+//           .emit("receive_notification", notifcation);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   });
+// });
 
 const PORT = process.env.PORT || 3001;
 
