@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const http = require("http");
-// const path = require("path");
 const { Server } = require("socket.io");
 require("dotenv").config();
 
@@ -16,10 +15,6 @@ const notificationService = require("./services/notificationService");
 
 app.use(cors());
 app.use(express.json());
-
-// app.get("/", function (req, res) {
-//   res.json(path.join(__dirname, "public/index.html"));
-// });
 
 app.use("/api/user", user);
 app.use("/api/post", post);
@@ -41,7 +36,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://stuforum.netlify.app/",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
