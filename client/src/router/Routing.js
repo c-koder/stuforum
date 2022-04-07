@@ -184,57 +184,33 @@ const Routing = () => {
             <>
               <Route
                 path="/home"
-                element={
-                  authState.status ? (
-                    <Home socket={socket} />
-                  ) : (
-                    <Navigate to={"/"} />
-                  )
-                }
+                element={authState.status ? <Home /> : <Navigate to={"/"} />}
               />
 
               <Route
                 path="/myquestions"
                 element={
-                  authState.status ? (
-                    <MyQuestions socket={socket} />
-                  ) : (
-                    <Navigate to={"/"} />
-                  )
+                  authState.status ? <MyQuestions /> : <Navigate to={"/"} />
                 }
               />
 
               <Route
                 path="/myanswers"
                 element={
-                  authState.status ? (
-                    <MyAnswers socket={socket} />
-                  ) : (
-                    <Navigate to={"/"} />
-                  )
+                  authState.status ? <MyAnswers /> : <Navigate to={"/"} />
                 }
               />
 
               <Route
                 path="/post/:id"
                 element={
-                  authState.status ? (
-                    <SinglePost socket={socket} />
-                  ) : (
-                    <Navigate to={"/"} />
-                  )
+                  authState.status ? <SinglePost /> : <Navigate to={"/"} />
                 }
               />
 
               <Route
                 path="/tagged/:name"
-                element={
-                  authState.status ? (
-                    <Home socket={socket} />
-                  ) : (
-                    <Navigate to={"/"} />
-                  )
-                }
+                element={authState.status ? <Home /> : <Navigate to={"/"} />}
               />
 
               <Route
